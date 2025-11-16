@@ -1,0 +1,49 @@
+@import "variables";
+
+:host {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+
+    .content-holder {
+        @apply flex items-center justify-between ml-[30px] mt-[40px] mr-[30px] border-b-2 border-dashed border-black text-[17px] font-bold uppercase;
+        
+        &-centered {
+            @apply flex items-center justify-center gap-6;
+        }
+    }
+
+    
+    
+    vsf-layout {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+
+    img.logo {
+        max-height: 42px;
+        animation: hue-rotate 10s infinite;
+    }
+
+    &:link, &:visited {
+        color: #0e95c7;
+        font-size: 22px;
+    }
+}
+
+@keyframes hue-rotate {
+  0% {
+    filter: hue-rotate(0deg) brightness(0.9);
+  }
+
+  100% {
+    filter: hue-rotate(360deg) brightness(0.9);
+  }
+}

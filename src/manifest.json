@@ -1,0 +1,9 @@
+{
+  "name": "Helena Grinshpun Art Storefront",
+  "short_name": "HGARt Storefront",
+  "theme_color": "#558996",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "/storefront/",
+  "start_url": "/storefront/"
+}
