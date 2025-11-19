@@ -3,6 +3,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Local Shameless script font for calligraphic elements */
+@font-face {
+    font-family: 'Shameless';
+    src: url('/assets/fonts/fonnts.com-Shameless.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+*, ::before, ::after {
+    border-style: none;
+    border-color: none;
+}
+
 html, body {
     height: 100%;
     margin: 0;
