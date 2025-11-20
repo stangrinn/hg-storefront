@@ -13,7 +13,7 @@ import {
  * A helper component used to embed a component instance into the {@link ModalDialogComponent}
  */
 @Component({
-    selector: 'vsf-dialog-component-outlet',
+    selector: 'hgart-dialog-component-outlet',
     template: ``,
 })
 export class DialogComponentOutletComponent implements OnInit {

@@ -21,9 +21,9 @@
         </div>
     </div>
     <div class="mt-12">
-        <vsf-cart-contents [cart]="order"
-                           [canAdjustQuantities]="false"></vsf-cart-contents>
-        <vsf-cart-totals [cart]="order"></vsf-cart-totals>
+        <hgart-cart-contents [cart]="order"
+                           [canAdjustQuantities]="false"></hgart-cart-contents>
+        <hgart-cart-totals [cart]="order"></hgart-cart-totals>
     </div>
 </div>
 <ng-container *ngIf="notFound$ | async">

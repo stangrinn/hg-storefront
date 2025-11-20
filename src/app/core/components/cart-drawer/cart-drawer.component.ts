@@ -5,7 +5,6 @@ import { map, shareReplay, switchMap, take } from 'rxjs/operators';
 import {
     AdjustItemQuantityMutation, AdjustItemQuantityMutationVariables,
     GetActiveOrderQuery,
-    GetActiveOrderQueryVariables,
     RemoveItemFromCartMutation, RemoveItemFromCartMutationVariables
 } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
@@ -16,14 +15,14 @@ import { ADJUST_ITEM_QUANTITY, REMOVE_ITEM_FROM_CART } from './cart-drawer.graph
 import { ActiveService } from '../../providers/active/active.service';
 
 @Component({
-    selector: 'vsf-cart-drawer',
+    selector: 'hgart-cart-drawer',
     templateUrl: './cart-drawer.component.html',
     styleUrls: ['./cart-drawer.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartDrawerComponent implements OnInit {
     @Input() visible = false;
-    @Output() close = new EventEmitter<void>();
+    @Output() drawerClosed = new EventEmitter<void>();
     @ViewChild('overlay') private overlayRef: ElementRef<HTMLDivElement>;
 
     cart$: Observable<GetActiveOrderQuery['activeOrder']>;
@@ -57,7 +56,7 @@ export class CartDrawerComponent implements OnInit {
 
     overlayClick(event: MouseEvent) {
         if (event.target === this.overlayRef.nativeElement) {
-            this.close.emit();
+            this.drawerClosed.emit();
         }
     }
 

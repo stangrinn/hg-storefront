@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { NotificationOptions, NOTIFICATION_OPTIONS } from '../../providers/notification/notification-types';
 
 @Component({
-    selector: 'vsf-notification',
+    selector: 'hgart-notification',
     templateUrl: './notification.component.html',
     styleUrls: ['./notification.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

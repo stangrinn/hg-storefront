@@ -10,7 +10,7 @@ import { StateService } from '../../../core/providers/state/state.service';
 import { ADD_PAYMENT, GET_ELIGIBLE_PAYMENT_METHODS } from './checkout-payment.graphql';
 
 @Component({
-    selector: 'vsf-checkout-payment',
+    selector: 'hgart-checkout-payment',
     templateUrl: './checkout-payment.component.html',
     // styleUrls: ['./checkout-payment.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

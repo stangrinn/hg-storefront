@@ -19,7 +19,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "vsf",
+            "prefix": "hgart",
             "style": "camelCase"
           }
         ],
@@ -27,7 +27,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "vsf",
+            "prefix": "hgart",
             "style": "kebab-case"
           }
         ],

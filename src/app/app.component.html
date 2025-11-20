@@ -1,11 +1,11 @@
-<vsf-layout>
-    <vsf-layout-header>
+<hgart-layout>
+    <hgart-layout-header>
         <div class="content-holder">
 
-            <vsf-mobile-menu-toggle class="md:hidden"></vsf-mobile-menu-toggle>
+            <hgart-mobile-menu-toggle class="md:hidden"></hgart-mobile-menu-toggle>
 
             <div class="content-holder-centered">
-                <vsf-collections-menu class="hidden md:block "></vsf-collections-menu>
+                <hgart-collections-menu class="hidden md:block "></hgart-collections-menu>
             </div>
 
             <div class="w-[250px]">
@@ -15,18 +15,18 @@
             </div>
 
             <div class="content-holder-centered">
-                <vsf-cart-toggle (toggle)="openCartDrawer()"></vsf-cart-toggle>
+                <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle>
 
-                <vsf-account-link class=""></vsf-account-link>
+                <hgart-account-link class=""></hgart-account-link>
             </div>
         </div>
-    </vsf-layout-header>
+    </hgart-layout-header>
 
-    <vsf-collections-menu-mobile [visible]="mobileNavVisible$ | async" class="z-10"></vsf-collections-menu-mobile>
+    <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" class="z-10"></hgart-collections-menu-mobile>
 
-    <vsf-cart-drawer (close)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></vsf-cart-drawer>
+    <hgart-cart-drawer (close)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-cart-drawer>
 
-    <vsf-home-page *ngIf="isHomePage$ | async; else main" style="flex: 1;"></vsf-home-page>
+    <hgart-home-page *ngIf="isHomePage$ | async; else main" style="flex: 1;"></hgart-home-page>
 
     <ng-template #main>
         <div style="flex: 1;">
@@ -34,7 +34,7 @@
         </div>
     </ng-template>
 
-    <vsf-layout-footer>
+    <hgart-layout-footer>
         <footer aria-labelledby="footer-heading" class="border-t">
             <h2 class="sr-only" id="footer-heading">Footer</h2>
             <div class="pl-[24px] pr-[24px] pt-[30px]">
@@ -90,6 +90,6 @@
                 </div>
             </div>
         </footer>
-    </vsf-layout-footer>
+    </hgart-layout-footer>
 
-</vsf-layout>
+</hgart-layout>

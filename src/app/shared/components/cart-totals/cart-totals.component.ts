@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
 import { CartFragment } from '../../../common/generated-types';
 
 @Component({
-  selector: 'vsf-cart-totals',
+  selector: 'hgart-cart-totals',
   templateUrl: './cart-totals.component.html',
   styleUrls: ['./cart-totals.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

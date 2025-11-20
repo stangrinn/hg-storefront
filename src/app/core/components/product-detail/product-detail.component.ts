@@ -21,7 +21,7 @@ type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number]
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
 
 @Component({
-    selector: 'vsf-product-detail',
+    selector: 'hgart-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss'],
 })

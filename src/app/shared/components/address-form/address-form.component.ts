@@ -4,7 +4,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { AddressFragment, CountryFragment, OrderAddressFragment } from '../../../common/generated-types';
 
 @Component({
-    selector: 'vsf-address-form',
+    selector: 'hgart-address-form',
     templateUrl: './address-form.component.html',
     // styleUrls: ['./address-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

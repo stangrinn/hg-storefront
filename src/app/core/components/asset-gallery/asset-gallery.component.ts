@@ -9,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 export type AssetWithDimensions = Pick<AssetFragment, 'id' | 'preview' | 'width' | 'height'>;
 
 @Component({
-    selector: 'vsf-asset-gallery',
+    selector: 'hgart-asset-gallery',
     templateUrl: './asset-gallery.component.html',
     styleUrls: ['./asset-gallery.component.scss'],
 })

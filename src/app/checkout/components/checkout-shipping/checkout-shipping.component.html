@@ -87,32 +87,32 @@
         Shipping Address
     </h2>
     <div class="card-body">
-        <vsf-address-form #addressForm
+        <hgart-address-form #addressForm
                           (focusout)="onAddressFormBlur(addressForm.addressForm)"
                           [address]="shippingAddress$ | async"
-                          [availableCountries]="availableCountries$ | async"></vsf-address-form>
+                          [availableCountries]="availableCountries$ | async"></hgart-address-form>
     </div>
 </div>
 <div class="mt-10 border-t border-gray-200 pt-10">
     <h2 class="text-lg font-medium text-gray-900">
         Shipping Method
     </h2>
-    <vsf-radio-card-fieldset
+    <hgart-radio-card-fieldset
         [idFn]="getId"
         [selectedItemId]="shippingMethodId"
         (selectItem)="setShippingMethod($event.id)"
     >
         <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-            <vsf-radio-card *ngFor="let method of eligibleShippingMethods$ | async" [item]="method">
+            <hgart-radio-card *ngFor="let method of eligibleShippingMethods$ | async" [item]="method">
                 <span class="block text-sm font-medium text-gray-900">
                     {{ method.name }}
                 </span>
                 <span class="mt-6 text-sm font-medium text-gray-900">
                     {{ method.priceWithTax | formatPrice }}
                 </span>
-            </vsf-radio-card>
+            </hgart-radio-card>
         </div>
-    </vsf-radio-card-fieldset>
+    </hgart-radio-card-fieldset>
 </div>
 <button class="btn-primary mt-6 w-full space-x-2"
         [disabled]="!shippingMethodId || addressForm.invalid"

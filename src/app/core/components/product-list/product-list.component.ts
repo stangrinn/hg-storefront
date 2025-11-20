@@ -20,7 +20,7 @@ import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
 type SearchItem = SearchProductsQuery['search']['items'][number];
 
 @Component({
-    selector: 'vsf-product-list',
+    selector: 'hgart-product-list',
     templateUrl: './product-list.component.html',
 // styleUrls: ['./product-list.component.scss'],
     })

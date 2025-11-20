@@ -13,7 +13,7 @@
         }
     }
     
-    vsf-layout {
+    hgart-layout {
         flex: 1;
         display: flex;
         flex-direction: column;
@@ -27,15 +27,15 @@
 /* Apply Shameless font to any calligraphic elements in the footer.
    If the markup uses a specific class for the slogan (e.g. .calligraphic, .slogan, .script),
    these selectors will pick it up. */
-vsf-layout-footer footer .calligraphic,
-vsf-layout-footer footer .slogan,
-vsf-layout-footer footer .script {
+hgart-layout-footer footer .calligraphic,
+hgart-layout-footer footer .slogan,
+hgart-layout-footer footer .script {
     font-family: 'Shameless', cursive;
     
 }
 
 /* Slogan specific sizing — responsive and visually similar to the mockup */
-vsf-layout-footer footer .slogan {
+hgart-layout-footer footer .slogan {
     font-size: 48px;
     line-height: 0.9;
     
@@ -44,7 +44,7 @@ vsf-layout-footer footer .slogan {
 }
 
 /* Dedicated footer grid so the left column can be narrow like the design */
-vsf-layout-footer footer {
+hgart-layout-footer footer {
     .footer {
        
         &-grid {
@@ -57,13 +57,13 @@ vsf-layout-footer footer {
 }
 
 @media (min-width: 1280px) {
-    vsf-layout-footer footer .footer-grid {
+    hgart-layout-footer footer .footer-grid {
         align-items: start;
     }
 }
 
 /* Ensure each footer column stretches so bottom content aligns horizontally */
-vsf-layout-footer footer .footer-grid > div {
+hgart-layout-footer footer .footer-grid > div {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -73,7 +73,7 @@ vsf-layout-footer footer .footer-grid > div {
 }
 
 /* Footer bottom text styling */
-vsf-layout-footer footer .footer-bottom {
+hgart-layout-footer footer .footer-bottom {
     color: #222;
     display: flex;
     align-items: center;
@@ -81,23 +81,23 @@ vsf-layout-footer footer .footer-bottom {
 }
 
 /* Full-height vertical dividers between columns */
-vsf-layout-footer footer .footer-grid > div + div {
+hgart-layout-footer footer .footer-grid > div + div {
     border-left: 1px solid rgba(0,0,0,1);
     padding-left: 1.5rem;
 }
 
-vsf-layout-footer footer .footer-grid > div + div + div {
+hgart-layout-footer footer .footer-grid > div + div + div {
     border-left: 1px solid rgba(0,0,0,1);
 }
 
 /* Footer headings: 22px */
-vsf-layout-footer footer h3 {
+hgart-layout-footer footer h3 {
     font-size: 22px !important;
     line-height: 1.1;
 }
 
 /* Footer links: 14px */
-vsf-layout-footer footer a {
+hgart-layout-footer footer a {
     font-size: 14px !important;
     
     text-decoration: none;

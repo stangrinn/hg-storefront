@@ -39,13 +39,13 @@ export class ModalService {
      * ```
      *
      * ```
-     * <ng-template vsfDialogTitle>Title of the modal</ng-template>
+     * <ng-template hgartDialogTitle>Title of the modal</ng-template>
      *
      * <p>
      *     My Content
      * </p>
      *
-     * <ng-template vsfDialogButtons>
+     * <ng-template hgartDialogButtons>
      *     <button type="button"
      *             class="btn"
      *             (click)="cancel()">Cancel</button>

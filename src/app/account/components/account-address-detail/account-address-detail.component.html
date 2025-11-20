@@ -1,6 +1,6 @@
-<vsf-address-form #addressForm
+<hgart-address-form #addressForm
                   [address]="address$ | async"
-                  [availableCountries]="availableCountries$ | async"></vsf-address-form>
+                  [availableCountries]="availableCountries$ | async"></hgart-address-form>
 <button class="btn-primary mt-3"
         [disabled]="addressForm.addressForm.invalid || addressForm.addressForm.pristine"
         (click)="updateAddress()">Update Address</button>

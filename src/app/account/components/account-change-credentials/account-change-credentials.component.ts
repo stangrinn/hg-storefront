@@ -11,7 +11,7 @@ import { DataService } from '../../../core/providers/data/data.service';
 import { CHANGE_EMAIL_ADDRESS, CHANGE_PASSWORD } from './account-change-credentials.graphql';
 
 @Component({
-    selector: 'vsf-account-change-credentials',
+    selector: 'hgart-account-change-credentials',
     templateUrl: './account-change-credentials.component.html',
     // styleUrls: ['./account-change-credentials.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

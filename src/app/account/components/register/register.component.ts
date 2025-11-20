@@ -6,7 +6,7 @@ import { DataService } from '../../../core/providers/data/data.service';
 import { REGISTER } from './register.graphql';
 
 @Component({
-    selector: 'vsf-register',
+    selector: 'hgart-register',
     templateUrl: './register.component.html',
     // styleUrls: ['./register.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -14,7 +14,7 @@ interface CollectionWithProducts {
 }
 
 @Component({
-    selector: 'vsf-home-page',
+    selector: 'hgart-home-page',
     templateUrl: './home-page.component.html',
     styleUrls: ['./home-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

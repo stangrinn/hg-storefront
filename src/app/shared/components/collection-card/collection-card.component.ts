@@ -5,7 +5,7 @@ import { GetCollectionQuery } from '../../../common/generated-types';
 import { AssetPreviewPipe } from '../../pipes/asset-preview.pipe';
 
 @Component({
-    selector: 'vsf-collection-card',
+    selector: 'hgart-collection-card',
     templateUrl: './collection-card.component.html',
     // styleUrls: ['./collection-card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

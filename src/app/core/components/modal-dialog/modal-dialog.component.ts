@@ -10,7 +10,7 @@ import { DialogButtonsDirective } from './dialog-buttons.directive';
  * directly in templates. See {@link ModalService.fromComponent} method for more detail.
  */
 @Component({
-    selector: 'vsf-modal-dialog',
+    selector: 'hgart-modal-dialog',
     templateUrl: './modal-dialog.component.html',
     // styleUrls: ['./modal-dialog.component.scss'],
 })

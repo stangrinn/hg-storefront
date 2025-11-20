@@ -15,10 +15,10 @@
 
                 <!-- Products Grid -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6" *ngIf="item.products.length > 0">
-                    <vsf-product-card 
+                    <hgart-product-card 
                         *ngFor="let product of item.products" 
                         [product]="product">
-                    </vsf-product-card>
+                    </hgart-product-card>
                 </div>
                 
                 <!-- Debug: Show if no products -->
@@ -40,10 +40,10 @@
             
             <!-- Products Grid Skeleton -->
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-                <vsf-product-card 
+                <hgart-product-card 
                     *ngFor="let _ of [1, 2, 3, 4]" 
                     [product]="null">
-                </vsf-product-card>
+                </hgart-product-card>
             </div>
         </section>
     </ng-template>

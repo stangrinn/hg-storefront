@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 import { GetCollectionQuery } from '../../../common/generated-types';
 
 @Component({
-    selector: 'vsf-collection-breadcrumbs',
+    selector: 'hgart-collection-breadcrumbs',
     templateUrl: './collection-breadcrumbs.component.html',
     styleUrls: ['./collection-breadcrumbs.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

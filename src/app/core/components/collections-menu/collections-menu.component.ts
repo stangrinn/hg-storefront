@@ -23,7 +23,7 @@ import { arrayToTree, RootNode, TreeNode } from './array-to-tree';
 type CollectionItem = GetCollectionsQuery['collections']['items'][number];
 
 @Component({
-    selector: 'vsf-collections-menu',
+    selector: 'hgart-collections-menu',
     templateUrl: './collections-menu.component.html',
     // styleUrls: ['./collections-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

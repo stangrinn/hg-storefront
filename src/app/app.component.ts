@@ -9,7 +9,7 @@ import { DataService } from './core/providers/data/data.service';
 import { StateService } from './core/providers/state/state.service';
 
 @Component({
-    selector: 'vsf-root',
+    selector: 'hgart-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
 })

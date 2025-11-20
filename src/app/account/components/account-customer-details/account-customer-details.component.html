@@ -1,5 +1,5 @@
 <ng-container *ngIf="form">
-    <vsf-centered-card class="block max-w-sm">
+    <hgart-centered-card class="block max-w-sm">
         <form [formGroup]="form">
             <div class="text-left mb-2">
                 <label for="firstName" class="text-sm text-gray-600">First name</label>
@@ -24,5 +24,5 @@
                 [disabled]="form.invalid || form.pristine"
                 (click)="updateDetails()">Update Details
         </button>
-    </vsf-centered-card>
+    </hgart-centered-card>
 </ng-container>
