@@ -1,10 +1,11 @@
+
 <a
     [routerLink]="['/category/', collection.slug]"
     class="block max-w-[300px] relative rounded-lg overflow-hidden hover:opacity-75 xl:w-auto"
 >
      <span aria-hidden="true" class="">
        <div class="w-full h-full object-center object-cover">
-           <img [src]="collection.featuredAsset | assetPreview:300:300"/>
+           <img [src]="collection.featuredAsset | assetPreview:300:300" alt/>
        </div>
      </span>
     <span

@@ -1,21 +1,33 @@
-<ng-template [ngIf]="product">
-    <a class="flex flex-col" prefetch='intent' [routerLink]="['/product', product.slug]">
-        <img
-            class="rounded-xl flex-grow object-cover aspect-[7/8]"
-            alt=""
-            [src]="product.productAsset | assetPreview:300:400"
-        />
-        <div class="h-2"></div>
-        <div class="text-sm text-gray-700">
-            {{ product.productName }}
+<ng-container *ngIf="product; else placeholder">
+    <a class="group flex flex-col" prefetch='intent' [routerLink]="['/product', product.slug]">
+        <div class="overflow-hidden rounded-lg">
+            <img
+                class="w-full object-cover aspect-[3/4] group-hover:scale-105 transition-transform duration-300"
+                [alt]="product.productName"
+                [src]="product.productAsset | assetPreview:400:533"
+            />
         </div>
-        <div class="text-sm font-medium text-gray-900">
+        <div class="h-3"></div>
+        <!-- <div class="text-sm text-gray-700 group-hover:text-gray-900">
+            {{ product.productName }}
+        </div> -->
+        <!-- <div class="text-sm font-medium text-gray-900">
             <ng-template [ngIf]="product.priceWithTax.min === product.priceWithTax.max" [ngIfElse]="range">
                 {{ product.priceWithTax.min | formatPrice }}
             </ng-template>
             <ng-template #range>
                 From {{ product.priceWithTax.min | formatPrice }}
             </ng-template>
-        </div>
+        </div> -->
     </a>
+</ng-container>
+
+<ng-template #placeholder>
+    <div class="flex flex-col animate-pulse">
+        <div class="bg-gray-200 rounded-lg aspect-[3/4]"></div>
+        <div class="h-3"></div>
+        <div class="bg-gray-200 h-4 w-3/4 rounded"></div>
+        <div class="h-2"></div>
+        <div class="bg-gray-200 h-4 w-1/2 rounded"></div>
+    </div>
 </ng-template>
