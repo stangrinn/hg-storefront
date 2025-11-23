@@ -30,11 +30,14 @@ export class HomePageComponent implements OnInit {
     ngOnInit(): void {
         const collections$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
             options: { 
-                take: 50
+                take: 50,
+                sort: {
+                    name: 'DESC'
+                }
             },
         }).pipe(
             map(({collections}) => {
-                console.log('All collections:', collections.items);
+                // console.log('All collections:', collections.items);
                 return collections.items.filter(c => c.parent && c.parent.id === '1');
             })
         );
@@ -53,7 +56,7 @@ export class HomePageComponent implements OnInit {
                         input: {
                             collectionSlug: collection.slug,
                             groupByProduct: true,
-                            take: 8,
+                            take: 200,
                         }
                     }).pipe(
                         map(result => {

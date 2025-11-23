@@ -1,11 +1,10 @@
-import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, Injector, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { environment } from '../../../../environments/environment';
+
 import { NotificationService } from '../notification/notification.service';
 
 import { DataService } from './data.service';
@@ -19,10 +18,10 @@ export class DefaultInterceptor implements HttpInterceptor {
         private dataService: DataService,
         private injector: Injector,
         private router: Router,
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: unknown,
     ) {}
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         return next.handle(req).pipe(
             tap(
                 event => {

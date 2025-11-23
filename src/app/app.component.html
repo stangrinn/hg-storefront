@@ -24,7 +24,7 @@
 
     <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" class="z-10"></hgart-collections-menu-mobile>
 
-    <hgart-cart-drawer (close)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-cart-drawer>
+    <hgart-cart-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-cart-drawer>
 
     <hgart-home-page *ngIf="isHomePage$ | async; else main" style="flex: 1;"></hgart-home-page>
 
@@ -83,7 +83,7 @@
                                 <a [routerLink]="['/about-me']">ABOUT ME</a>
                             </div>
                             <div>
-                                <a href="mailto:hello@helenagrinshpun.art" class="text-base inline-block">HELLO@HELENAGRINSHPUN.ART</a>
+                                <a href="mailto:hello@helenagrinshpun.art" class="text-base inline-block">HELLO HELENAGRINSHPUN.ART</a>
                             </div>
                         </div>
                     </div>
