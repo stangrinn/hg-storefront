@@ -8,11 +8,6 @@ import { SearchProductsQuery } from '../../../common/generated-types';
     // styleUrls: ['./product-card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductCardComponent implements OnInit {
+export class ProductCardComponent  {
     @Input() product: SearchProductsQuery['search']['items'][number];
-
-    ngOnInit() {
-        console.log('Product card received:', this.product);
-        
-    }
 }

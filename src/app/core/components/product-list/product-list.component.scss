@@ -75,3 +75,24 @@
 //        margin-left: calc($spacer / 2);
 //    }
 //}
+
+// Center items in last incomplete row
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem 1.5rem;
+    justify-content: center;
+    
+    hgart-product-card {
+        width: 100%;
+        max-width: 320px;
+        
+        @media (min-width: 640px) {
+            width: calc(50% - 0.75rem);
+        }
+        
+        @media (min-width: 1024px) {
+            width: calc(25% - 1.125rem);
+        }
+    }
+}

@@ -22,8 +22,8 @@ type SearchItem = SearchProductsQuery['search']['items'][number];
 @Component({
     selector: 'hgart-product-list',
     templateUrl: './product-list.component.html',
-// styleUrls: ['./product-list.component.scss'],
-    })
+    styleUrls: ['./product-list.component.scss'],
+})
 export class ProductListComponent implements OnInit {
     products$: Observable<SearchItem[]>;
     totalResults$: Observable<number>;
@@ -76,6 +76,7 @@ export class ProductListComponent implements OnInit {
                     return this.dataService.query<GetCollectionQuery, GetCollectionQueryVariables>(GET_COLLECTION, {
                         slug,
                     }).pipe(
+                        tap(data => console.log('Fetched collection:', data.collection)),
                         map(data => data.collection),
                     );
                 } else {
@@ -109,6 +110,7 @@ export class ProductListComponent implements OnInit {
         );
 
         const triggerFetch$ = combineLatest(this.collection$, this.activeFacetValueIds$, this.searchTerm$, this.refresh);
+        
         const getInitialFacetValueIds = () => {
             combineLatest(this.collection$, this.searchTerm$).pipe(
                 take(1),
@@ -128,9 +130,11 @@ export class ProductListComponent implements OnInit {
                     this.unfilteredTotalItems = data.search.totalItems;
                 });
         };
+        
         this.loading$ = merge(
             triggerFetch$.pipe(mapTo(true)),
         );
+        
         const queryResult$ = triggerFetch$.pipe(
             switchMap(([collection, facetValueIds, term]) => {
                 return this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
@@ -186,6 +190,7 @@ export class ProductListComponent implements OnInit {
             }),
         );
 
+        console.log('ProductListComponent initialized', this.collection$);
     }
 
     trackByProductId(index: number, item: SearchItem) {

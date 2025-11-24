@@ -8,9 +8,9 @@
             {{ product?.name ?? '  ' }}
         </div>
     </ng-template>
-    <hgart-collection-breadcrumbs [breadcrumbs]="breadcrumbs"
+    <!-- <hgart-collection-breadcrumbs [breadcrumbs]="breadcrumbs"
                                 class="mb-2"
-                                [linkLast]="true"></hgart-collection-breadcrumbs>
+                                [linkLast]="true"></hgart-collection-breadcrumbs> -->
     <div class="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start mt-4 md:mt-12">
         <hgart-asset-gallery
             [assets]="product?.assets"
@@ -39,16 +39,16 @@
             </div>
 
             <div class="mt-10 flex flex-col sm:flex-row sm:items-center">
-                <p class="text-3xl text-gray-900 mr-4">
+                <!-- <p class="text-3xl text-gray-900 mr-4">
                     {{ selectedVariant?.priceWithTax | formatPrice }}
-                </p>
+                </p> -->
                 <div class="flex sm:flex-col1 align-baseline">
-                    <button
+                    <!-- <button
                         type="submit"
                         class="max-w-xs flex-1 transition-colors border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full"
                         [ngClass]="{
                             'bg-gray-400': inFlight,
-                            'bg-primary-600 hover:bg-primary-700': !inFlight
+                            'bg-black hover:bg-grey': !inFlight
                         }"
                         (click)="addToCart(selectedVariant, qty)"
                     >
@@ -65,6 +65,21 @@
                     >
                         <fa-icon icon="heart"></fa-icon>
                         <span class="sr-only">Add to favorites</span>
+                    </button> -->
+
+                    <button
+                        type="submit"
+                        class="max-w-xs flex-1 transition-colors border border-transparent py-3 px-8 flex items-center justify-center text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full"
+                        [ngClass]="{
+                            'bg-gray-400': inFlight,
+                            'bg-black hover:bg-grey': !inFlight
+                        }"
+                    >
+                        <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">Preorder</div>
+                        <ng-template #inCartCount>
+                            <fa-icon icon="check" class="mr-2"></fa-icon>
+                            <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
+                        </ng-template>
                     </button>
                 </div>
             </div>
@@ -73,7 +88,7 @@
                     {{selectedVariant?.sku}}
                 </span>
             </div>
-            <section class="mt-12 pt-12 border-t text-xs">
+            <!-- <section class="mt-12 pt-12 border-t text-xs">
                 <h3 class="text-gray-600 font-bold mb-2">
                     Shipping & Returns
                 </h3>
@@ -93,7 +108,7 @@
                         for further information.
                     </p>
                 </div>
-            </section>
+            </section> -->
         </div>
     </div>
     <div className="mt-24">

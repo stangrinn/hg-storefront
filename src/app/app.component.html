@@ -2,23 +2,23 @@
     <hgart-layout-header>
         <div class="content-holder">
 
-            <hgart-mobile-menu-toggle class="md:hidden"></hgart-mobile-menu-toggle>
+            <hgart-mobile-menu-toggle class="md:hidden mb-[26px]"></hgart-mobile-menu-toggle>
 
             <div class="content-holder-centered">
-                <hgart-collections-menu class="hidden md:block "></hgart-collections-menu>
+                <hgart-collections-menu class="hidden md:block"></hgart-collections-menu>
             </div>
 
             <div class="w-[250px]">
-                <a [routerLink]="['/']" class="absolute bottom-[6px]">
+                <a [routerLink]="['/']" class="logo-link">
                     <img alt="Helena Grinshpun ARt" class="w-[280px]" src="assets/logo.png">
                 </a>
             </div>
 
-            <div class="content-holder-centered">
+            <!-- <div class="content-holder-centered">
                 <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle>
 
                 <hgart-account-link class=""></hgart-account-link>
-            </div>
+            </div> -->
         </div>
     </hgart-layout-header>
 
@@ -35,15 +35,15 @@
     </ng-template>
 
     <hgart-layout-footer>
-        <footer aria-labelledby="footer-heading" class="border-t">
+        <footer aria-labelledby="footer-heading" class="border-t mt-[80px]">
             <h2 class="sr-only" id="footer-heading">Footer</h2>
-            <div class="pl-[24px] pr-[24px] pt-[30px]">
+            <div class="pl-[24px] pr-[24px]">
                 <div class="xl:grid xl:grid-cols-3 xl:gap-8 footer-grid border-t-[1px] border-black">
                     <!-- Left column -->
                     <div class="">
-                        <h3 class="text-sm font-semibold  tracking-wider uppercase">
+                        <!-- <h3 class="text-sm font-semibold  tracking-wider uppercase">
                             HELENA GRINSHPUN ART
-                        </h3>
+                        </h3> -->
                         
                         <!-- Calligraphic slogan matching the design mockup -->
                         <p class="slogan text-gray-700">Dreams transformed into reality with AI + AR</p>

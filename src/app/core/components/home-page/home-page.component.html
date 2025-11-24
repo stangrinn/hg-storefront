@@ -1,11 +1,11 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <ng-container *ngIf="collectionsWithProducts$ | async as collections; else loading">
         <ng-container *ngFor="let item of collections">
             <!-- Collection Section -->
             <section class="mb-16 last:mb-0">
                 <!-- Collection Title -->
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl sm:text-4xl font-light tracking-tight text-gray-900 uppercase mb-2">
+                    <h2 class="text-3xl sm:text-4xl font-light text-gray-900 uppercase mb-2 tracking-[2px]">
                         {{ item.collection.name }}
                     </h2>
                     <p class="text-sm text-gray-500 uppercase tracking-wider">
@@ -14,10 +14,12 @@
                 </div>
 
                 <!-- Products Grid -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6" *ngIf="item.products.length > 0">
+                <div class="flex flex-wrap justify-center gap-y-10 gap-x-6" *ngIf="item.products.length > 0">
                     <hgart-product-card 
                         *ngFor="let product of item.products" 
-                        [product]="product">
+                        [product]="product"
+                        class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(15%-1.125rem)] max-w-xs"
+                        >
                     </hgart-product-card>
                 </div>
                 

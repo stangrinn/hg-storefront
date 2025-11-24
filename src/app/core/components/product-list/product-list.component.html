@@ -1,12 +1,11 @@
-<div class="max-w-6xl mx-auto px-4">
+<div class="mx-auto px-4">
     <ng-container *ngIf="collection$ | async as collection">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-center items-center flex-col">
             <h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
                 {{collection.name}}
             </h2>
         </div>
         <!-- <hgart-collection-breadcrumbs [breadcrumbs]="breadcrumbs$ | async"></hgart-collection-breadcrumbs> -->
-
         <ng-container *ngIf="collection.children.length">
             <div class="max-w-2xl mx-auto py-16 sm:py-16 lg:max-w-none border-b mb-16">
                 <h2 class="text-2xl font-light text-gray-900">
@@ -24,34 +23,29 @@
         Results for <span class="font-medium">"{{ term }}"</span>
     </h2>
 
-    <div class="mt-6 grid sm:grid-cols-5 gap-x-4">
-        <hgart-product-list-controls
-            class="mb-4"
-            [facetValues]="facetValues"
-            [activeFacetValueIds]="activeFacetValueIds$ | async"
-            [totalResults]="unfilteredTotalItems"></hgart-product-list-controls>
-        <div class="sm:col-span-5 lg:col-span-4">
-            <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
-                    <hgart-product-card *ngFor="let product of products$ | async; trackBy: trackByProductId"
-                                      [product]="product"></hgart-product-card>
-                </ng-container>
-                <ng-template #placeholders>
-                    <hgart-product-card *ngFor="let product of placeholderProducts"
-                                      [product]="product"></hgart-product-card>
-                </ng-template>
-            </div>
-            <div class="load-more flex-fill" *ngIf="displayLoadMore$ | async">
-                <button class="btn btn-light btn-lg d-inline-flex align-items-center"
-                        (click)="loadMore()"
-                        [disabled]="loading$ | async">
-                    Load more
-                    <span [class.show]="loading$ | async"
-                          class="loading-indicator spinner-grow spinner-grow-sm"
-                          role="status"
-                          aria-hidden="true"></span>
-                </button>
-            </div>
+    <div>
+        <div class="flex flex-wrap justify-center gap-y-10 gap-x-6">
+            <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
+
+                <hgart-product-card *ngFor="let product of products$ | async; trackBy: trackByProductId"
+                    [product]="product"
+                    class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(15%-1.125rem)] max-w-xs"></hgart-product-card>
+
+            </ng-container>
+
+            <ng-template #placeholders>
+                <hgart-product-card *ngFor="let product of placeholderProducts" [product]="product"
+                    class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] max-w-xs"></hgart-product-card>
+            </ng-template>
+        </div>
+
+        <div class="load-more flex-fill" *ngIf="displayLoadMore$ | async">
+            <button class="btn btn-light btn-lg d-inline-flex align-items-center" (click)="loadMore()"
+                [disabled]="loading$ | async">
+                Load more
+                <span [class.show]="loading$ | async" class="loading-indicator spinner-grow spinner-grow-sm"
+                    role="status" aria-hidden="true"></span>
+            </button>
         </div>
     </div>
 
