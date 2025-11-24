@@ -36,6 +36,7 @@ export class ProductListComponent implements OnInit {
     loading$: Observable<boolean>;
     breadcrumbs$: Observable<Array<{id: string; name: string; }>>;
     mastheadBackground$: Observable<SafeStyle>;
+    
     private currentPage = 0;
     private refresh = new BehaviorSubject<void>(undefined);
     readonly placeholderProducts = Array.from({ length: 12 }).map(() => null);

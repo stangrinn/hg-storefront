@@ -27,6 +27,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
+import { SupportComponent } from './components/support/support.component';
 import { TopReviewsComponent } from './components/top-reviews/top-reviews.component';
 import { buildIconLibrary } from './icon-library';
 import { DefaultInterceptor } from './providers/data/interceptor';
@@ -35,6 +36,7 @@ const CORE_COMPONENTS = [
     ProductListComponent,
     ProductDetailComponent,
     AboutMeComponent,
+    SupportComponent,
     CartToggleComponent,
     AccountLinkComponent,
     CartDrawerComponent,

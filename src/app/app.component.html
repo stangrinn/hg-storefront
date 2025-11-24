@@ -2,11 +2,7 @@
     <hgart-layout-header>
         <div class="content-holder">
 
-            <hgart-mobile-menu-toggle class="md:hidden mb-[26px]"></hgart-mobile-menu-toggle>
-
-            <div class="content-holder-centered">
-                <hgart-collections-menu class="hidden md:block"></hgart-collections-menu>
-            </div>
+            <hgart-mobile-menu-toggle class="mb-[26px]"></hgart-mobile-menu-toggle>
 
             <div class="w-[250px]">
                 <a [routerLink]="['/']" class="logo-link">
@@ -67,7 +63,7 @@
                             USEFUL LINKS
                         </h3>
                         <div>
-                            <div><a href="#">SUPPORT</a></div>
+                            <div><a [routerLink]="['/support']">SUPPORT AND FAQ</a></div>
                             <div><a href="#">PRIVACY POLICY</a></div>
                         </div>
                     </div>
