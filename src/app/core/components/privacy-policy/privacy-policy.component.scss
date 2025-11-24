@@ -1,0 +1,48 @@
+:host {
+    display: block;
+    min-height: 80vh;
+}
+
+.page-title {
+    @apply text-4xl sm:text-6xl font-light tracking-tight text-gray-900 mb-4;
+}
+
+.page-subtitle {
+    @apply text-lg text-gray-600;
+}
+
+.section-title {
+    @apply text-2xl font-medium text-gray-900 mb-4;
+}
+
+.section-list {
+    @apply list-disc list-inside space-y-2;
+}
+
+.toc-container {
+    @apply mb-12 p-6 rounded-lg;
+}
+
+.toc-list {
+    @apply space-y-2 text-gray-700;
+}
+
+.toc-link {
+    @apply hover:text-gray-900;
+}
+
+.content-text {
+    @apply text-gray-700 leading-relaxed;
+}
+
+.email-link {
+    @apply underline hover:text-gray-900;
+}
+
+section {
+    scroll-margin-top: 2rem;
+}
+
+a {
+    transition: color 0.2s;
+}

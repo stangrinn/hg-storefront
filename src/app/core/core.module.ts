@@ -22,6 +22,7 @@ import { LayoutFooterComponent } from './components/layout/layout-footer.compone
 import { LayoutHeaderComponent } from './components/layout/layout-header.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { MobileMenuToggleComponent } from './components/mobile-menu-toggle/mobile-menu-toggle.component';
+import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-policy.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
@@ -37,6 +38,7 @@ const CORE_COMPONENTS = [
     ProductDetailComponent,
     AboutMeComponent,
     SupportComponent,
+    PrivacyPolicyComponent,
     CartToggleComponent,
     AccountLinkComponent,
     CartDrawerComponent,
