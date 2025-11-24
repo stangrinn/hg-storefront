@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { SharedModule } from '../shared/shared.module';
 
 import { APOLLO_CLIENT_PROVIDER } from './apollo-client-provider';
+import { AboutMeComponent } from './components/about-me/about-me.component';
 import { AccountLinkComponent } from './components/account-link/account-link.component';
 import { AssetGalleryComponent } from './components/asset-gallery/asset-gallery.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
@@ -33,6 +34,7 @@ import { DefaultInterceptor } from './providers/data/interceptor';
 const CORE_COMPONENTS = [
     ProductListComponent,
     ProductDetailComponent,
+    AboutMeComponent,
     CartToggleComponent,
     AccountLinkComponent,
     CartDrawerComponent,

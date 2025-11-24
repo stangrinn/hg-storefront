@@ -1,9 +1,14 @@
 import { Route } from '@angular/router';
 
+import { AboutMeComponent } from './core/components/about-me/about-me.component';
 import { ProductDetailComponent } from './core/components/product-detail/product-detail.component';
 import { ProductListComponent } from './core/components/product-list/product-list.component';
 
 export const routes: Route[] = [
+    {
+        path: 'about',
+        component: AboutMeComponent,
+    },
     {
         path: 'category/:slug',
         component: ProductListComponent,
