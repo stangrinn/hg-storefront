@@ -6,7 +6,7 @@
     align-items: flex-start;
     position: fixed;
     height: 100vh;
-    width: calc(100vw - 3rem);
+    width: 100%;
     top: 0;
     left: 0;
     bottom: 0;
@@ -16,5 +16,39 @@
 
     &.visible {
         transform: translateX(0);
+    }
+
+    .drawer-content {
+        @apply pointer-events-none fixed inset-y-0 left-0 flex w-[20%];
+
+        ul li a {
+            padding: 0;
+        }
+
+
+        @media (max-width: 1268px) {
+            width: 40%;
+        }
+
+        @media (max-width: 768px) {
+            width: 100%;
+        }
+
+        .extra-footer {
+            display: none;
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            flex-direction: column;
+            row-gap: 16px;
+
+            a {
+                font-size: 12px;
+            }
+
+            @media (max-width: 768px) {
+                display: flex;
+            }
+        }
     }
 }

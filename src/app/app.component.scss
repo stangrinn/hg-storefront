@@ -28,7 +28,7 @@
             left: auto;
         }
     }
-    
+
 }
 
 /* Footer typography adjustments to match the design mockup */
@@ -70,20 +70,44 @@ hgart-layout-footer footer {
     }
 }
 
+hgart-layout-footer footer {
 
-@media (min-width: 1280px) {
-    hgart-layout-footer footer .footer-grid {
-        align-items: start;
+    .footer-wrapper {
+        @apply xl:grid xl:grid-cols-3 xl:gap-8 border-t-[1px] border-black;
     }
-}
 
-hgart-layout-footer footer .footer-grid>div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 240px;
-    padding-top: 37px;
-    padding-bottom: 20px;
+    .footer-left {}
+
+    .footer-grid {
+        >div {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            padding-top: 37px;
+            padding-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+            display: block;
+        }
+
+        @media (min-width: 1280px) {
+            align-items: start;
+        }
+    }
+
+    @media (max-width: 700px) {
+
+        .footer-bottom {
+            display: block !important;
+        }
+
+        .footer-center,
+        .footer-right {
+            display: none !important;
+        }
+    }
 }
 
 /* Footer bottom text styling */
@@ -92,9 +116,6 @@ hgart-layout-footer footer .footer-bottom {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    @media screen and (max-width: 768px) {
-        display: block;
-    }
 }
 
 /* Full-height vertical dividers between columns */

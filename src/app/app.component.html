@@ -33,53 +33,58 @@
     <hgart-layout-footer>
         <footer aria-labelledby="footer-heading" class="border-t mt-[80px]">
             <h2 class="sr-only" id="footer-heading">Footer</h2>
+
             <div class="pl-[24px] pr-[24px]">
-                <div class="xl:grid xl:grid-cols-3 xl:gap-8 footer-grid border-t-[1px] border-black">
+                <div class="footer-wrapper footer-grid">
                     <!-- Left column -->
-                    <div class="">
+                    <div class="footer-left">
                         <!-- <h3 class="text-sm font-semibold  tracking-wider uppercase">
                             HELENA GRINSHPUN ART
                         </h3> -->
-                        
+
                         <!-- Calligraphic slogan matching the design mockup -->
                         <p class="slogan text-gray-700">Dreams transformed into reality with AI + AR</p>
 
                         <div class="footer-bottom mt-8 ">
 
                             <div class="flex gap-1">
-                                <a href="https://www.instagram.com/helena_grinshpun/" target="_blank" class="text-xs text-gray-600 font-semibold">INSTA</a>
-                                <a href="https://www.facebook.com/h.grinshpun" target="_blank" class="text-xs text-gray-600 font-semibold">FB</a>
+                                <a href="https://www.instagram.com/helena_grinshpun/" target="_blank"
+                                    class="text-xs text-gray-600 font-semibold">INSTA</a>
+                                <a href="https://www.facebook.com/h.grinshpun" target="_blank"
+                                    class="text-xs text-gray-600 font-semibold">FB</a>
                             </div>
-                            
+
                             <div class="footer-bottom">
-                                <span class="text-xs text-gray-600 font-medium">©2025 HELENA GRINSHPUN ART. ALL RIGHTS RESERVED.</span>
+                                <span class="text-xs text-gray-600 font-medium">©2025 HELENA GRINSHPUN ART. ALL RIGHTS
+                                    RESERVED.</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Middle column (with left divider) -->
-                    <div class="border-l footer-middle">
+                    <div class="border-l footer-center">
                         <h3 class="text-sm font-semibold tracking-wider uppercase">
                             USEFUL LINKS
                         </h3>
                         <div>
                             <div><a [routerLink]="['/support']">SUPPORT AND FAQ</a></div>
-                            <div><a href="#">PRIVACY POLICY</a></div>
+                            <div><a [routerLink]="['/privacy-policy']">PRIVACY POLICY</a></div>
                         </div>
                     </div>
 
                     <!-- Right column (with left divider) -->
-                    <div class="border-l">
+                    <div class="border-l footer-right">
                         <h3 class="text-sm font-semibold  tracking-wider uppercase">
                             CONTACT
                         </h3>
-                        
+
                         <div>
                             <div>
                                 <a [routerLink]="['/about']">ABOUT ME</a>
                             </div>
                             <div>
-                                <a href="mailto:hello@helenagrinshpun.art" class="text-base inline-block">HELLO HELENAGRINSHPUN.ART</a>
+                                <a href="mailto:hello@helenagrinshpun.art" class="text-base inline-block">HELLO
+                                    HELENAGRINSHPUN.ART</a>
                             </div>
                         </div>
                     </div>
