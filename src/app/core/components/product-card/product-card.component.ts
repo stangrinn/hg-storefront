@@ -1,10 +1,20 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    HostListener,
+    Input,
+    OnChanges,
+    ViewChild,
+} from '@angular/core';
 
 import { SearchProductsQuery } from '../../../common/generated-types';
 
 /**
- * ProductCardComponent displays a product card with hover animation support.
- * On hover, switches from preview image to source (e.g., animated GIF).
+ * ProductCardComponent displays a product card with video hover animation support.
+ * On hover, plays a video overlay if a video source is available.
  */
 @Component({
     selector: 'hgart-product-card',
@@ -12,40 +22,105 @@ import { SearchProductsQuery } from '../../../common/generated-types';
     styleUrls: ['./product-card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductCardComponent implements OnChanges {
+export class ProductCardComponent implements OnChanges, AfterViewInit {
     @Input() product: SearchProductsQuery['search']['items'][number];
 
-    /** Currently displayed image URL */
+    @ViewChild('videoPlayer', { static: false }) videoPlayer: ElementRef<HTMLVideoElement>;
+
+    /** Currently displayed preview image URL */
     currentImage: string;
 
-    hoverImage = '';
+    /** Video source URL for hover effect */
+    videoSource: string | null = null;
 
-    constructor(private el: ElementRef) {}
+    /** Controls video visibility */
+    isVideoVisible = false;
+
+    /** Flag to track if user has interacted with the page */
+    private static userHasInteracted = false;
+
+    constructor(private cdr: ChangeDetectorRef) {}
+
+    /**
+     * Track first user interaction to enable video autoplay.
+     */
+    @HostListener('document:click', ['$event'])
+    @HostListener('document:keydown', ['$event'])
+    @HostListener('document:touchstart', ['$event'])
+    onUserInteraction(): void {
+        ProductCardComponent.userHasInteracted = true;
+    }
 
     ngOnChanges(): void {
         if (this.product?.productAsset?.preview) {
             this.currentImage = this.product.productAsset.preview;
         }
+
+        // Check if variant asset is a video file
+        const source = this.product?.productVariantAsset?.source;
+        if (source && this.isVideoFile(source)) {
+            this.videoSource = source;
+        } else {
+            this.videoSource = null;
+        }
+    }
+
+    ngAfterViewInit(): void {
+        // Preload video for faster playback on hover
+        if (this.videoPlayer?.nativeElement && this.videoSource) {
+            const video = this.videoPlayer.nativeElement;
+            video.preload = 'auto';
+            video.load();
+        }
     }
 
     /**
-     * Switches to the source image (e.g., animated GIF) on mouse hover.
-     * Uses the source URL from productAsset which is now available in the search query.
+     * Checks if the source URL points to a video file.
+     * @param source - Asset source URL
+     * @returns True if the source is a video file
+     */
+    private isVideoFile(source: string): boolean {
+        const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+        const lowerSource = source.toLowerCase();
+        return videoExtensions.some(ext => lowerSource.includes(ext));
+    }
+
+    /**
+     * Shows and plays the video on mouse hover.
      */
     onMouseOver(): void {
-        const source = this.product?.productVariantAsset?.source;
-        
-       if (!source) return;
+        if (!this.videoSource) return;
 
-       this.hoverImage = source + '?reload=' + new Date().getTime();
+        this.isVideoVisible = true;
+        this.cdr.markForCheck();
+
+        // Play video - muted videos should autoplay even without user interaction
+        setTimeout(() => {
+            if (this.videoPlayer?.nativeElement) {
+                const video = this.videoPlayer.nativeElement;
+                video.currentTime = 0;
+                
+                // Ensure video is muted (required for autoplay policy)
+                video.muted = true;
+                
+                video.play().catch(() => {
+                    // Silently fail - video will just show paused frame
+                });
+            }
+        }, 0);
     }
 
     /**
-     * Switches back to the preview image on mouse out.
+     * Hides the video and stops playback on mouse out.
      */
     onMouseOut(): void {
-        if (this.product?.productAsset?.preview) {
-            this.hoverImage = '';
+        if (!this.videoSource) return;
+
+        this.isVideoVisible = false;
+        this.cdr.markForCheck();
+
+        if (this.videoPlayer?.nativeElement) {
+            this.videoPlayer.nativeElement.pause();
         }
     }
 }

@@ -1,23 +1,23 @@
 :host {
     .img-wrapper {
-        @apply overflow-hidden border-8 border-solid border-black;
+        @apply overflow-hidden border-8 border-solid border-black relative;
         background-size: cover;
         background-position: center;
         aspect-ratio: 3/4;
         width: 229px + 16px; // 229px image width + 8px border on each side
         height: 304px + 16px; // 304px image height + 8px border on each side
         transition: transform 0.3s ease-in-out;
-        
-        .img {
-            width: 100%;
-            aspect-ratio: 3/4;
-            background-size: cover;
-            background-position: center;
-            transition: transform 0.3s ease-in-out;
 
-            // &:hover {
-            //     background-image: url('/assets/icons/woman-of-silence.gif') !important;
-            // }
+        // Video overlay styles
+        .video-overlay {
+            @apply absolute inset-0 w-full h-full object-cover;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+
+            &.visible {
+                opacity: 1;
+            }
         }
     }
 }
