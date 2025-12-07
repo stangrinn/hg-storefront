@@ -35,11 +35,9 @@ export class ProductCardComponent implements OnChanges {
     onMouseOver(): void {
         const source = this.product?.productVariantAsset?.source;
         
-        console.log('Hovering over product card, switching to source image:', this.product);
-        
-        if (source) {
-            this.hoverImage = source;
-        }
+       if (!source) return;
+
+       this.hoverImage = source + '?reload=' + new Date().getTime();
     }
 
     /**

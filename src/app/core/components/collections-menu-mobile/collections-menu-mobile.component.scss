@@ -22,6 +22,7 @@
         @apply pointer-events-none fixed inset-y-0 left-0 flex w-[20%];
 
         ul li a {
+            @apply block text-gray-700 cursor-pointer w-full hover:bg-gray-50 hover:text-black items-center font-medium;
             padding: 8px 16px;
             margin-bottom: 12px;
             font-size: 14px;
@@ -31,7 +32,7 @@
 
         &-title {
             @apply text-[18px] font-bold uppercase;
-            padding: 8px 16px;
+            padding: 8px 0 8px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
