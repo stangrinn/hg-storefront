@@ -6,10 +6,22 @@
     min-height: 100%;
 
     .content-holder {
-        @apply flex items-center justify-between ml-[30px] mt-[40px] mr-[30px] border-b-2 border-dashed border-black text-[17px] font-bold uppercase;
+        @apply ml-[30px] mt-[40px] mr-[30px];
 
         &-centered {
             @apply flex items-center justify-center gap-6;
+        }
+
+        &-items {
+            @apply flex items-center justify-between text-[17px] font-bold uppercase;
+        }
+
+
+        .dashed {
+            background-image: url("/assets/icons/dashed-long.svg");
+            background-repeat: repeat;
+            width: 100%;
+            height: 2px;
         }
     }
 

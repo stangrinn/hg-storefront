@@ -26,8 +26,8 @@ export class CollectionsMenuMobileComponent implements OnInit {
     selected1: string | null = null;
 
     constructor(private router: Router,
-                private stateService: StateService,
-                private dataService: DataService) { }
+        private stateService: StateService,
+        private dataService: DataService) { }
 
     ngOnInit() {
         this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {

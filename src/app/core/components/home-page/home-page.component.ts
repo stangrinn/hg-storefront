@@ -29,14 +29,14 @@ export class HomePageComponent implements OnInit {
 
     ngOnInit(): void {
         const collections$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
-            options: { 
+            options: {
                 take: 50,
                 sort: {
                     name: 'DESC'
                 }
             },
         }).pipe(
-            map(({collections}) => {
+            map(({ collections }) => {
                 // console.log('All collections:', collections.items);
                 return collections.items.filter(c => c.parent && c.parent.id === '1');
             })
@@ -45,13 +45,13 @@ export class HomePageComponent implements OnInit {
         this.collectionsWithProducts$ = collections$.pipe(
             switchMap(rootCollections => {
                 console.log('Root collections:', rootCollections);
-                
+
                 if (rootCollections.length === 0) {
                     return of([]);
                 }
-                
+
                 // Create observables for each collection's products
-                const observables = rootCollections.map(collection => 
+                const observables = rootCollections.map(collection =>
                     this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
                         input: {
                             collectionSlug: collection.slug,
@@ -68,17 +68,17 @@ export class HomePageComponent implements OnInit {
                         })
                     )
                 );
-                
+
                 // Combine all product queries
                 return combineLatest(observables);
             })
         );
-        
+
         this.heroImage = this.getHeroImageUrl();
     }
 
     private getHeroImageUrl(): string {
-        const {apiHost, apiPort} = environment;
+        const { apiHost, apiPort } = environment;
         return `${apiHost}:${apiPort}/assets/preview/a2/thomas-serer-420833-unsplash__preview.jpg`;
     }
 
@@ -122,6 +122,16 @@ const SEARCH_PRODUCTS = gql`
                 productAsset {
                     id
                     preview
+                    source
+                    focalPoint {
+                        x
+                        y
+                    }
+                }
+                productVariantAsset {
+                    id
+                    preview
+                    source
                     focalPoint {
                         x
                         y

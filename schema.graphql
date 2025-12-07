@@ -1328,6 +1328,7 @@ type SearchResultAsset {
     focalPoint: Coordinate
     id: ID!
     preview: String!
+    source: String!
 }
 
 type Seller implements Node {

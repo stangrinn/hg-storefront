@@ -1,4 +1,4 @@
-import {gql} from 'apollo-angular';
+import { gql } from 'apollo-angular';
 
 
 import { ASSET_FRAGMENT } from '../../../common/graphql/fragments.graphql';
@@ -20,6 +20,16 @@ export const SEARCH_PRODUCTS = gql`
                 productAsset {
                     id
                     preview
+                    source
+                    focalPoint {
+                        x
+                        y
+                    }
+                }
+                productVariantAsset {
+                    id
+                    preview
+                    source
                     focalPoint {
                         x
                         y

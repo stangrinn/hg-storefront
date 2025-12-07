@@ -1,20 +1,24 @@
 <hgart-layout>
     <hgart-layout-header>
         <div class="content-holder">
+            <div class="content-holder-items">
+                <hgart-mobile-menu-toggle class="mb-[26px]"></hgart-mobile-menu-toggle>
 
-            <hgart-mobile-menu-toggle class="mb-[26px]"></hgart-mobile-menu-toggle>
+                <div class="w-[250px]">
+                    <a [routerLink]="['/']" class="logo-link">
+                        <img alt="Helena Grinshpun ARt" class="w-[280px]" src="assets/logo.png">
+                    </a>
+                </div>
 
-            <div class="w-[250px]">
-                <a [routerLink]="['/']" class="logo-link">
-                    <img alt="Helena Grinshpun ARt" class="w-[280px]" src="assets/logo.png">
-                </a>
+                <!-- <div class="content-holder-centered">
+                    <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle>
+
+                    <hgart-account-link class=""></hgart-account-link>
+                </div> -->
             </div>
 
-            <!-- <div class="content-holder-centered">
-                <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle>
+            <div class="dashed"> </div>
 
-                <hgart-account-link class=""></hgart-account-link>
-            </div> -->
         </div>
     </hgart-layout-header>
 

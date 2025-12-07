@@ -1,55 +1,23 @@
-//@import "variables";
-//
-//:host {
-//    display: block;
-//    margin: $spacer calc($spacer / 2) $spacer * 2;
-//    width: 200px;
-//
-//    &:hover {
-//        .product-image {
-//            opacity: 1;
-//        }
-//    }
-//}
-//
-//.image-wrapper {
-//    display: block;
-//    overflow: hidden;
-//}
-//
-//.product-image {
-//    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-//    opacity: 0.85;
-//}
-//
-//.product-name {
-//    text-align: center;
-//    color: $gray-800;
-//    display: block;
-//
-//    &:hover {
-//        color: $gray-700;
-//        text-decoration: underline;
-//        text-decoration-color: $gray-400;
-//    }
-//}
-//
-//.price {
-//    font-weight: normal;
-//    text-align: center;
-//    color: $gray-600;
-//}
-//
-//.placeholder-image {
-//    height: 200px;
-//    width: 200px;
-//}
-//
-//.placeholder-title {
-//    height: $font-size-base;
-//    margin-bottom: calc($spacer / 2);
-//}
-//
-//.placeholder-body {
-//    height: $font-size-base;
-//}
+:host {
+    .img-wrapper {
+        @apply overflow-hidden border-8 border-solid border-black;
+        background-size: cover;
+        background-position: center;
+        aspect-ratio: 3/4;
+        width: 229px + 16px; // 229px image width + 8px border on each side
+        height: 304px + 16px; // 304px image height + 8px border on each side
+        transition: transform 0.3s ease-in-out;
+        
+        .img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s ease-in-out;
+
+            // &:hover {
+            //     background-image: url('/assets/icons/woman-of-silence.gif') !important;
+            // }
+        }
+    }
+}
