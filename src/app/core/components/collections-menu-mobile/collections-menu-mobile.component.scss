@@ -39,7 +39,7 @@
         }
 
         &-holder {
-            @apply flex-1 flex flex-col overflow-y-hidden sm:px-6;
+            @apply overflow-y-hidden sm:px-6;
             padding: 66px 52px;
 
             .dashed {
@@ -63,7 +63,7 @@
         }
 
         .extra-footer {
-            // border-top: 2px dashed black;
+            
             padding: 50px 16px;
             flex-direction: column;
             row-gap: 16px;
@@ -75,6 +75,7 @@
             a {
                 font-size: 14px;
                 font-weight: 500;
+                @apply block text-gray-700;
             }
 
         }

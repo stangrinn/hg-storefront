@@ -12,7 +12,7 @@
         .video-overlay {
             @apply absolute inset-0 w-full h-full object-cover;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.6s ease-in-out;
             pointer-events: none;
 
             &.visible {

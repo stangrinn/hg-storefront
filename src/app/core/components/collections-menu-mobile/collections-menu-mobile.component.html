@@ -23,14 +23,14 @@
                                 <ul class="drawer-content-list" *ngIf="collectionTree$ | async as tree">
 
                                     <li *ngFor="let collection of tree.children">
-                                        <a class="block text-gray-700 cursor-pointer w-full hover:bg-gray-50 hover:text-black group items-center font-medium"
+                                        <a 
                                             tabindex="0" (click)="onL0Click($event, collection)"
                                             (keydown)="onL0Keydown($event, collection)">{{ collection.name }}</a>
 
                                         <ul *ngIf="collection.children.length"
                                             [ngClass]="selected0 === collection.id ? 'block' : 'hidden'">
                                             <li class="level1" *ngFor="let level1 of collection.children">
-                                                <a class="block text-gray-700 cursor-pointer w-full hover:bg-gray-50 hover:text-black group items-center font-medium"
+                                                <a 
                                                     tabindex="0" (click)="onL1Click($event, level1)"
                                                     (keydown)="onL1Keydown($event, level1)">{{ level1.name }}</a>
                                                 <ul *ngIf="level1.children.length" class="expandable"
@@ -55,8 +55,11 @@
                                         USEFUL LINKS
                                     </h3>
                                     <div>
-                                        <div class="pb-[42px]"><a [routerLink]="['/support']">SUPPORT AND FAQ</a></div>
-                                        <div class="pb-[42px]"><a [routerLink]="['/privacy-policy']">PRIVACY POLICY</a>
+                                        <div class="pb-[42px]">
+                                            <a [routerLink]="['/support']">SUPPORT AND FAQ</a>
+                                        </div>
+                                        <div class="pb-[42px]">
+                                            <a [routerLink]="['/privacy-policy']">PRIVACY POLICY</a>
                                         </div>
                                     </div>
                                 </div>

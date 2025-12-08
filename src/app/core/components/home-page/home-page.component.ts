@@ -31,14 +31,18 @@ export class HomePageComponent implements OnInit {
         const collections$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
             options: {
                 take: 50,
+                
                 sort: {
-                    name: 'DESC'
+                    name: 'ASC'
                 }
             },
         }).pipe(
             map(({ collections }) => {
                 // console.log('All collections:', collections.items);
-                return collections.items.filter(c => c.parent && c.parent.id === '1');
+                // Filter root collections and exclude 'Kids Posters' (id: '12')
+                return collections.items.filter(c => 
+                    c.parent && c.parent.id === '1' && c.id !== '12'
+                );
             })
         );
 

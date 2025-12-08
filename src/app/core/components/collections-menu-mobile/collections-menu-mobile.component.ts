@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GetCollectionsQuery, GetCollectionsQueryVariables } from '../../../common/generated-types';
+import { GetCollectionsQuery, GetCollectionsQueryVariables, SortOrder } from '../../../common/generated-types';
 import { GET_COLLECTIONS } from '../../../common/graphql/documents.graphql';
 import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state/state.service';
@@ -31,7 +31,12 @@ export class CollectionsMenuMobileComponent implements OnInit {
 
     ngOnInit() {
         this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
-            options: { take: 50 },
+            options: {
+                take: 50,
+                sort: {
+                    name: SortOrder.ASC,
+                }
+            },
         }).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
