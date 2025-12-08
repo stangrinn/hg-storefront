@@ -2488,7 +2488,7 @@ export type Product = Node & {
   assets: Array<Asset>;
   collections: Array<Collection>;
   createdAt: Scalars['DateTime'];
-  customFields?: Maybe<Scalars['JSON']>;
+  customFields?: Maybe<ProductCustomFields>;
   description: Scalars['String'];
   facetValues: Array<FacetValue>;
   featuredAsset?: Maybe<Asset>;
@@ -2508,6 +2508,12 @@ export type Product = Node & {
 
 export type ProductVariantListArgs = {
   options?: InputMaybe<ProductVariantListOptions>;
+};
+
+/** Custom fields for Product entity */
+export type ProductCustomFields = {
+  __typename?: 'ProductCustomFields';
+  additionalInfo?: Maybe<Scalars['String']>;
 };
 
 export type ProductFilterParameter = {
@@ -2609,7 +2615,7 @@ export type ProductVariant = Node & {
   assets: Array<Asset>;
   createdAt: Scalars['DateTime'];
   currencyCode: CurrencyCode;
-  customFields?: Maybe<Scalars['JSON']>;
+  customFields?: Maybe<ProductVariantCustomFields>;
   facetValues: Array<FacetValue>;
   featuredAsset?: Maybe<Asset>;
   id: Scalars['ID'];
@@ -2626,6 +2632,12 @@ export type ProductVariant = Node & {
   taxRateApplied: TaxRate;
   translations: Array<ProductVariantTranslation>;
   updatedAt: Scalars['DateTime'];
+};
+
+/** Custom fields for ProductVariant entity */
+export type ProductVariantCustomFields = {
+  __typename?: 'ProductVariantCustomFields';
+  additionalInfo?: Maybe<Scalars['String']>;
 };
 
 export type ProductVariantFilterParameter = {
@@ -3560,7 +3572,7 @@ export type GetProductDetailQueryVariables = Exact<{
 }>;
 
 
-export type GetProductDetailQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description: string, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, price: any, priceWithTax: any, sku: string, options: Array<{ __typename?: 'ProductOption', code: string, name: string }> }>, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, assets: Array<{ __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }>, collections: Array<{ __typename?: 'Collection', id: string, slug: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }> } };
+export type GetProductDetailQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, name: string, description: string, customFields?: { __typename?: 'ProductCustomFields', additionalInfo?: string }, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, price: any, priceWithTax: any, sku: string, options: Array<{ __typename?: 'ProductOption', code: string, name: string }>, customFields?: { __typename?: 'ProductVariantCustomFields', additionalInfo?: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, assets: Array<{ __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }>, collections: Array<{ __typename?: 'Collection', id: string, slug: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }> } };
 
 export type AddToCartMutationVariables = Exact<{
   variantId: Scalars['ID'];

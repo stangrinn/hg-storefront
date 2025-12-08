@@ -5,6 +5,16 @@ schema {
     mutation: Mutation
 }
 
+"""Custom fields for Product entity"""
+type ProductCustomFields {
+    additionalInfo: String
+}
+
+"""Custom fields for ProductVariant entity"""
+type ProductVariantCustomFields {
+    additionalInfo: String
+}
+
 interface CustomField {
     description: [LocalizedString!]
     internal: Boolean
@@ -1018,7 +1028,7 @@ type Product implements Node {
     assets: [Asset!]!
     collections: [Collection!]!
     createdAt: DateTime!
-    customFields: JSON
+    customFields: ProductCustomFields
     description: String!
     facetValues: [FacetValue!]!
     featuredAsset: Asset
@@ -1095,7 +1105,7 @@ type ProductVariant implements Node {
     assets: [Asset!]!
     createdAt: DateTime!
     currencyCode: CurrencyCode!
-    customFields: JSON
+    customFields: ProductVariantCustomFields
     facetValues: [FacetValue!]!
     featuredAsset: Asset
     id: ID!

@@ -1,4 +1,4 @@
-import {gql} from 'apollo-angular';
+import { gql } from 'apollo-angular';
 
 
 import { ASSET_FRAGMENT, CART_FRAGMENT, ERROR_RESULT_FRAGMENT } from '../../../common/graphql/fragments.graphql';
@@ -9,6 +9,9 @@ export const GET_PRODUCT_DETAIL = gql`
             id
             name
             description
+            customFields {
+                additionalInfo
+            }
             variants {
                 id
                 name
@@ -19,6 +22,9 @@ export const GET_PRODUCT_DETAIL = gql`
                 price
                 priceWithTax
                 sku
+                customFields {
+                    additionalInfo
+                }
             }
             featuredAsset {
                 ...Asset

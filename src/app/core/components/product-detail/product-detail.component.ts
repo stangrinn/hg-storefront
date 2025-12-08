@@ -20,6 +20,9 @@ import { ActiveService } from '../../providers/active/active.service';
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
 
+/** Available tabs for product detail page */
+type ProductTab = 'description' | 'additionalInfo';
+
 @Component({
     selector: 'hgart-product-detail',
     templateUrl: './product-detail.component.html',
@@ -34,6 +37,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     qty = 1;
     breadcrumbs: Collection['breadcrumbs'] | null = null;
     inFlight = false;
+    
+    /** Currently active tab */
+    activeTab: ProductTab = 'description';
+    
     @ViewChild('addedToCartTemplate', {static: true})
     private addToCartTemplate: TemplateRef<any>;
     private sub: Subscription;
@@ -143,6 +150,33 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             }
             return 0;
         })[0];
+    }
+
+    /**
+     * Sets the active tab.
+     * @param tab - Tab to activate
+     */
+    setActiveTab(tab: ProductTab): void {
+        this.activeTab = tab;
+    }
+
+    /**
+     * Returns the additional info content with priority:
+     * variant's additionalInfo > product's additionalInfo.
+     * @returns Additional info HTML content or null
+     */
+    getAdditionalInfo(): string | null {
+        const variantInfo = this.selectedVariant?.customFields?.additionalInfo;
+        const productInfo = this.product?.customFields?.additionalInfo;
+        return variantInfo || productInfo || null;
+    }
+
+    /**
+     * Checks if additional info is available for current product/variant.
+     * @returns True if additional info exists
+     */
+    hasAdditionalInfo(): boolean {
+        return !!this.getAdditionalInfo();
     }
 
 }
