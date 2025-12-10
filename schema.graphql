@@ -8,6 +8,7 @@ schema {
 """Custom fields for Product entity"""
 type ProductCustomFields {
     additionalInfo: String
+    artCollectionName: String
 }
 
 """Custom fields for ProductVariant entity"""

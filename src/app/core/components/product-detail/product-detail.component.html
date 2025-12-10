@@ -1,177 +1,113 @@
-<div class="max-w-6xl mx-auto px-4">
-    <h2 *ngIf="product; else titlePlaceholder"
-        class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-        {{ product?.name ?? '  ' }}
-    </h2>
-    <ng-template #titlePlaceholder>
-        <div class="h-8 w-72 bg-gray-200 animate-pulse my-8">
-            {{ product?.name ?? '  ' }}
+<div class="product-detail-wrapper">
+    <div class="product-detail-container">
+
+        <div class="product-grid">
+            <div class="product-nav product-nav-prev" (click)="nextOrPreviousProduct(false)"></div>
+
+            <div class="product-main-content">
+                <hgart-asset-gallery [assets]="product?.assets" [selectedAssetId]="product?.featuredAsset?.id" />
+
+                <div class="product-info">
+
+                    <div class="product-header">
+
+                        <div class="product-header__content">
+                            <div class="product-header__titles">
+                                <h2 class="product-title">
+                                    {{ product?.name ?? ' ' }}
+                                </h2>
+
+                                <div *ngIf="product?.customFields?.artCollectionName" class="product-collection-name">
+                                    {{ product?.customFields?.artCollectionName }} collection
+                                </div>
+                            </div>
+
+
+                            <button type="submit" class="preorder-btn" [ngClass]="{
+                                    'preorder-btn--disabled': inFlight,
+                                    'preorder-btn--active': !inFlight
+                                }">
+                                <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">PREORDER
+                                </div>
+
+                                <ng-template #inCartCount>
+                                    <fa-icon icon="check" class="preorder-btn__icon"></fa-icon>
+                                    <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
+                                </ng-template>
+
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="variant-selector" *ngIf="product?.variants.length > 1">
+                        <label htmlFor="option" class="variant-selector__label">
+                            Select option
+                        </label>
+                        <select [(ngModel)]="selectedVariant" class="variant-selector__select">
+                            <option *ngFor="let variant of product?.variants" [ngValue]="variant">{{ variant.name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="product-close" (click)="closeProductDetails()"></div>
+                <div (click)="nextOrPreviousProduct(true)" class="product-nav product-nav-next"></div>
+            </div>
+
         </div>
-    </ng-template>
-    <!-- <hgart-collection-breadcrumbs [breadcrumbs]="breadcrumbs"
-                                class="mb-2"
-                                [linkLast]="true"></hgart-collection-breadcrumbs> -->
-    <div class="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start mt-4 md:mt-12">
-        <hgart-asset-gallery
-            [assets]="product?.assets"
-            [selectedAssetId]="product?.featuredAsset?.id"></hgart-asset-gallery>
-        <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0" #zoomPreviewArea>
-            
-            <!-- Tabs Navigation -->
-            <div class="border-b border-gray-200 mb-6">
-                <nav class="flex space-x-8">
-                    <button 
-                        type="button"
-                        (click)="setActiveTab('description')"
-                        class="pb-4 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors"
-                        [ngClass]="{
-                            'border-black text-black': activeTab === 'description',
-                            'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'description'
-                        }">
-                        Description
-                    </button>
-                    <button 
-                        *ngIf="hasAdditionalInfo()"
-                        type="button"
-                        (click)="setActiveTab('additionalInfo')"
-                        class="pb-4 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors"
-                        [ngClass]="{
-                            'border-black text-black': activeTab === 'additionalInfo',
-                            'border-transparent text-gray-500 hover:text-gray-700': activeTab !== 'additionalInfo'
-                        }">
-                        Additional Information
-                    </button>
-                </nav>
+
+    </div>
+
+    <div class="tabs">
+        <!-- Tabs Navigation -->
+        <div class="tabs__nav">
+            <nav class="tabs__nav-list">
+                <button type="button" (click)="setActiveTab('description')" class="tabs__tab" [ngClass]="{
+                        'tabs__tab--active': activeTab === 'description',
+                        'tabs__tab--inactive': activeTab !== 'description'
+                    }">
+                    Description
+                </button>
+                <button *ngIf="hasAdditionalInfo()" type="button" (click)="setActiveTab('additionalInfo')"
+                    class="tabs__tab" [ngClass]="{
+                        'tabs__tab--active': activeTab === 'additionalInfo',
+                        'tabs__tab--inactive': activeTab !== 'additionalInfo'
+                    }">
+                    Additional Information
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tabs__content">
+            <!-- Description Tab -->
+            <div *ngIf="activeTab === 'description'" class="tabs__panel">
+                <h3 class="tabs__panel-title">Description</h3>
+                <div class="tabs__panel-content" [innerHTML]="product?.description | safeHtml"></div>
             </div>
 
-            <!-- Tab Content -->
-            <div class="">
-                <!-- Description Tab -->
-                <div *ngIf="activeTab === 'description'">
-                    <h3 class="sr-only">Description</h3>
-                    <div
-                        class="text-base text-gray-700"
-                        [innerHTML]="product?.description | safeHtml"
-                    ></div>
-                </div>
-
-                <!-- Additional Information Tab -->
-                <div *ngIf="activeTab === 'additionalInfo' && hasAdditionalInfo()">
-                    <h3 class="sr-only">Additional Information</h3>
-                    <div
-                        class="text-base text-gray-700"
-                        [innerHTML]="getAdditionalInfo() | safeHtml"
-                    ></div>
-                </div>
+            <!-- Additional Information Tab -->
+            <div *ngIf="activeTab === 'additionalInfo' && hasAdditionalInfo()" class="tabs__panel">
+                <h3 class="tabs__panel-title">Additional Information</h3>
+                <div class="tabs__panel-content" [innerHTML]="getAdditionalInfo() | safeHtml"></div>
             </div>
-            
-            <div class="mt-4" *ngIf="product?.variants.length > 1">
-                <label
-                    htmlFor="option"
-                    class="block text-sm font-medium text-gray-700"
-                >
-                    Select option
-                </label>
-                <select [(ngModel)]="selectedVariant"
-                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
-                    <option *ngFor="let variant of product?.variants"
-                            [ngValue]="variant">{{ variant.name }}</option>
-                </select>
-            </div>
-
-            <div class="mt-10 flex flex-col sm:flex-row sm:items-center">
-                <!-- <p class="text-3xl text-gray-900 mr-4">
-                    {{ selectedVariant?.priceWithTax | formatPrice }}
-                </p> -->
-                <div class="flex sm:flex-col1 align-baseline">
-                    <!-- <button
-                        type="submit"
-                        class="max-w-xs flex-1 transition-colors border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full"
-                        [ngClass]="{
-                            'bg-gray-400': inFlight,
-                            'bg-black hover:bg-grey': !inFlight
-                        }"
-                        (click)="addToCart(selectedVariant, qty)"
-                    >
-                        <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">Add to cart</div>
-                        <ng-template #inCartCount>
-                            <fa-icon icon="check" class="mr-2"></fa-icon>
-                            <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
-                        </ng-template>
-                    </button>
-
-                    <button
-                        type="button"
-                        class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500"
-                    >
-                        <fa-icon icon="heart"></fa-icon>
-                        <span class="sr-only">Add to favorites</span>
-                    </button> -->
-
-                    <button
-                        type="submit"
-                        class="max-w-xs flex-1 transition-colors border border-transparent py-3 px-8 flex items-center justify-center text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full"
-                        [ngClass]="{
-                            'bg-gray-400': inFlight,
-                            'bg-black hover:bg-grey': !inFlight
-                        }"
-                    >
-                        <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">Preorder</div>
-                        <ng-template #inCartCount>
-                            <fa-icon icon="check" class="mr-2"></fa-icon>
-                            <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
-                        </ng-template>
-                    </button>
-                </div>
-            </div>
-            <div class="mt-2 flex items-center space-x-2">
-                <span class="text-gray-500">
-                    {{selectedVariant?.sku}}
-                </span>
-            </div>
-            <!-- <section class="mt-12 pt-12 border-t text-xs">
-                <h3 class="text-gray-600 font-bold mb-2">
-                    Shipping & Returns
-                </h3>
-                <div class="text-gray-500 space-y-1">
-                    <p>
-                        Standard shipping: 3 - 5 working days.
-                        Express shipping: 1 - 3 working days.
-                    </p>
-                    <p>
-                        Shipping costs depend on delivery
-                        address and will be calculated during
-                        checkout.
-                    </p>
-                    <p>
-                        Returns are subject to terms. Please see
-                        the <span class="underline">returns page</span>
-                        for further information.
-                    </p>
-                </div>
-            </section> -->
         </div>
     </div>
-    <!-- <div className="mt-24">
-        <hgart-top-reviews></hgart-top-reviews>
-    </div> -->
 </div>
 
 <ng-template #addedToCartTemplate let-variant="variant" let-quantity="quantity" let-close="closeFn">
-    <div class="flex">
-        <div class="mr-8">
-            <img
-                class="rounded"
+    <div class="cart-notification">
+        <div class="cart-notification__image-wrapper">
+            <img class="cart-notification__image"
                 [src]="(variant.featuredAsset?.preview || product?.featuredAsset?.preview) + '?preset=tiny'"
-                alt="product thumbnail"
-            />
+                alt="product thumbnail" />
         </div>
-        <div class="text-sm">{{ quantity }} x {{ variant.name }}</div>
+        <div class="cart-notification__text">{{ quantity }} x {{ variant.name }}</div>
     </div>
-    <div class="flex justify-end">
-        <button type="button"
-                (click)="viewCartFromNotification(close)"
-                class="inline-flex items-center rounded border border-transparent bg-primary-100 px-2.5 py-1.5 text-xs font-medium text-primary-700 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+    <div class="cart-notification__actions">
+        <button type="button" (click)="viewCartFromNotification(close)" class="cart-notification__view-cart-btn">
             View cart
         </button>
     </div>

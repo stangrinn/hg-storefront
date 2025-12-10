@@ -81,7 +81,9 @@ export class ProductCardComponent implements OnChanges, AfterViewInit {
      */
     private isVideoFile(source: string): boolean {
         const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+        
         const lowerSource = source.toLowerCase();
+
         return videoExtensions.some(ext => lowerSource.includes(ext));
     }
 
@@ -98,14 +100,13 @@ export class ProductCardComponent implements OnChanges, AfterViewInit {
         setTimeout(() => {
             if (this.videoPlayer?.nativeElement) {
                 const video = this.videoPlayer.nativeElement;
+                
                 video.currentTime = 0;
                 
                 // Ensure video is muted (required for autoplay policy)
                 video.muted = true;
                 
-                video.play().catch(() => {
-                    // Silently fail - video will just show paused frame
-                });
+                video.play().catch(() => { /* Silently fail - video will just show paused frame */ });
             }
         }, 0);
     }

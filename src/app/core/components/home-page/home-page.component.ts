@@ -48,7 +48,7 @@ export class HomePageComponent implements OnInit {
 
         this.collectionsWithProducts$ = collections$.pipe(
             switchMap(rootCollections => {
-                console.log('Root collections:', rootCollections);
+                // console.log('Root collections:', rootCollections);
 
                 if (rootCollections.length === 0) {
                     return of([]);
@@ -64,7 +64,7 @@ export class HomePageComponent implements OnInit {
                         }
                     }).pipe(
                         map(result => {
-                            console.log(`Products for ${collection.name}:`, result.search.items);
+                            // console.log(`Products for ${collection.name}:`, result.search.items);
                             return {
                                 collection,
                                 products: result.search.items

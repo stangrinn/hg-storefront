@@ -77,7 +77,7 @@ export class ProductListComponent implements OnInit {
                     return this.dataService.query<GetCollectionQuery, GetCollectionQueryVariables>(GET_COLLECTION, {
                         slug,
                     }).pipe(
-                        tap(data => console.log('Fetched collection:', data.collection)),
+                        // tap(data => console.log('Fetched collection:', data.collection)),
                         map(data => data.collection),
                     );
                 } else {
@@ -183,6 +183,11 @@ export class ProductListComponent implements OnInit {
                     return acc.concat(val);
                 }
             }, [] as SearchItem[]),
+            tap(products => {
+                // Save product slugs for navigation between products
+                const slugs = products.map(p => p.slug);
+                this.stateService.setState('collectionProductSlugs', slugs);
+            }),
         );
         this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
         this.displayLoadMore$ = combineLatest(this.products$, this.totalResults$).pipe(
@@ -191,7 +196,7 @@ export class ProductListComponent implements OnInit {
             }),
         );
 
-        console.log('ProductListComponent initialized', this.collection$);
+        // console.log('ProductListComponent initialized', this.collection$);
     }
 
     trackByProductId(index: number, item: SearchItem) {

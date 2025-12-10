@@ -1,20 +1,23 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
+import { Location } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, Subscription } from 'rxjs';
+import { filter, map, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 
 import {
     AddToCartMutation,
     AddToCartMutationVariables,
     GetProductDetailQuery,
-    GetProductDetailQueryVariables
+    GetProductDetailQueryVariables,
+    SearchCollectionProductsQuery,
+    SearchCollectionProductsQueryVariables
 } from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data/data.service';
 import { NotificationService } from '../../providers/notification/notification.service';
 import { StateService } from '../../providers/state/state.service';
 
-import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
+import { ADD_TO_CART, GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
 import { ActiveService } from '../../providers/active/active.service';
 
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
@@ -27,33 +30,55 @@ type ProductTab = 'description' | 'additionalInfo';
     selector: 'hgart-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss'],
+    // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
     product: GetProductDetailQuery['product'];
-    selectedAsset: { id: string; preview: string; };
+    
     qtyInCart: { [id: string]: number; } = {};
     selectedVariant: Variant;
     qty = 1;
     breadcrumbs: Collection['breadcrumbs'] | null = null;
     inFlight = false;
-    
+
     /** Currently active tab */
     activeTab: ProductTab = 'description';
-    
-    @ViewChild('addedToCartTemplate', {static: true})
-    private addToCartTemplate: TemplateRef<any>;
+
+    /** URL from which user navigated to this page */
+    private referrerUrl: string | null = null;
+
+    @ViewChild('addedToCartTemplate', { static: true })
+    private addToCartTemplate: TemplateRef<unknown>;
     private sub: Subscription;
 
     constructor(private dataService: DataService,
-                private stateService: StateService,
-                private notificationService: NotificationService,
-                private activeService: ActiveService,
-                private route: ActivatedRoute) {
+        private stateService: StateService,
+        private notificationService: NotificationService,
+        private activeService: ActiveService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private cDRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
+        // Build referrer URL from last collection slug
+        // this.stateService.select(state => state.lastCollectionSlug)
+        //     // .pipe(take(1))
+        //     .subscribe(slug => {
+        //         if (slug) {
+        //             console.log('Setting referrerUrl to last collection slug:', slug);
+        //             this.referrerUrl = `/category/${slug}`;
+        //         } else {
+        //             console.log('No last collection slug found; setting referrerUrl to home page');
+        //             this.referrerUrl = '/';
+        //         }
+        //     });
+
+        console.log('ProductDetailComponent initialized', this.route.snapshot.paramMap.get('slug'));
+        
         const lastCollectionSlug$ = this.stateService.select(state => state.lastCollectionSlug);
+
         const productSlug$ = this.route.paramMap.pipe(
             map(paramMap => paramMap.get('slug')),
             filter(notNullOrUndefined),
@@ -62,74 +87,136 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.sub = productSlug$.pipe(
             switchMap(slug => {
                 return this.dataService.query<GetProductDetailQuery, GetProductDetailQueryVariables>(GET_PRODUCT_DETAIL, {
-                        slug,
-                    },
-                );
+                    slug,
+                });
             }),
             map(data => data.product),
             filter(notNullOrUndefined),
             withLatestFrom(lastCollectionSlug$),
+
         ).subscribe(([product, lastCollectionSlug]) => {
             this.product = product;
-            if (this.product.featuredAsset) {
-                this.selectedAsset = this.product.featuredAsset;
-            }
+            
             this.selectedVariant = product.variants[0];
+
+            this.referrerUrl = `/category/${product.collections[0]?.slug}`;
+
+            // console.log('Product loaded:', product.collections[0]?.slug);
+
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
+
             this.breadcrumbs = collection ? collection.breadcrumbs : [];
         });
 
         this.activeService.activeOrder$.subscribe(order => {
+            
             this.qtyInCart = {};
+
             for (const line of order?.lines ?? []) {
                 this.qtyInCart[line.productVariant.id] = line.quantity;
             }
-        })
-    }
-
-    ngOnDestroy() {
-        if (this.sub) {
-            this.sub.unsubscribe();
-        }
-    }
-
-    addToCart(variant: Variant, qty: number) {
-        this.inFlight = true;
-        this.dataService.mutate<AddToCartMutation, AddToCartMutationVariables>(ADD_TO_CART, {
-            variantId: variant.id,
-            qty,
-        }).subscribe(({addItemToOrder}) => {
-            this.inFlight = false;
-            switch (addItemToOrder.__typename) {
-                case 'Order':
-                    this.stateService.setState('activeOrderId', addItemToOrder ? addItemToOrder.id : null);
-                    if (variant) {
-                        this.notificationService.notify({
-                            title: 'Added to cart',
-                            type: 'info',
-                            duration: 3000,
-                            templateRef: this.addToCartTemplate,
-                            templateContext: {
-                                variant,
-                                quantity: qty,
-                            },
-                        }).subscribe();
-                    }
-                    break;
-                case 'OrderModificationError':
-                case 'OrderLimitError':
-                case 'NegativeQuantityError':
-                case 'InsufficientStockError':
-                    this.notificationService.error(addItemToOrder.message).subscribe();
-                    break;
-            }
-
         });
     }
 
-    viewCartFromNotification(closeFn: () => void) {
-        this.stateService.setState('cartDrawerOpen', true);
-        closeFn();
+    /**
+     * Navigates to the next or previous product in the collection.
+     * If collection products are not loaded, fetches them first.
+     * @param next - If true, navigates to the next product; if false, to the previous one
+     */
+    nextOrPreviousProduct(next: boolean): void {
+        
+        this.stateService.select(state => state.collectionProductSlugs)
+            .pipe(
+                take(1),
+                switchMap(() => {
+                    //load products from the product's collection
+                    const collection = this.getMostRelevantCollection(
+                        this.product?.collections || [],
+                        null
+                    );
+                    if (!collection) return of([]);
+                    // Fetch collection products
+                    return this.dataService.query<SearchCollectionProductsQuery, SearchCollectionProductsQueryVariables>(
+                        SEARCH_COLLECTION_PRODUCTS,
+                        { collectionId: collection.id }
+                    ).pipe(
+                        map(data => {
+                            const productSlugs = data.search.items.map(item => item.slug);
+                            // Save to state for future navigation
+                            this.stateService.setState('collectionProductSlugs', productSlugs);
+                            return productSlugs;
+                        })
+                    );
+                }),
+                filter(slugs => slugs.length > 0),
+
+                map(slugs => this.getTargetSlug(slugs, next)),
+
+                filter(notNullOrUndefined),
+            )
+            .subscribe(targetSlug => {
+                // console.log(`Navigating to ${next ? 'next' : 'previous'} product:`, targetSlug);
+                
+                this.router.navigate(['/product', targetSlug]);
+                
+                this.cDRef.markForCheck();
+            });
+    }
+    
+    /**
+     * Navigates back to the page from which user came.
+     * Falls back to the last collection or home page if referrer is unavailable.
+     */
+    closeProductDetails(): void {
+        console.log('Closing product details, navigating to referrerUrl:', this.referrerUrl);
+        this.referrerUrl && this.router.navigateByUrl(this.referrerUrl);
+    }
+
+    /**
+     * Checks if the URL is internal (same origin).
+     * @param url - URL to check
+     * @returns True if URL is internal
+     */
+    private isInternalUrl(url: string): boolean {
+        try {
+            const parsedUrl = new URL(url, window.location.origin);
+            return parsedUrl.origin === window.location.origin;
+        } catch {
+            // If URL parsing fails, assume it's a relative path (internal)
+            return true;
+        }
+    }
+
+    /**
+     * Calculates the target slug based on current position and direction.
+     * @param slugs - Array of product slugs
+     * @param next - If true, get next slug; if false, get previous
+     * @returns Target slug or null
+     */
+    private getTargetSlug(slugs: string[], next: boolean): string | null {
+        const currentSlug = this.product?.slug;
+        if (!currentSlug) {
+            return null;
+        }
+
+        const currentIndex = slugs.indexOf(currentSlug);
+
+        if (currentIndex === -1) {
+            return null;
+        }
+
+        const targetIndex = next ? currentIndex + 1 : currentIndex - 1;
+
+        // Wrap around: if at the end, go to the beginning and vice versa
+        if (targetIndex < 0) {
+            return slugs[slugs.length - 1];
+        }
+
+        if (targetIndex >= slugs.length) {
+            return slugs[0];
+        }
+
+        return slugs[targetIndex];
     }
 
     /**
@@ -177,6 +264,52 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      */
     hasAdditionalInfo(): boolean {
         return !!this.getAdditionalInfo();
+    }
+
+        addToCart(variant: Variant, qty: number) {
+        this.inFlight = true;
+        this.dataService.mutate<AddToCartMutation, AddToCartMutationVariables>(ADD_TO_CART, {
+            variantId: variant.id,
+            qty,
+        }).subscribe(({ addItemToOrder }) => {
+            this.inFlight = false;
+            switch (addItemToOrder.__typename) {
+                case 'Order':
+                    this.stateService.setState('activeOrderId', addItemToOrder ? addItemToOrder.id : null);
+                    if (variant) {
+                        this.notificationService.notify({
+                            title: 'Added to cart',
+                            type: 'info',
+                            duration: 3000,
+                            templateRef: this.addToCartTemplate,
+                            templateContext: {
+                                variant,
+                                quantity: qty,
+                            },
+                        }).subscribe();
+                    }
+                    break;
+                case 'OrderModificationError':
+                case 'OrderLimitError':
+                case 'NegativeQuantityError':
+                case 'InsufficientStockError':
+                    this.notificationService.error(addItemToOrder.message).subscribe();
+                    break;
+            }
+
+        });
+    }
+
+    viewCartFromNotification(closeFn: () => void) {
+        this.stateService.setState('cartDrawerOpen', true);
+        closeFn();
+    }
+
+    ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.referrerUrl = null;
+        }
     }
 
 }

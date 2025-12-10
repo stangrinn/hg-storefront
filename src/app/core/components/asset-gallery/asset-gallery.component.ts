@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
@@ -44,9 +45,7 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     onLoad() {
-        console.log(`loaded`);
         this.featuredAssetLoaded = true;
-
     }
 
     private initPhotoswipe() {
@@ -67,7 +66,7 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     selectImage(assetId: string) {
-        if (assetId != null) {
+        if (assetId !== null) {
             this.selectedAsset = this.assets?.find(a => a.id === assetId);
         } else {
             this.selectedAsset = this.assets?.[0];

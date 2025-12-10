@@ -1,10 +1,11 @@
-<img *ngIf="selectedAsset" [src]="selectedAsset | assetPreview:540" alt=""
+<img *ngIf="selectedAsset" [src]="selectedAsset | assetPreview:362:468" alt="selectedAsset?.name || 'Selected asset'"
      tabindex="0"
      (click)="openImage(selectedAsset?.id)"
      (keyup.enter)="openImage(selectedAsset?.id)"
      (load)="onLoad()"
-     class="w-full h-full object-center object-cover cursor-zoom-in"
+     class="w-full h-full object-center object-cover cursor-zoom-in gallery-image"
 />
+
 <div *ngIf="!selectedAsset || !featuredAssetLoaded"
      class="rounded-lg bg-gray-200 animate-pulse aspect-video w-full"></div>
 
@@ -15,6 +16,6 @@
          tabindex="0"
          role="button"
          aria-label="Select asset thumbnail">
-        <img [src]="asset | assetPreview:'thumb'" class="rounded-lg select-none h-24 w-full object-cover" [alt]="asset?.name || 'Asset thumbnail'">
+        <img [src]="asset | assetPreview:'thumb'" class="select-none h-24 w-full object-cover" [alt]="asset?.name || 'Asset thumbnail'">
     </div>
 </div>
