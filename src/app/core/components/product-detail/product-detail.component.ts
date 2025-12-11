@@ -44,6 +44,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     /** Currently active tab */
     activeTab: ProductTab = 'description';
+    
+    /** Video source URL for gallery hover effect */
+    videoSource: string | null = null;
 
     /** URL from which user navigated to this page */
     private referrerUrl: string | null = null;
@@ -62,21 +65,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        // Build referrer URL from last collection slug
-        // this.stateService.select(state => state.lastCollectionSlug)
-        //     // .pipe(take(1))
-        //     .subscribe(slug => {
-        //         if (slug) {
-        //             console.log('Setting referrerUrl to last collection slug:', slug);
-        //             this.referrerUrl = `/category/${slug}`;
-        //         } else {
-        //             console.log('No last collection slug found; setting referrerUrl to home page');
-        //             this.referrerUrl = '/';
-        //         }
-        //     });
-
-        console.log('ProductDetailComponent initialized', this.route.snapshot.paramMap.get('slug'));
-        
         const lastCollectionSlug$ = this.stateService.select(state => state.lastCollectionSlug);
 
         const productSlug$ = this.route.paramMap.pipe(
@@ -100,8 +88,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.selectedVariant = product.variants[0];
 
             this.referrerUrl = `/category/${product.collections[0]?.slug}`;
-
-            // console.log('Product loaded:', product.collections[0]?.slug);
+            
+            // Extract video source from variant's featuredAsset if it's a video file
+            this.videoSource = this.extractVideoSource(product);
+            
+            console.log('PRODUCT:', this.product);
 
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
 
@@ -303,6 +294,39 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     viewCartFromNotification(closeFn: () => void) {
         this.stateService.setState('cartDrawerOpen', true);
         closeFn();
+    }
+
+    /**
+     * Extracts video source URL from product's variant assets.
+     * Looks for video files in variant's featuredAsset.
+     * @param product - Product data
+     * @returns Video source URL or null
+     */
+    private extractVideoSource(product: GetProductDetailQuery['product']): string | null {
+        if (!product?.variants?.length) {
+            return null;
+        }
+        
+        // Check first variant's featuredAsset for video
+        const firstVariant = product.variants[0];
+        const source = firstVariant?.featuredAsset?.source;
+        
+        if (source && this.isVideoFile(source)) {
+            return source;
+        }
+        
+        return null;
+    }
+
+    /**
+     * Checks if the source URL points to a video file.
+     * @param source - Asset source URL
+     * @returns True if the source is a video file
+     */
+    private isVideoFile(source: string): boolean {
+        const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+        const lowerSource = source.toLowerCase();
+        return videoExtensions.some(ext => lowerSource.includes(ext));
     }
 
     ngOnDestroy() {

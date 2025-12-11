@@ -5,7 +5,11 @@
             <div class="product-nav product-nav-prev" (click)="nextOrPreviousProduct(false)"></div>
 
             <div class="product-main-content">
-                <hgart-asset-gallery [assets]="product?.assets" [selectedAssetId]="product?.featuredAsset?.id" />
+                <hgart-asset-gallery 
+                    [assets]="product?.assets" 
+                    [selectedAssetId]="product?.featuredAsset?.id"
+                    [videoSource]="videoSource" 
+                />
 
                 <div class="product-info">
 
@@ -23,12 +27,11 @@
                             </div>
 
 
-                            <button type="submit" class="preorder-btn" [ngClass]="{
+                            <button class="preorder-btn" [ngClass]="{
                                     'preorder-btn--disabled': inFlight,
                                     'preorder-btn--active': !inFlight
                                 }">
-                                <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">PREORDER
-                                </div>
+                                <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">PREORDER</div>
 
                                 <ng-template #inCartCount>
                                     <fa-icon icon="check" class="preorder-btn__icon"></fa-icon>
