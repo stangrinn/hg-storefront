@@ -18,8 +18,8 @@
                                     {{ product?.name ?? ' ' }}
                                 </h2>
 
-                                <div *ngIf="product?.customFields?.artCollectionName" class="product-collection-name">
-                                    {{ product?.customFields?.artCollectionName }} collection
+                                <div *ngIf="product?.collections[0].slug" class="product-collection-name">
+                                    {{ product?.collections[0].slug }} collection
                                 </div>
                             </div>
 
@@ -133,7 +133,7 @@
             </div>
             <div>
                 <h1>{{ product?.name }}</h1>
-                <h1>{{ product?.customFields?.artCollectionName }}</h1>
+                <h1>{{ product?.collections[0].slug }}</h1>
                 <h1>$ {{ product?.variants[0]?.price / 100 }}</h1>
             </div>
         </div>
