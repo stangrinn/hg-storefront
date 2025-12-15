@@ -1,8 +1,8 @@
-import { Location } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
-import { filter, map, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import {
     AddToCartMutation,
@@ -18,13 +18,28 @@ import { NotificationService } from '../../providers/notification/notification.s
 import { StateService } from '../../providers/state/state.service';
 
 import { ADD_TO_CART, GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
+import { REGISTER_PREORDER } from './preorder.graphql';
 import { ActiveService } from '../../providers/active/active.service';
 
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
-
 /** Available tabs for product detail page */
 type ProductTab = 'description' | 'additionalInfo';
+
+/** Purchase readiness options */
+interface PurchaseReadinessOption {
+    value: string;
+    label: string;
+}
+
+/** Preorder form data */
+interface PreorderFormData {
+    name: string;
+    email: string;
+    whatsapp: string;
+    purchaseReadiness: string;
+    comment: string;
+}
 
 @Component({
     selector: 'hgart-product-detail',
@@ -47,6 +62,29 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     
     /** Video source URL for gallery hover effect */
     videoSource: string | null = null;
+    
+    /** Preorder modal visibility */
+    isPreorderModalOpen = false;
+    
+    /** Preorder form data */
+    preorderForm: PreorderFormData = {
+        name: '',
+        email: '',
+        whatsapp: '',
+        purchaseReadiness: '',
+        comment: ''
+    };
+    
+    /** Purchase readiness dropdown options */
+    purchaseReadinessOptions: PurchaseReadinessOption[] = [
+        { value: 'ready', label: 'Ready to buy now' },
+        { value: 'soon', label: 'Planning to buy soon' },
+        { value: 'interested', label: 'Just interested' },
+        { value: 'gift', label: 'Looking for a gift' }
+    ];
+    
+    /** Form submission state */
+    isSubmitting = false;
 
     /** URL from which user navigated to this page */
     private referrerUrl: string | null = null;
@@ -329,11 +367,97 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         return videoExtensions.some(ext => lowerSource.includes(ext));
     }
 
+    /**
+     * Opens the preorder modal.
+     */
+    openPreorderModal(): void {
+        this.isPreorderModalOpen = true;
+        // Prevent body scroll when modal is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    /**
+     * Closes the preorder modal and resets form.
+     */
+    closePreorderModal(): void {
+        this.isPreorderModalOpen = false;
+        document.body.style.overflow = '';
+        this.resetPreorderForm();
+    }
+
+    /**
+     * Resets the preorder form to initial state.
+     */
+    private resetPreorderForm(): void {
+        this.preorderForm = {
+            name: '',
+            email: '',
+            whatsapp: '',
+            purchaseReadiness: '',
+            comment: ''
+        };
+    }
+
+    /**
+     * Validates the preorder form.
+     * @returns True if form is valid
+     */
+    isPreorderFormValid(): boolean {
+        return !!(this.preorderForm.name.trim() && this.preorderForm.email.trim());
+    }
+
+    /**
+     * Submits the preorder form.
+     */
+    submitPreorder(): void {
+        if (!this.isPreorderFormValid() || this.isSubmitting) return;
+        
+        this.isSubmitting = true;
+
+        // Send preorder to Vendure backend
+        this.dataService.mutate(REGISTER_PREORDER, {
+            productId: this.product?.id,
+            variantId: this.selectedVariant?.id,
+            customerName: this.preorderForm.name,
+            customerEmail: this.preorderForm.email,
+            whatsapp: this.preorderForm.whatsapp || null,
+            purchaseReadiness: this.preorderForm.purchaseReadiness || null,
+            comment: this.preorderForm.comment || null,
+        }).subscribe({
+            next: () => {
+                this.isSubmitting = false;
+                this.closePreorderModal();
+                this.notificationService.notify({
+                    title: 'Interest Registered',
+                    type: 'info',
+                    duration: 5000,
+                }).subscribe();
+            },
+            error: (error) => {
+                this.isSubmitting = false;
+                console.error('Preorder submission failed:', error);
+                this.notificationService.error('Failed to register interest. Please try again.').subscribe();
+            }
+        });
+    }
+
+    /**
+     * Handles click on modal backdrop to close modal.
+     * @param event - Click event
+     */
+    onModalBackdropClick(event: MouseEvent): void {
+        if ((event.target as HTMLElement).classList.contains('preorder-modal-overlay')) {
+            this.closePreorderModal();
+        }
+    }
+
     ngOnDestroy() {
         if (this.sub) {
             this.sub.unsubscribe();
             this.referrerUrl = null;
         }
+        // Ensure body scroll is restored
+        document.body.style.overflow = '';
     }
 
 }

@@ -64,17 +64,20 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
 
     private initPhotoswipe() {
         if (isPlatformBrowser(this.platformId)) {
+            
             const items = this.assets?.map(asset => ({
                 src: asset.preview,
                 msrc: asset.preview + '?preset=medium',
                 width: asset.width || 1000,
                 height: asset.height || 1000,
             }));
+            
             this.gallery = new PhotoSwipeLightbox({
                 dataSource: items,
                 pswpModule: () => import('photoswipe'),
                 showHideOpacity: true,
             });
+
             this.gallery.init();
         }
     }

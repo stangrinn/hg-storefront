@@ -40,6 +40,7 @@
       "LocaleTextCustomFieldConfig",
       "RelationCustomFieldConfig",
       "StringCustomFieldConfig",
+      "StructCustomFieldConfig",
       "TextCustomFieldConfig"
     ],
     "CustomFieldConfig": [
@@ -51,6 +52,7 @@
       "LocaleTextCustomFieldConfig",
       "RelationCustomFieldConfig",
       "StringCustomFieldConfig",
+      "StructCustomFieldConfig",
       "TextCustomFieldConfig"
     ],
     "ErrorResult": [
@@ -71,6 +73,7 @@
       "NegativeQuantityError",
       "NoActiveOrderError",
       "NotVerifiedError",
+      "OrderInterceptorError",
       "OrderLimitError",
       "OrderModificationError",
       "OrderPaymentStateError",
@@ -130,6 +133,7 @@
       "CountryList",
       "CustomerList",
       "FacetList",
+      "FacetValueList",
       "HistoryEntryList",
       "OrderList",
       "ProductList",
@@ -157,6 +161,7 @@
     ],
     "RemoveOrderItemsResult": [
       "Order",
+      "OrderInterceptorError",
       "OrderModificationError"
     ],
     "RequestPasswordResetResult": [
@@ -194,6 +199,22 @@
       "Order",
       "OrderModificationError"
     ],
+    "StructField": [
+      "BooleanStructFieldConfig",
+      "DateTimeStructFieldConfig",
+      "FloatStructFieldConfig",
+      "IntStructFieldConfig",
+      "StringStructFieldConfig",
+      "TextStructFieldConfig"
+    ],
+    "StructFieldConfig": [
+      "BooleanStructFieldConfig",
+      "DateTimeStructFieldConfig",
+      "FloatStructFieldConfig",
+      "IntStructFieldConfig",
+      "StringStructFieldConfig",
+      "TextStructFieldConfig"
+    ],
     "TransitionOrderToStateResult": [
       "Order",
       "OrderStateTransitionError"
@@ -210,10 +231,18 @@
       "PasswordValidationError",
       "Success"
     ],
+    "UpdateOrderItemErrorResult": [
+      "InsufficientStockError",
+      "NegativeQuantityError",
+      "OrderInterceptorError",
+      "OrderLimitError",
+      "OrderModificationError"
+    ],
     "UpdateOrderItemsResult": [
       "InsufficientStockError",
       "NegativeQuantityError",
       "Order",
+      "OrderInterceptorError",
       "OrderLimitError",
       "OrderModificationError"
     ],
