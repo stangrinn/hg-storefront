@@ -1,15 +1,30 @@
 :host {
 
     ::ng-deep hgart-asset-gallery img.gallery-image {
-        width: 362px;
+        min-width: 362px;
         height: 468px;
         border: 10px solid #000;
+
+        @media screen and (max-width: 968px) {
+            margin-top: 84px;
+            min-width: auto;
+        }
     }
 
     .product-main-content {
         display: flex;
         gap: 64px;
         align-items: center;
+        // justify-content: center;
+
+        @media screen and (max-width: 968px) {
+            flex-direction: column;
+
+            .hgart-asset-gallery {
+                position: relative;
+                top: 24px;
+            }
+        }
     }
 
     .product-detail-wrapper {
@@ -19,6 +34,9 @@
         display: flex;
         flex-direction: column;
         row-gap: 88px;
+        @media screen and (max-width: 968px) {
+           padding-top: 12px;
+        }
     }
 
     .product-detail-container {
@@ -29,6 +47,10 @@
             position: absolute;
             top: 0;
             cursor: pointer;
+
+             @media screen and (max-width: 968px) {
+                right: 0px;
+             }
         }
     }
 
@@ -38,11 +60,18 @@
         column-gap: 2rem;
         justify-content: space-between;
         position: relative;
+
+        @media screen and (max-width: 968px) {
+            flex-direction: column;
+        }
     }
 
     .product-info {
         @apply mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0;
         width: 610px;
+        @media screen and (max-width: 968px) {
+            width: 100%;
+        }
     }
 
     // Variant selector
@@ -78,6 +107,8 @@
 
     }
 
+
+
     .product-nav {
         width: 54px;
         height: 54px;
@@ -90,6 +121,10 @@
 
         &-next {
             background-image: url('/assets/icons/arrow-right.svg');
+        }
+
+        @media screen and (max-width: 968px) {
+            display: none;
         }
     }
 
@@ -199,7 +234,7 @@
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
         &__close {
-            @apply absolute top-4 right-4 p-2 text-gray-500  transition-colors;
+            @apply absolute top-4 right-4 p-2 text-gray-500 transition-colors;
             background: none;
             border: none;
             cursor: pointer;
@@ -215,12 +250,19 @@
             @apply text-gray-600 mb-8;
             font-size: 14px;
             margin-top: 10px;
+            font-family: 'Montserrat';
+        }
+
+        &__product-collection {
+            font-size: 14px;
+            font-family: 'Montserrat';
         }
     }
 
     // Preorder Form
     .preorder-form {
         font-family: "Montserrat";
+
         &__field {
             @apply mb-5;
         }
@@ -239,8 +281,8 @@
             @apply w-full px-4 py-3 border border-gray-300 text-gray-900;
             @apply focus:outline-none focus:border-black transition-colors;
             font-size: 14px;
-            border:1px solid #dedede;
-            
+            border: 1px solid #dedede;
+
 
             &::placeholder {
                 @apply text-gray-400;
