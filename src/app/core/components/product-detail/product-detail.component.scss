@@ -34,8 +34,9 @@
         display: flex;
         flex-direction: column;
         row-gap: 88px;
+
         @media screen and (max-width: 968px) {
-           padding-top: 12px;
+            padding-top: 12px;
         }
     }
 
@@ -48,9 +49,9 @@
             top: 0;
             cursor: pointer;
 
-             @media screen and (max-width: 968px) {
+            @media screen and (max-width: 968px) {
                 right: 0px;
-             }
+            }
         }
     }
 
@@ -69,6 +70,7 @@
     .product-info {
         @apply mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0;
         width: 610px;
+
         @media screen and (max-width: 968px) {
             width: 100%;
         }
@@ -99,6 +101,8 @@
         &__titles {
             border-bottom: 1px solid #000;
             margin-bottom: 27px;
+            position: relative;
+            bottom: 20px;
         }
     }
 
@@ -256,6 +260,7 @@
         &__product-collection {
             font-size: 14px;
             font-family: 'Montserrat';
+            text-transform: capitalize;
         }
     }
 

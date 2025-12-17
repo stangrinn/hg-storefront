@@ -43,6 +43,15 @@
 
 }
 
+/* Route animation wrapper styles */
+/* Ensures smooth transitions without layout shifts */
+::ng-deep {
+    router-outlet ~ * {
+        position: relative;
+        width: 100%;
+    }
+}
+
 /* Footer typography adjustments to match the design mockup */
 /* (no top-level footer block - specific selectors below apply styles) */
 

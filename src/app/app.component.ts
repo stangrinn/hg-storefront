@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterEvent } from '@angular/router';
+import { ChildrenOutletContexts, Router, RouterEvent } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 import { GetCollectionsQuery, GetCollectionsQueryVariables } from './common/generated-types';
 import { GET_COLLECTIONS } from './common/graphql/documents.graphql';
+import { routeAnimations } from './core/animations/route-animations';
 import { DataService } from './core/providers/data/data.service';
 import { StateService } from './core/providers/state/state.service';
 
@@ -12,6 +13,7 @@ import { StateService } from './core/providers/state/state.service';
     selector: 'hgart-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
+    animations: [routeAnimations],
 })
 export class AppComponent implements OnInit {
     cartDrawerVisible$: Observable<boolean>;
@@ -36,7 +38,8 @@ export class AppComponent implements OnInit {
 
     constructor(private router: Router,
                 private stateService: StateService,
-                private dataService: DataService) {
+                private dataService: DataService,
+                private contexts: ChildrenOutletContexts) {
     }
 
     ngOnInit(): void {
@@ -60,5 +63,19 @@ export class AppComponent implements OnInit {
 
     closeCartDrawer() {
         this.stateService.setState('cartDrawerOpen', false);
+    }
+
+    /**
+     * Get route animation state for smooth page transitions
+     * Includes URL params to trigger animation on param changes
+     */
+    getRouteAnimationData() {
+        const context = this.contexts.getContext('primary');
+        const route = context?.route?.snapshot;
+        const animation = route?.data?.['animation'];
+        const params = route?.params;
+        
+        // Combine animation state with params to trigger on param changes
+        return animation ? `${animation}-${JSON.stringify(params)}` : '';
     }
 }

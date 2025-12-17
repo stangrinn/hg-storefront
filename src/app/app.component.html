@@ -26,13 +26,13 @@
 
     <hgart-cart-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-cart-drawer>
 
-    <hgart-home-page *ngIf="isHomePage$ | async; else main" style="flex: 1;"></hgart-home-page>
+    <div style="flex: 1;" [@routeAnimations]="getRouteAnimationData()">
+        <hgart-home-page *ngIf="isHomePage$ | async; else main" style="flex: 1;"></hgart-home-page>
 
-    <ng-template #main>
-        <div style="flex: 1;">
+        <ng-template #main>
             <router-outlet></router-outlet>
-        </div>
-    </ng-template>
+        </ng-template>
+    </div>
 
     <hgart-layout-footer>
         <footer aria-labelledby="footer-heading" class="border-t mt-[80px]">
