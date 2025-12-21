@@ -1,6 +1,18 @@
 :host {
     display: block;
     min-height: 80vh;
+
+    .page {
+        &-wrapper {
+            @apply max-w-4xl mx-auto px-4 py-16;
+        }
+
+        &-content {
+            @apply space-y-8 text-gray-700 leading-relaxed;
+            font-family: 'Montserrat', sans-serif;
+        }
+    }
+
 }
 
 .prose {

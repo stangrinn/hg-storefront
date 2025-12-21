@@ -1,4 +1,4 @@
-<ng-container *ngIf="product; else placeholder">
+<ng-container *ngIf="product">
     <a class="group flex flex-col" prefetch="intent" [routerLink]="['/product', product.slug]">
         <div 
             class="img-wrapper" 

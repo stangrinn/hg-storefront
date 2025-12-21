@@ -130,7 +130,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             // Extract video source from variant's featuredAsset if it's a video file
             this.videoSource = this.extractVideoSource(product);
             
-            console.log('PRODUCT:', this.product);
+            console.log('lastCollectionSlug:', lastCollectionSlug, this.router);
 
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
 
@@ -153,7 +153,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      * @param next - If true, navigates to the next product; if false, to the previous one
      */
     nextOrPreviousProduct(next: boolean): void {
-        
         this.stateService.select(state => state.collectionProductSlugs)
             .pipe(
                 take(1),
@@ -184,7 +183,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 filter(notNullOrUndefined),
             )
             .subscribe(targetSlug => {
-                // console.log(`Navigating to ${next ? 'next' : 'previous'} product:`, targetSlug);
+                console.log(`Navigating to ${next ? 'next' : 'previous'} product:`, targetSlug);
                 
                 this.router.navigate(['/product', targetSlug]);
                 
@@ -295,7 +294,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         return !!this.getAdditionalInfo();
     }
 
-        addToCart(variant: Variant, qty: number) {
+    addToCart(variant: Variant, qty: number) {
         this.inFlight = true;
         this.dataService.mutate<AddToCartMutation, AddToCartMutationVariables>(ADD_TO_CART, {
             variantId: variant.id,

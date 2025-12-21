@@ -20,6 +20,14 @@
 html, body {
     height: 100%;
     margin: 0;
+    
+    .pswp {
+        backdrop-filter: blur(4px);
+        --pswp-bg: rgba(0, 0, 0, 0.1);
+        button[title="Zoom"] {
+            display: none;
+        }
+    }
 }
 
 /* Use Orbitron as the base display font; fall back to system sans */

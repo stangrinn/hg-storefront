@@ -26,7 +26,7 @@
 
     <hgart-cart-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-cart-drawer>
 
-    <div style="flex: 1;" [@routeAnimations]="getRouteAnimationData()">
+    <div style="flex: 1;" [@fadeAnimation]="getRouteAnimationData()">
         <hgart-home-page *ngIf="isHomePage$ | async; else main" style="flex: 1;"></hgart-home-page>
 
         <ng-template #main>

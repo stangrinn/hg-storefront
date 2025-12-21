@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
-
 import { AssetFragment } from '../../../common/generated-types';
-
 import './types.d';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -76,6 +74,10 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
                 dataSource: items,
                 pswpModule: () => import('photoswipe'),
                 showHideOpacity: true,
+            });
+
+            this.gallery.on('uiRegister', () => {
+                console.log('PhotoSwipe UI registered');
             });
 
             this.gallery.init();

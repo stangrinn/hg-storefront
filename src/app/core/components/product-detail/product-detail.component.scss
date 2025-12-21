@@ -8,6 +8,7 @@
         @media screen and (max-width: 968px) {
             margin-top: 84px;
             min-width: auto;
+            height: auto;
         }
     }
 
@@ -49,7 +50,7 @@
             top: 0;
             cursor: pointer;
 
-            @media screen and (max-width: 968px) {
+            @media screen and (max-width: 1268px) {
                 right: 0px;
             }
         }
@@ -111,8 +112,6 @@
 
     }
 
-
-
     .product-nav {
         width: 54px;
         height: 54px;
@@ -127,9 +126,14 @@
             background-image: url('/assets/icons/arrow-right.svg');
         }
 
-        @media screen and (max-width: 968px) {
-            display: none;
+        &-prev,
+        &-next {
+            @media screen and (max-width: 1268px) {
+                display: none;
+            }
         }
+
+
     }
 
     .product-collection-name {

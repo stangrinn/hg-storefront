@@ -5,7 +5,7 @@ import { filter, map } from 'rxjs/operators';
 
 import { GetCollectionsQuery, GetCollectionsQueryVariables } from './common/generated-types';
 import { GET_COLLECTIONS } from './common/graphql/documents.graphql';
-import { routeAnimations } from './core/animations/route-animations';
+import { routeAnimations, fadeAnimation, slideAnimation } from './core/animations/route-animations';
 import { DataService } from './core/providers/data/data.service';
 import { StateService } from './core/providers/state/state.service';
 
@@ -13,7 +13,7 @@ import { StateService } from './core/providers/state/state.service';
     selector: 'hgart-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    animations: [routeAnimations],
+    animations: [fadeAnimation, routeAnimations, slideAnimation],
 })
 export class AppComponent implements OnInit {
     cartDrawerVisible$: Observable<boolean>;
