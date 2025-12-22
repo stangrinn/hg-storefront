@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import { AssetFragment } from '../../../common/generated-types';
 import './types.d';
@@ -11,31 +11,35 @@ export type AssetWithDimensions = Pick<AssetFragment, 'id' | 'preview' | 'width'
     selector: 'hgart-asset-gallery',
     templateUrl: './asset-gallery.component.html',
     styleUrls: ['./asset-gallery.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() assets?: AssetWithDimensions[] = [];
     @Input() selectedAssetId: string;
-    
+
     /** Video source URL for hover effect on first image */
     @Input() videoSource?: string | null = null;
-    
-    @ViewChild('mainPreview', {static: false})
+
+    @ViewChild('mainPreview', { static: false })
     featuredAssetLoaded = false;
     private mainPreview: ElementRef<HTMLImageElement>;
-    
-    @ViewChild('videoPlayer', { static: false }) 
+
+    @ViewChild('videoPlayer', { static: false })
     videoPlayer: ElementRef<HTMLVideoElement>;
 
     selectedAsset?: AssetWithDimensions;
     private gallery: any;
-    
+
     /** Controls video visibility on hover */
     isVideoVisible = false;
+
+    /** Track if video was loaded at least once for caching */
+    private videoLoadedOnce = false;
 
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
         private cdr: ChangeDetectorRef
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.selectImage(this.selectedAssetId);
@@ -62,14 +66,14 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
 
     private initPhotoswipe() {
         if (isPlatformBrowser(this.platformId)) {
-            
+
             const items = this.assets?.map(asset => ({
                 src: asset.preview,
                 msrc: asset.preview + '?preset=medium',
                 width: asset.width || 1000,
                 height: asset.height || 1000,
             }));
-            
+
             this.gallery = new PhotoSwipeLightbox({
                 dataSource: items,
                 pswpModule: () => import('photoswipe'),
@@ -124,12 +128,49 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
 
     /**
      * Preloads video for faster playback on hover.
+     * Uses intelligent loading strategy:
+     * - Loads metadata first (lightweight)
+     * - Full video loads on first interaction or after a delay
      */
     private preloadVideo(): void {
-        if (this.videoPlayer?.nativeElement && this.videoSource) {
-            const video = this.videoPlayer.nativeElement;
-            video.preload = 'auto';
-            video.load();
+        if (!isPlatformBrowser(this.platformId) || !this.videoPlayer?.nativeElement || !this.videoSource) {
+            return;
+        }
+
+        const video = this.videoPlayer.nativeElement;
+        
+        // Start with metadata only (fast)
+        video.preload = 'metadata';
+        video.load();
+
+        // Preload full video after component is visible and user is likely to interact
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !this.videoLoadedOnce) {
+                        // User can see the component, preload full video
+                        setTimeout(() => {
+                            if (video && !this.videoLoadedOnce) {
+                                video.preload = 'auto';
+                                video.load();
+                                this.videoLoadedOnce = true;
+                            }
+                        }, 500); // Small delay to prioritize other content
+                        observer.disconnect();
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            observer.observe(this.mainPreview?.nativeElement || video);
+        } else {
+            // Fallback for browsers without IntersectionObserver
+            setTimeout(() => {
+                if (video && !this.videoLoadedOnce) {
+                    video.preload = 'auto';
+                    video.load();
+                    this.videoLoadedOnce = true;
+                }
+            }, 1000);
         }
     }
 
@@ -139,17 +180,29 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     onMouseEnter(): void {
         if (!this.hasVideoHover()) return;
 
-        this.isVideoVisible = true;
-        this.cdr.markForCheck();
+        console.log('Hover video play triggered', this.videoPlayer?.nativeElement);
 
-        setTimeout(() => {
-            if (this.videoPlayer?.nativeElement) {
-                const video = this.videoPlayer.nativeElement;
+        if (this.videoPlayer?.nativeElement) {
+            const video = this.videoPlayer.nativeElement;
+            
+            // Force full preload on first interaction if not already loaded
+            if (!this.videoLoadedOnce) {
+                video.preload = 'auto';
+                video.load();
+                this.videoLoadedOnce = true;
+            }
+
+            this.isVideoVisible = true;
+
+            // Use requestAnimationFrame for smoother transition
+            requestAnimationFrame(() => {
                 video.currentTime = 0;
                 video.muted = true;
                 video.play().catch(() => { /* Silently fail */ });
-            }
-        }, 0);
+                this.cdr.markForCheck();
+                console.log('Video playback started');
+            });
+        }
     }
 
     /**
@@ -157,7 +210,7 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
      */
     onMouseLeave(): void {
         if (!this.videoSource) return;
-
+        console.log('Mouse leave the video play triggered');
         this.isVideoVisible = false;
         this.cdr.markForCheck();
 

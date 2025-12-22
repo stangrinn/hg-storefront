@@ -1,5 +1,5 @@
 
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
@@ -45,7 +45,7 @@ interface PreorderFormData {
     selector: 'hgart-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss'],
-    // changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
@@ -130,11 +130,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             // Extract video source from variant's featuredAsset if it's a video file
             this.videoSource = this.extractVideoSource(product);
             
-            console.log('lastCollectionSlug:', lastCollectionSlug, this.router);
+            console.log('lastCollectionSlug:', lastCollectionSlug, document.referrer);
 
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
 
             this.breadcrumbs = collection ? collection.breadcrumbs : [];
+
+            this.cDRef.markForCheck();
         });
 
         this.activeService.activeOrder$.subscribe(order => {
@@ -156,6 +158,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.stateService.select(state => state.collectionProductSlugs)
             .pipe(
                 take(1),
+                
                 switchMap(() => {
                     //load products from the product's collection
                     const collection = this.getMostRelevantCollection(
@@ -176,6 +179,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                         })
                     );
                 }),
+                
                 filter(slugs => slugs.length > 0),
 
                 map(slugs => this.getTargetSlug(slugs, next)),

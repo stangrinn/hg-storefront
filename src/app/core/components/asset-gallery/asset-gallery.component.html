@@ -2,7 +2,7 @@
      (mouseenter)="onMouseEnter()"
      (mouseleave)="onMouseLeave()">
     <img *ngIf="selectedAsset" 
-         [src]="selectedAsset | assetPreview:362:468" 
+         [src]="selectedAsset.preview" 
          [alt]="selectedAsset?.name || 'Selected asset'"
          tabindex="0"
          (click)="openImage(selectedAsset?.id)"
@@ -14,14 +14,15 @@
     <!-- Video overlay for hover effect (only on first image) -->
     <video 
         #videoPlayer
-        *ngIf="videoSource && isFirstAssetSelected()"
+        *ngIf="videoSource"
         class="video-overlay"
-        [class.visible]="isVideoVisible"
+        [class.visible]="isVideoVisible && isFirstAssetSelected()"
         [src]="videoSource"
         muted
         loop
         playsinline
-        preload="auto">
+        preload="metadata"
+        [attr.poster]="selectedAsset?.preview">
     </video>
 </div>
 

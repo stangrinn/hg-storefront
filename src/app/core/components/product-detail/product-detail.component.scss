@@ -167,7 +167,7 @@
 
     // Tabs section
     .tabs {
-
+        
         &__nav {
             @apply border-b border-gray-200 mb-6;
         }
@@ -198,6 +198,10 @@
 
         &__panel-content {
             @apply text-base text-gray-700;
+        }
+
+        &__content {
+            font-family: 'Montserrat';
         }
     }
 
