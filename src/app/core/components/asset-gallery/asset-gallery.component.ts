@@ -36,6 +36,9 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     /** Track if video was loaded at least once for caching */
     private videoLoadedOnce = false;
 
+    /** Track muted state of video */
+    isMuted = true;
+
     constructor(
         @Inject(PLATFORM_ID) private platformId: any,
         private cdr: ChangeDetectorRef
@@ -80,9 +83,9 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
                 showHideOpacity: true,
             });
 
-            this.gallery.on('uiRegister', () => {
-                console.log('PhotoSwipe UI registered');
-            });
+            // this.gallery.on('uiRegister', () => {
+            //     console.log('PhotoSwipe UI registered');
+            // });
 
             this.gallery.init();
         }
@@ -180,8 +183,6 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     onMouseEnter(): void {
         if (!this.hasVideoHover()) return;
 
-        console.log('Hover video play triggered', this.videoPlayer?.nativeElement);
-
         if (this.videoPlayer?.nativeElement) {
             const video = this.videoPlayer.nativeElement;
             
@@ -200,7 +201,6 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
                 video.muted = true;
                 video.play().catch(() => { /* Silently fail */ });
                 this.cdr.markForCheck();
-                console.log('Video playback started');
             });
         }
     }
@@ -212,11 +212,35 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
         if (!this.videoSource) return;
         console.log('Mouse leave the video play triggered');
         this.isVideoVisible = false;
+        this.isMuted = true;
         this.cdr.markForCheck();
 
         if (this.videoPlayer?.nativeElement) {
-            this.videoPlayer.nativeElement.pause();
+            const video = this.videoPlayer.nativeElement;
+            video.muted = true;
+            video.pause();
         }
     }
 
+    /**
+     * Unmutes video when hovering over volume button.
+     */
+    onVolumeButtonEnter(): void {
+        if (this.videoPlayer?.nativeElement) {
+            this.videoPlayer.nativeElement.muted = false;
+            this.isMuted = false;
+            this.cdr.markForCheck();
+        }
+    }
+
+    /**
+     * Mutes video when leaving volume button.
+     */
+    onVolumeButtonLeave(): void {
+        if (this.videoPlayer?.nativeElement) {
+            this.videoPlayer.nativeElement.muted = true;
+            this.isMuted = true;
+            this.cdr.markForCheck();
+        }
+    }
 }

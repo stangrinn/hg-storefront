@@ -24,6 +24,16 @@
         preload="metadata"
         [attr.poster]="selectedAsset?.preview">
     </video>
+
+    <!-- Volume control button -->
+    <button 
+        class="volume-button"
+        (mouseenter)="onVolumeButtonEnter()"
+        (mouseleave)="onVolumeButtonLeave()"
+        [attr.aria-label]="isMuted ? 'Unmute video' : 'Mute video'"
+        type="button">
+        <fa-icon [icon]="isMuted ? 'volume-mute' : 'volume-up'"></fa-icon>
+    </button>
 </div>
 
 <div *ngIf="!selectedAsset || !featuredAssetLoaded"

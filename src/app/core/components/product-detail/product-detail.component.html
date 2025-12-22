@@ -19,7 +19,7 @@
                                 </h2>
 
                                 <div *ngIf="product?.collections[0].slug" class="product-collection-name">
-                                    {{ product?.collections[0].slug }} collection
+                                    {{ product?.collections[0].slug.replace('-',' ') }} collection
                                 </div>
                             </div>
 
