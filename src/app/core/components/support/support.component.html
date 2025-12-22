@@ -1,0 +1,118 @@
+<div class="max-w-4xl mx-auto px-4 py-16">
+    <div class="flex flex-col items-center text-center mb-16">
+        <h1 class="text-4xl sm:text-6xl font-light tracking-tight text-gray-900 mb-4">
+            Support and FAQ
+        </h1>
+    </div>
+
+    <div class="space-y-0">
+        <!-- Question 1 -->
+        <div class="faq-item">
+            <button 
+                (click)="toggleQuestion(0)"
+                class="w-full text-left py-6 ">
+                <span class="text-xl font-normal text-gray-900">1. What is HG.Art and how does it work?</span>
+            </button>
+            <div *ngIf="isOpen(0)" class="pb-6 text-gray-700 leading-relaxed">
+                HG.Art is an augmented reality (AR) application designed specifically for
+                interacting with exclusive artworks by Helena Grinshpun. Simply point your device's
+                camera at the artwork or approach it to the artwork approximately on a distance of
+                15 cm to activate NFC, and watch it come alive through, approve to proceed with
+                the AR app technology. After a single use on the artwork on your smartphone
+                will be a cached copy (mirror) of the app, that will disappear after 30 days or
+                after the app updates.
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="faq-item">
+            <button 
+                (click)="toggleQuestion(1)"
+                class="w-full text-left py-6 ">
+                <span class="text-xl font-normal text-gray-900">2. Which devices are compatible with HG.Art?</span>
+            </button>
+            <div *ngIf="isOpen(1)" class="pb-6 text-gray-700 leading-relaxed">
+                The app is compatible with iOS devices running iOS [minimum supported version]
+                or later. Please ensure your device software is up-to-date for optimal
+                performance.
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="faq-item">
+            <button 
+                (click)="toggleQuestion(2)"
+                class="w-full text-left py-6 ">
+                <span class="text-xl font-normal text-gray-900">3. Why is the AR experience not loading or displaying correctly?</span>
+            </button>
+            <div *ngIf="isOpen(2)" class="pb-6 text-gray-700 leading-relaxed space-y-2">
+                <p>Ensure your device camera has permissions enabled (Settings > Privacy & Security > Camera).</p>
+                <p>Check your internet connection; AR features may require stable connectivity.</p>
+                <p>Ensure good lighting conditions and focus your camera on the artwork.</p>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="faq-item">
+            <button 
+                (click)="toggleQuestion(3)"
+                class="w-full text-left py-6 ">
+                <span class="text-xl font-normal text-gray-900">4. What should I do if the app crashes or freezes?</span>
+            </button>
+            <div *ngIf="isOpen(3)" class="pb-6 text-gray-700 leading-relaxed space-y-2">
+                <p>Close and restart the app.</p>
+                <p>Ensure your app is updated to the latest version via the App Store.</p>
+                <p>Restart your device to refresh its memory.</p>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="faq-item">
+            <button 
+                (click)="toggleQuestion(4)"
+                class="w-full text-left py-6 ">
+                <span class="text-xl font-normal text-gray-900">5. How can I report a bug or suggest improvements?</span>
+            </button>
+            <div *ngIf="isOpen(4)" class="pb-6 text-gray-700 leading-relaxed">
+                We appreciate your feedback! Please send bug reports or suggestions to 
+                <a href="mailto:support@helenagrinshpun.art" 
+                   class="text-blue-600 hover:text-blue-800 transition-colors">
+                    support@helenagrinshpun.art
+                </a>. 
+                Include details about your device and operating system version and a clear
+                description or screenshot of the issue.
+            </div>
+        </div>
+
+        <!-- Question 6 -->
+        <div class="faq-item">
+            <button 
+                (click)="toggleQuestion(5)"
+                class="w-full text-left py-6 ">
+                <span class="text-xl font-normal text-gray-900">6. How do I get support if my question isn't answered here?</span>
+            </button>
+            <div *ngIf="isOpen(5)" class="pb-6 text-gray-700 leading-relaxed">
+                You can reach our dedicated support team via email at 
+                <a href="mailto:support@helenagrinshpun.art" 
+                   class="text-blue-600 hover:text-blue-800 transition-colors">
+                    support@helenagrinshpun.art
+                </a>. 
+                We aim to respond within 24-48 hours.
+            </div>
+        </div>
+
+        <!-- Question 7 -->
+        <div class="faq-item">
+            <button 
+                (click)="toggleQuestion(6)"
+                class="w-full text-left py-6 ">
+                <span class="text-xl font-normal text-gray-900">7. Do I need special artwork to use the app?</span>
+            </button>
+            <div *ngIf="isOpen(6)" class="pb-6 text-gray-700 leading-relaxed">
+                Yes, HG.Art is designed specifically to interact with selected artworks by
+                Helena Grinshpun. You can find available AR-enabled artworks and additional details
+                at helenagrinshpun.art.
+            </div>
+        </div>
+    </div>
+</div>

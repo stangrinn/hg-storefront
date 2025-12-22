@@ -6,22 +6,178 @@
     min-height: 100%;
 
     .content-holder {
-        @apply flex items-center justify-between ml-[30px] mt-[40px] mr-[30px] border-b-2 border-dashed border-black text-[17px] font-bold uppercase;
-        
+        @apply ml-[30px] mt-[40px] mr-[30px];
+
         &-centered {
             @apply flex items-center justify-center gap-6;
         }
+
+        &-items {
+            @apply flex items-center justify-between text-[17px] font-bold uppercase;
+        }
+
+
+        .dashed {
+            background-image: url("/assets/icons/dashed-long.svg");
+            background-repeat: repeat;
+            width: 100%;
+            height: 2px;
+        }
     }
 
-    
-    
-    vsf-layout {
+    hgart-layout {
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
+
+    .logo-link {
+        @apply absolute bottom-[6px] left-[calc(50%-140px)];
+
+        @media screen and (max-width: 1268px) {
+            right: 26px;
+            left: auto;
+        }
+    }
+
 }
+
+/* Route animation wrapper styles */
+/* Ensures smooth transitions without layout shifts */
+::ng-deep {
+    router-outlet ~ * {
+        position: relative;
+        width: 100%;
+    }
+}
+
+/* Footer typography adjustments to match the design mockup */
+/* (no top-level footer block - specific selectors below apply styles) */
+
+/* Apply Shameless font to any calligraphic elements in the footer.
+   If the markup uses a specific class for the slogan (e.g. .calligraphic, .slogan, .script),
+   these selectors will pick it up. */
+hgart-layout-footer footer .calligraphic,
+hgart-layout-footer footer .slogan,
+hgart-layout-footer footer .script {
+    font-family: 'Shameless', cursive;
+
+}
+
+/* Slogan specific sizing — responsive and visually similar to the mockup */
+hgart-layout-footer footer .slogan {
+    font-size: 48px;
+    line-height: 0.9;
+
+    color: #2f3a40;
+    white-space: normal;
+}
+
+/* Dedicated footer grid so the left column can be narrow like the design */
+hgart-layout-footer footer {
+    .footer {
+
+        &-grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 2fr repeat(2, minmax(0, 1fr));
+            border-top: 1px solid #000;
+
+            @media (max-width: 700px) {
+                display: block;
+            }
+        }
+    }
+}
+
+hgart-layout-footer footer {
+
+    .footer-wrapper {
+        @apply xl:grid xl:grid-cols-3 xl:gap-8 border-t-[1px] border-black;
+    }
+
+    .footer-left {}
+
+    .footer-grid {
+        >div {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            padding-top: 37px;
+            padding-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+            display: block;
+        }
+
+        @media (min-width: 1280px) {
+            align-items: start;
+        }
+    }
+
+    @media (max-width: 700px) {
+
+        .footer-bottom {
+            display: block !important;
+        }
+
+        .footer-center,
+        .footer-right {
+            display: none !important;
+        }
+    }
+}
+
+/* Footer bottom text styling */
+hgart-layout-footer footer .footer-bottom {
+    color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Full-height vertical dividers between columns */
+hgart-layout-footer footer .footer-grid>div+div {
+    border-left: 1px solid rgba(0, 0, 0, 1);
+    padding-left: 1.5rem;
+}
+
+hgart-layout-footer footer .footer-grid>div+div+div {
+    border-left: 1px solid rgba(0, 0, 0, 1);
+}
+
+/* Footer headings: 22px */
+hgart-layout-footer footer h3 {
+    font-size: 22px !important;
+    line-height: 1.1;
+}
+
+/* Footer links: 14px */
+hgart-layout-footer footer a {
+    font-size: 14px !important;
+
+    text-decoration: none;
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: currentColor;
+        transition: width 0.3s ease;
+    }
+
+    &:hover::after {
+        width: 100%;
+    }
+}
+
 
 .logo-link {
     display: flex;
@@ -32,18 +188,19 @@
         animation: hue-rotate 10s infinite;
     }
 
-    &:link, &:visited {
+    &:link,
+    &:visited {
         color: #0e95c7;
         font-size: 22px;
     }
 }
 
 @keyframes hue-rotate {
-  0% {
-    filter: hue-rotate(0deg) brightness(0.9);
-  }
+    0% {
+        filter: hue-rotate(0deg) brightness(0.9);
+    }
 
-  100% {
-    filter: hue-rotate(360deg) brightness(0.9);
-  }
+    100% {
+        filter: hue-rotate(360deg) brightness(0.9);
+    }
 }

@@ -15,7 +15,7 @@ export interface FacetWithValues {
 }
 
 @Component({
-    selector: 'vsf-product-list-controls',
+    selector: 'hgart-product-list-controls',
     templateUrl: './product-list-controls.component.html',
     // styleUrls: ['./product-list-controls.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

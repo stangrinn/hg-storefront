@@ -1,28 +1,52 @@
-<div class="relative">
-    <div
-        aria-hidden="true"
-        class="absolute inset-0 overflow-hidden"
-    >
-        <img
-            class="absolute inset-0 w-full object-cover h-full"
-            [src]="heroImage + '?w=800&format=webp'"
-            alt="header"
-        />
+<div class="mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <ng-container *ngIf="collectionsWithProducts$ | async as collections; else loading">
+        <ng-container *ngFor="let item of collections">
+            <!-- Collection Section -->
+            <section class="mb-16 last:mb-0">
+                <!-- Collection Title -->
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl sm:text-4xl text-gray-900 uppercase mb-2 tracking-[2px] font-semibold">
+                        {{ item.collection.name }}
+                    </h2>
+                    <p class="text-sm text-gray-500 uppercase tracking-wider">
+                        Limited to {{ item.products.length }} items · Printed on fine art paper or canvas
+                    </p>
+                </div>
 
-    </div>
-    <div
-        aria-hidden="true"
-        class="absolute inset-0 bg-gray-900 opacity-80"
-    ></div>
+                <!-- Products Grid -->
+                <div class="flex flex-wrap justify-center gap-y-10 gap-x-6" *ngIf="item.products.length > 0">
+                    <hgart-product-card 
+                        *ngFor="let product of item.products" 
+                        [product]="product"
+                        
+                        >
+                    </hgart-product-card>
+                </div>
+                
+                <!-- Debug: Show if no products -->
+                <div *ngIf="item.products.length === 0" class="text-center text-gray-500">
+                    No products in this collection yet
+                </div>
+            </section>
+        </ng-container>
+    </ng-container>
 
-</div>
-<div class="max-w-6xl mx-auto px-4 pt-12">
-    <div class="box-content py-2 px-2 relative overflow-x-auto xl:overflow-visible border-black">
-        <!-- <div
-            class="grid justify-items-center grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-8 sm:px-6 lg:px-8 xl:relative xl:px-0 xl:space-x-0 xl:gap-x-8">
-            <vsf-collection-card *ngFor="let collection of collections$ | async"
-                                 [collection]="collection">
-            </vsf-collection-card>
-        </div> -->
-    </div>
+    <!-- Loading State -->
+    <ng-template #loading>
+        <section class="mb-16" *ngFor="let _ of [1, 2]">
+            <!-- Title Skeleton -->
+            <div class="text-center mb-8 animate-pulse">
+                <div class="h-10 bg-gray-200 rounded w-64 mx-auto mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
+            </div>
+            
+            <!-- Products Grid Skeleton -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+                <hgart-product-card 
+                    *ngFor="let _ of [1, 2, 3, 4]" 
+                    [product]="null">
+                </hgart-product-card>
+            </div>
+        </section>
+    </ng-template>
 </div>

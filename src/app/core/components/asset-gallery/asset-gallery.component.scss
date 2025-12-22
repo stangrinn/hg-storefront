@@ -1,39 +1,60 @@
-//@import "variables";
-//
-//::ng-deep {
-//    @import "photoswipe/dist/photoswipe.css";
-//}
-//
-//.product-image {
-//    width: 100%;
-//}
-//.main-image {
-//    min-height: 250px;
-//    @include media-breakpoint-up(md) {
-//        min-height: 200px;
-//    }
-//    @include media-breakpoint-up(md) {
-//        min-height: 300px;
-//    }
-//    .main-preview {
-//        cursor: zoom-in;
-//    }
-//}
-//.alt-images {
-//    display: flex;
-//    flex-wrap: wrap;
-//
-//    .alt-image {
-//        cursor: pointer;
-//        border: 6px solid transparent;
-//
-//        img {
-//            min-width: 50px;
-//            min-height: 50px;
-//        }
-//
-//        &.selected {
-//            border-color: #e1e1e1;
-//        }
-//    }
-//}
+:host {
+    height: 100%;
+}
+
+.gallery-main-image {
+    @apply relative w-full h-full;
+
+    // Video overlay styles
+    .video-overlay {
+        @apply absolute inset-0 w-full h-full object-cover;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.6s ease-in-out, visibility 0s 0.6s;
+        pointer-events: none;
+        // cursor: zoom-in;
+        border: 10px solid #000;
+        // Keep video in DOM but hidden for caching
+        &:not(.visible) {
+            z-index: -1;
+        }
+        &.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.6s ease-in-out, visibility 0s 0s;
+            z-index: 1;
+        }
+    }
+
+    // Volume control button
+    .volume-button {
+        @apply absolute bottom-4 right-4;
+        z-index: 10;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: rgba(0, 0, 0, 0.1);
+        // border: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.1);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+
+        fa-icon {
+            color: white;
+            font-size: 10px;
+        }
+    }
+}

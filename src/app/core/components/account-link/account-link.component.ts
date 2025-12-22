@@ -8,7 +8,7 @@ import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state/state.service';
 
 @Component({
-    selector: 'vsf-account-link',
+    selector: 'hgart-account-link',
     templateUrl: './account-link.component.html',
     // styleUrls: ['./account-link.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -6,7 +6,7 @@
     align-items: flex-start;
     position: fixed;
     height: 100vh;
-    width: calc(100vw - 3rem);
+    width: 100%;
     top: 0;
     left: 0;
     bottom: 0;
@@ -16,5 +16,68 @@
 
     &.visible {
         transform: translateX(0);
+    }
+
+    .drawer-content {
+        @apply pointer-events-none fixed inset-y-0 left-0 flex w-[20%];
+
+        ul li a {
+            @apply block text-gray-700 cursor-pointer w-full hover:bg-gray-50 hover:text-black items-center font-medium;
+            padding: 8px 16px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        &-title {
+            @apply text-[18px] font-bold uppercase;
+            padding: 8px 0 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        &-holder {
+            @apply overflow-y-hidden sm:px-6;
+            padding: 66px 52px;
+
+            .dashed {
+                background-image: url("/assets/icons/dashed.svg");
+                width: 100%;
+                height: 2px;
+            }
+        }
+
+        &-list {
+            padding-top: 42px;
+            padding-bottom: 50px;
+        }
+
+        @media (max-width: 1268px) {
+            width: 40%;
+        }
+
+        @media (max-width: 768px) {
+            width: 100%;
+        }
+
+        .extra-footer {
+            
+            padding: 50px 16px;
+            flex-direction: column;
+            row-gap: 16px;
+
+            h3 {
+                font-size: 18px;
+            }
+
+            a {
+                font-size: 14px;
+                font-weight: 500;
+                @apply block text-gray-700;
+            }
+
+        }
     }
 }

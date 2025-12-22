@@ -21,20 +21,20 @@ export type DropdownPosition = 'top' | 'right' | 'bottom' | 'left' | 'top-left' 
  *
  * @example
  * ```
- * <vsf-dropdown #dropdown [position]="['top']">
+ * <hgart-dropdown #dropdown [position]="['top']">
  *
- *     <button vsfDropdownTrigger class="btn btn-secondary">Open it!</button>
+ *     <button hgartDropdownTrigger class="btn btn-secondary">Open it!</button>
  *
- *     <div class="card" vsfDropdownContent>
+ *     <div class="card" hgartDropdownContent>
  *         <p>Here's the dropdown content!</p>
  *         <button class="btn" (click)="dropdown.close()">Close</button>
  *     </div>
  *
- * </vsf-dropdown>
+ * </hgart-dropdown>
  * ```
  */
 @Component({
-    selector: 'vsf-dropdown',
+    selector: 'hgart-dropdown',
     templateUrl: './dropdown.component.html',
     // styleUrls: ['./dropdown.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

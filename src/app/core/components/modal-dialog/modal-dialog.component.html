@@ -10,10 +10,10 @@
         </button>
     </div>
     <div class="modal-body">
-        <vsf-dialog-component-outlet
+        <hgart-dialog-component-outlet
             [component]="childComponentType"
             (create)="onCreate($event)"
-        ></vsf-dialog-component-outlet>
+        ></hgart-dialog-component-outlet>
     </div>
     <div class="modal-footer">
         <ng-container *ngTemplateOutlet="(buttonsTemplateRef$ | async)"></ng-container>

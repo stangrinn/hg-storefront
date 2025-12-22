@@ -1,21 +1,30 @@
-<ng-template [ngIf]="product">
-    <a class="flex flex-col" prefetch='intent' [routerLink]="['/product', product.slug]">
-        <img
-            class="rounded-xl flex-grow object-cover aspect-[7/8]"
-            alt=""
-            [src]="product.productAsset | assetPreview:300:400"
-        />
-        <div class="h-2"></div>
-        <div class="text-sm text-gray-700">
-            {{ product.productName }}
+<ng-container *ngIf="product">
+    <a class="group flex flex-col" prefetch="intent" [routerLink]="['/product', product.slug]">
+        <div 
+            class="img-wrapper" 
+            [style.background-image]="'url(' + currentImage + ')'"
+            (mouseenter)="onMouseOver()"
+            (mouseleave)="onMouseOut()">
+            
+            <!-- Video overlay for hover effect -->
+            <video 
+                #videoPlayer
+                class="video-overlay"
+                [class.visible]="isVideoVisible"
+                [class.hidden]="!videoSource"
+                [src]="videoSource"
+                muted
+                loop
+                playsinline
+                preload="auto">
+            </video>
         </div>
-        <div class="text-sm font-medium text-gray-900">
-            <ng-template [ngIf]="product.priceWithTax.min === product.priceWithTax.max" [ngIfElse]="range">
-                {{ product.priceWithTax.min | formatPrice }}
-            </ng-template>
-            <ng-template #range>
-                From {{ product.priceWithTax.min | formatPrice }}
-            </ng-template>
-        </div>
+        <div class="h-3"></div>
     </a>
+</ng-container>
+
+<ng-template #placeholder>
+    <div class="flex flex-col animate-pulse">
+        <div class="bg-gray-200 rounded-lg aspect-[3/4]"></div>
+    </div>
 </ng-template>

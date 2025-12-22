@@ -3,9 +3,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Local Shameless script font for calligraphic elements */
+@font-face {
+    font-family: 'Shameless';
+    src: url('/assets/fonts/fonnts.com-Shameless.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+*, ::before, ::after {
+    border-style: none;
+    border-color: none;
+}
+
 html, body {
     height: 100%;
     margin: 0;
+    
+    .pswp {
+        backdrop-filter: blur(34px);
+        --pswp-bg: rgba(0, 0, 0, 0.1);
+        button[title="Zoom"] {
+            display: none;
+        }
+    }
 }
 
 /* Use Orbitron as the base display font; fall back to system sans */

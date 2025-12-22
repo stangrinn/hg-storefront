@@ -6,16 +6,22 @@ export interface AppState {
     signedIn: boolean;
     activeOrderId: string | null;
     lastCollectionSlug: string | null;
+    /** List of product slugs in the current collection for navigation */
+    collectionProductSlugs: string[];
     mobileNavMenuIsOpen: boolean;
     cartDrawerOpen: boolean;
+    /** Saved referrer URL when entering product pages from non-product pages */
+    productPageReferrer: string | null;
 }
 
 export const initialState: AppState = {
     signedIn: false,
     activeOrderId: null,
     lastCollectionSlug: null,
+    collectionProductSlugs: [],
     mobileNavMenuIsOpen: false,
     cartDrawerOpen: false,
+    productPageReferrer: '/',
 };
 
 /**

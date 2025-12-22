@@ -3,11 +3,11 @@
     <div class="mb-4 text-gray-600">Placed on <span class="font-medium">{{ order.orderPlacedAt | date:'medium' }}</span></div>
     <div class="md:grid grid-cols-3">
         <div class="col-span-2">
-            <vsf-cart-contents [cart]="order"></vsf-cart-contents>
-            <vsf-cart-totals [cart]="order"></vsf-cart-totals>
+            <hgart-cart-contents [cart]="order"></hgart-cart-contents>
+            <hgart-cart-totals [cart]="order"></hgart-cart-totals>
         </div>
         <div class="pl-6">
-            <vsf-address-card title="Shipping address" [address]="order.shippingAddress"></vsf-address-card>
+            <hgart-address-card title="Shipping address" [address]="order.shippingAddress"></hgart-address-card>
         </div>
     </div>
 </ng-container>

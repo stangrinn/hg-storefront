@@ -8,7 +8,7 @@ import { StateService } from '../../../core/providers/state/state.service';
 import { VERIFY_CHANGE_EMAIL_ADDRESS } from './change-email-address.graphql';
 
 @Component({
-    selector: 'vsf-change-email-address',
+    selector: 'hgart-change-email-address',
     templateUrl: './change-email-address.component.html',
     // styleUrls: ['./change-email-address.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,

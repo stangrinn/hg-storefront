@@ -40,7 +40,7 @@ import {
 export type AddressFormValue = Pick<AddressFragment, Exclude<keyof AddressFragment, 'country'>> & { countryCode: string; };
 
 @Component({
-    selector: 'vsf-checkout-shipping',
+    selector: 'hgart-checkout-shipping',
     templateUrl: './checkout-shipping.component.html',
     // styleUrls: ['./checkout-shipping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

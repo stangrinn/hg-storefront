@@ -9,7 +9,7 @@ import { StateService } from '../../../core/providers/state/state.service';
 import { SIGN_OUT } from './account.graphql';
 
 @Component({
-    selector: 'vsf-account',
+    selector: 'hgart-account',
     templateUrl: './account.component.html',
     // styleUrls: ['./account.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

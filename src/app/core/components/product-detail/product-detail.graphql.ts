@@ -1,4 +1,4 @@
-import {gql} from 'apollo-angular';
+import { gql } from 'apollo-angular';
 
 
 import { ASSET_FRAGMENT, CART_FRAGMENT, ERROR_RESULT_FRAGMENT } from '../../../common/graphql/fragments.graphql';
@@ -7,8 +7,13 @@ export const GET_PRODUCT_DETAIL = gql`
     query GetProductDetail($slug: String!) {
         product(slug: $slug) {
             id
+            slug
             name
             description
+            customFields {
+                additionalInfo
+                artCollectionName
+            }
             variants {
                 id
                 name
@@ -19,6 +24,12 @@ export const GET_PRODUCT_DETAIL = gql`
                 price
                 priceWithTax
                 sku
+                featuredAsset {
+                    ...Asset
+                }
+                customFields {
+                    additionalInfo
+                }
             }
             featuredAsset {
                 ...Asset
@@ -54,4 +65,15 @@ export const ADD_TO_CART = gql`
     }
     ${CART_FRAGMENT}
     ${ERROR_RESULT_FRAGMENT}
+`;
+
+export const SEARCH_COLLECTION_PRODUCTS = gql`
+    query SearchCollectionProducts($collectionId: ID!) {
+        search(input: { collectionId: $collectionId, groupByProduct: true, take: 100 }) {
+            items {
+                slug
+            }
+            totalItems
+        }
+    }
 `;

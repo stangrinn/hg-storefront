@@ -7,7 +7,7 @@ import { DataService } from '../../../core/providers/data/data.service';
 import { REQUEST_PASSWORD_RESET } from './forgotten-password.graphql';
 
 @Component({
-    selector: 'vsf-forgotten-password',
+    selector: 'hgart-forgotten-password',
     templateUrl: './forgotten-password.component.html',
     styleUrls: ['./forgotten-password.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,

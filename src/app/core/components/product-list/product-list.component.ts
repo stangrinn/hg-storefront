@@ -20,10 +20,10 @@ import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
 type SearchItem = SearchProductsQuery['search']['items'][number];
 
 @Component({
-    selector: 'vsf-product-list',
+    selector: 'hgart-product-list',
     templateUrl: './product-list.component.html',
-// styleUrls: ['./product-list.component.scss'],
-    })
+    styleUrls: ['./product-list.component.scss'],
+})
 export class ProductListComponent implements OnInit {
     products$: Observable<SearchItem[]>;
     totalResults$: Observable<number>;
@@ -36,6 +36,7 @@ export class ProductListComponent implements OnInit {
     loading$: Observable<boolean>;
     breadcrumbs$: Observable<Array<{id: string; name: string; }>>;
     mastheadBackground$: Observable<SafeStyle>;
+    
     private currentPage = 0;
     private refresh = new BehaviorSubject<void>(undefined);
     readonly placeholderProducts = Array.from({ length: 12 }).map(() => null);
@@ -76,6 +77,7 @@ export class ProductListComponent implements OnInit {
                     return this.dataService.query<GetCollectionQuery, GetCollectionQueryVariables>(GET_COLLECTION, {
                         slug,
                     }).pipe(
+                        // tap(data => console.log('Fetched collection:', data.collection)),
                         map(data => data.collection),
                     );
                 } else {
@@ -109,6 +111,7 @@ export class ProductListComponent implements OnInit {
         );
 
         const triggerFetch$ = combineLatest(this.collection$, this.activeFacetValueIds$, this.searchTerm$, this.refresh);
+        
         const getInitialFacetValueIds = () => {
             combineLatest(this.collection$, this.searchTerm$).pipe(
                 take(1),
@@ -128,9 +131,11 @@ export class ProductListComponent implements OnInit {
                     this.unfilteredTotalItems = data.search.totalItems;
                 });
         };
+        
         this.loading$ = merge(
             triggerFetch$.pipe(mapTo(true)),
         );
+        
         const queryResult$ = triggerFetch$.pipe(
             switchMap(([collection, facetValueIds, term]) => {
                 return this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
@@ -178,6 +183,11 @@ export class ProductListComponent implements OnInit {
                     return acc.concat(val);
                 }
             }, [] as SearchItem[]),
+            tap(products => {
+                // Save product slugs for navigation between products
+                const slugs = products.map(p => p.slug);
+                this.stateService.setState('collectionProductSlugs', slugs);
+            }),
         );
         this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
         this.displayLoadMore$ = combineLatest(this.products$, this.totalResults$).pipe(
@@ -186,6 +196,7 @@ export class ProductListComponent implements OnInit {
             }),
         );
 
+        // console.log('ProductListComponent initialized', this.collection$);
     }
 
     trackByProductId(index: number, item: SearchItem) {

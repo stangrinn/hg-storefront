@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
-  selector: 'vsf-account-sign-in',
+  selector: 'hgart-account-sign-in',
   templateUrl: './account-sign-in.component.html',
   styleUrls: ['./account-sign-in.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

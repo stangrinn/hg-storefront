@@ -9,7 +9,7 @@ import { StateService } from '../../providers/state/state.service';
 import { GET_CART_TOTALS } from './cart-toggle.graphql';
 
 @Component({
-    selector: 'vsf-cart-toggle',
+    selector: 'hgart-cart-toggle',
     templateUrl: './cart-toggle.component.html',
 })
 export class CartToggleComponent implements OnInit {

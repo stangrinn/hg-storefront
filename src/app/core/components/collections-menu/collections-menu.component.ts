@@ -14,7 +14,7 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, map, takeUntil } from 'rxjs/operators';
 
-import { GetCollectionsQuery, GetCollectionsQueryVariables } from '../../../common/generated-types';
+import { GetCollectionsQuery, GetCollectionsQueryVariables, SortOrder } from '../../../common/generated-types';
 import { GET_COLLECTIONS } from '../../../common/graphql/documents.graphql';
 import { DataService } from '../../../core/providers/data/data.service';
 
@@ -23,7 +23,7 @@ import { arrayToTree, RootNode, TreeNode } from './array-to-tree';
 type CollectionItem = GetCollectionsQuery['collections']['items'][number];
 
 @Component({
-    selector: 'vsf-collections-menu',
+    selector: 'hgart-collections-menu',
     templateUrl: './collections-menu.component.html',
     // styleUrls: ['./collections-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,7 +48,12 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
-            options: { take: 50 }
+            options: { 
+                take: 50,                 
+                sort: {
+                    name: SortOrder.DESC
+                } 
+            },
         }).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
@@ -98,7 +103,7 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
         // TODO: re-enable this
     }
 
-    close(event: any) {
+    close() {
         this.overlayIsOpen$.next(false);
     }
 

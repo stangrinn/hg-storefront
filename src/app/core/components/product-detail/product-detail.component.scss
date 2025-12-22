@@ -1,0 +1,334 @@
+:host {
+
+    ::ng-deep hgart-asset-gallery img.gallery-image {
+        min-width: 362px;
+        height: 468px;
+        border: 10px solid #000;
+
+        @media screen and (max-width: 968px) {
+            margin-top: 84px;
+            min-width: auto;
+            height: auto;
+        }
+    }
+
+    .product-main-content {
+        display: flex;
+        gap: 64px;
+        align-items: center;
+        // justify-content: center;
+
+        @media screen and (max-width: 968px) {
+            flex-direction: column;
+
+            .hgart-asset-gallery {
+                position: relative;
+                top: 24px;
+            }
+        }
+    }
+
+    .product-detail-wrapper {
+        padding-top: 88px;
+        padding-left: 40px;
+        padding-right: 40px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 88px;
+
+        @media screen and (max-width: 968px) {
+            padding-top: 12px;
+        }
+    }
+
+    .product-detail-container {
+        .product-close {
+            width: 54px;
+            height: 54px;
+            background-image: url('/assets/icons/close.svg');
+            position: absolute;
+            top: 0;
+            cursor: pointer;
+
+            @media screen and (max-width: 1268px) {
+                right: 0px;
+            }
+        }
+    }
+
+    .product-grid {
+        display: flex;
+        align-items: center;
+        column-gap: 2rem;
+        justify-content: space-between;
+        position: relative;
+
+        @media screen and (max-width: 968px) {
+            flex-direction: column;
+        }
+    }
+
+    .product-info {
+        @apply mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0;
+        width: 610px;
+
+        @media screen and (max-width: 968px) {
+            width: 100%;
+        }
+    }
+
+    // Variant selector
+    .variant-selector {
+        @apply mt-4;
+
+        &__label {
+            @apply block text-sm font-medium text-gray-700;
+        }
+
+        &__select {
+            @apply mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300;
+            @apply focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md;
+        }
+    }
+
+    // Product header section
+    .product-header {
+        @apply flex flex-col sm:flex-row sm:items-center;
+
+        &__content {
+            width: 100%;
+        }
+
+        &__titles {
+            border-bottom: 1px solid #000;
+            margin-bottom: 27px;
+            position: relative;
+            bottom: 20px;
+        }
+    }
+
+    .product-title {
+        font-size: 48px;
+
+    }
+
+    .product-nav {
+        width: 54px;
+        height: 54px;
+        background-repeat: no-repeat;
+        cursor: pointer;
+
+        &-prev {
+            background-image: url('/assets/icons/arrow-left.svg');
+        }
+
+        &-next {
+            background-image: url('/assets/icons/arrow-right.svg');
+        }
+
+        &-prev,
+        &-next {
+            @media screen and (max-width: 1268px) {
+                display: none;
+            }
+        }
+
+
+    }
+
+    .product-collection-name {
+        @apply text-sm uppercase tracking-wider text-gray-500 mb-4;
+    }
+
+    // Preorder button
+    .preorder-btn {
+        @apply max-w-xs flex-1 transition-colors border border-transparent py-3 px-8;
+        @apply flex items-center justify-center text-base font-medium text-white;
+        @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-primary-500 sm:w-full;
+
+        width: auto;
+        height: 42px;
+        font-size: 14px;
+        letter-spacing: 2px;
+        padding: 8px 12px;
+
+        &--disabled {
+            @apply bg-gray-400;
+        }
+
+        &--active {
+            @apply bg-black hover:bg-gray-800;
+        }
+
+        &__icon {
+            @apply mr-2;
+        }
+    }
+
+    // Tabs section
+    .tabs {
+        
+        &__nav {
+            @apply border-b border-gray-200 mb-6;
+        }
+
+        &__nav-list {
+            @apply flex space-x-8;
+            border-bottom: 1px solid;
+            gap: 95px;
+        }
+
+        &__tab {
+            @apply pb-2 text-sm font-bold uppercase tracking-wider border-b-2 transition-colors;
+            border-bottom: 2px solid transparent;
+
+            &--active {
+                @apply border-black text-black;
+                border-bottom: 2px solid;
+            }
+
+            &--inactive {
+                @apply border-transparent text-gray-500 hover:text-gray-700;
+            }
+        }
+
+        &__panel-title {
+            @apply sr-only;
+        }
+
+        &__panel-content {
+            @apply text-base text-gray-700;
+        }
+
+        &__content {
+            font-family: 'Montserrat';
+        }
+    }
+
+    // Added to cart notification
+    .cart-notification {
+        @apply flex;
+
+        &__image-wrapper {
+            @apply mr-8;
+        }
+
+        &__image {
+            @apply rounded;
+        }
+
+        &__text {
+            @apply text-sm;
+        }
+
+        &__actions {
+            @apply flex justify-end;
+        }
+
+        &__view-cart-btn {
+            @apply inline-flex items-center rounded border border-transparent;
+            @apply bg-primary-100 px-2.5 py-1.5 text-xs font-medium text-primary-700;
+            @apply hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+        }
+    }
+
+    // Preorder Modal Overlay
+    .preorder-modal-overlay {
+        @apply fixed inset-0 z-50 flex items-center justify-center;
+        background-color: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(2px);
+    }
+
+    // Preorder Modal
+    .preorder-modal {
+        @apply bg-white relative w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto;
+        padding: 32px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+        &__close {
+            @apply absolute top-4 right-4 p-2 text-gray-500 transition-colors;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        &__title {
+            @apply font-bold uppercase tracking-wider mb-2;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        &__subtitle {
+            @apply text-gray-600 mb-8;
+            font-size: 14px;
+            margin-top: 10px;
+            font-family: 'Montserrat';
+        }
+
+        &__product-collection {
+            font-size: 14px;
+            font-family: 'Montserrat';
+            text-transform: capitalize;
+        }
+    }
+
+    // Preorder Form
+    .preorder-form {
+        font-family: "Montserrat";
+
+        &__field {
+            @apply mb-5;
+        }
+
+        &__label {
+            @apply block text-sm font-medium text-gray-900 mb-2;
+        }
+
+        &__required {
+            @apply text-red-500;
+        }
+
+        &__input,
+        &__select,
+        &__textarea {
+            @apply w-full px-4 py-3 border border-gray-300 text-gray-900;
+            @apply focus:outline-none focus:border-black transition-colors;
+            font-size: 14px;
+            border: 1px solid #dedede;
+
+
+            &::placeholder {
+                @apply text-gray-400;
+            }
+        }
+
+        &__select {
+            @apply appearance-none bg-white cursor-pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='6' viewBox='0 0 14 8' fill='none'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%23333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 12px 12px;
+            padding-right: 40px;
+        }
+
+        &__textarea {
+            @apply resize-none;
+        }
+
+        &__submit {
+            @apply w-full py-4 bg-black text-white font-medium uppercase tracking-wider;
+            @apply hover:bg-gray-800 transition-colors;
+            @apply disabled:bg-gray-400 disabled:cursor-not-allowed;
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-top: 24px;
+            border: none;
+            cursor: pointer;
+        }
+
+        &__privacy {
+            @apply text-center text-gray-500 mt-4;
+            font-size: 12px;
+        }
+    }
+}

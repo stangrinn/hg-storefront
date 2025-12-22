@@ -8,7 +8,7 @@ import { DataService } from '../../../core/providers/data/data.service';
 import { GET_ORDER_LIST } from './account-order-list.graphql';
 
 @Component({
-    selector: 'vsf-account-order-list',
+    selector: 'hgart-account-order-list',
     templateUrl: './account-order-list.component.html',
     // styleUrls: ['./account-order-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

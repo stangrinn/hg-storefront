@@ -37,6 +37,6 @@ export function arrayToTree<T extends HasParent>(nodes: T[]): RootNode<T> {
         }
     }
 
-    const rootId = topLevelNodes.length ? topLevelNodes[0].parent!.id : undefined;
+    const rootId = topLevelNodes.length ? topLevelNodes[0].parent?.id : undefined;
     return {id: rootId, children: topLevelNodes};
 }

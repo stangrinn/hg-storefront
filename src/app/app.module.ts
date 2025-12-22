@@ -1,13 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Inject, NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NavigationEnd, Router, RouterModule, UrlSerializer } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NavigationEnd, Router, RouterModule, RouteReuseStrategy, UrlSerializer } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 import { HomePageComponent } from './core/components/home-page/home-page.component';
 import { CoreModule } from './core/core.module';
+import { CustomRouteReuseStrategy } from './core/route-reuse-strategy';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -17,7 +20,12 @@ import { SharedModule } from './shared/shared.module';
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot(routes, { scrollPositionRestoration: 'disabled', initialNavigation: 'enabledBlocking' }),
+        BrowserAnimationsModule,
+        RouterModule.forRoot(routes, { 
+            scrollPositionRestoration: 'disabled', 
+            initialNavigation: 'enabledBlocking',
+            onSameUrlNavigation: 'reload'
+        }),
         CoreModule,
         SharedModule,
         // Using the service worker appears to break SSR after the initial page load.
@@ -25,6 +33,9 @@ import { SharedModule } from './shared/shared.module';
         //     enabled: environment.production,
         //     registrationStrategy: 'registerWithDelay:5000',
         // }),
+    ],
+    providers: [
+        { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
     ],
     bootstrap: [AppComponent],
 })

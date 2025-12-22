@@ -32,7 +32,7 @@ export class NotificationService {
         );
         const closeFn = () => {
             if (overlayRef.hasAttached()) {
-                const notificationEl = overlayRef.overlayElement.querySelector('vsf-notification');
+                const notificationEl = overlayRef.overlayElement.querySelector('hgart-notification');
                 if (notificationEl) {
                     notificationEl.classList.add('remove');
                 }

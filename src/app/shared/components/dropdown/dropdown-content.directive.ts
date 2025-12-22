@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-    selector: '[vsfDropdownContent]',
+    selector: '[hgartDropdownContent]',
 })
 export class DropdownContentDirective {
 }
