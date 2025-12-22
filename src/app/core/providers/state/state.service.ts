@@ -10,6 +10,8 @@ export interface AppState {
     collectionProductSlugs: string[];
     mobileNavMenuIsOpen: boolean;
     cartDrawerOpen: boolean;
+    /** Saved referrer URL when entering product pages from non-product pages */
+    productPageReferrer: string | null;
 }
 
 export const initialState: AppState = {
@@ -19,6 +21,7 @@ export const initialState: AppState = {
     collectionProductSlugs: [],
     mobileNavMenuIsOpen: false,
     cartDrawerOpen: false,
+    productPageReferrer: '/',
 };
 
 /**

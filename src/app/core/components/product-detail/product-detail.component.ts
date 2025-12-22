@@ -1,6 +1,6 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
@@ -100,6 +100,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private cDRef: ChangeDetectorRef) {
+        // Track current URL before navigating away - save it as potential referrer
+        this.router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+        ).subscribe((event) => {
+            const currentUrl = event.urlAfterRedirects;
+            
+            // If we're on a non-product page, save it as referrer
+            if (!currentUrl.startsWith('/product/')) {
+                this.stateService.setState('productPageReferrer', currentUrl);
+                console.log('Router: Saved non-product URL as referrer:', currentUrl);
+            }
+        });
     }
 
     ngOnInit() {
@@ -118,19 +130,31 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             }),
             map(data => data.product),
             filter(notNullOrUndefined),
-            withLatestFrom(lastCollectionSlug$),
+            withLatestFrom(lastCollectionSlug$, this.stateService.select(state => state.productPageReferrer)),
 
-        ).subscribe(([product, lastCollectionSlug]) => {
+        ).subscribe(([product, lastCollectionSlug, savedReferrer]) => {
             this.product = product;
             
             this.selectedVariant = product.variants[0];
 
-            this.referrerUrl = `/category/${product.collections[0]?.slug}`;
+            console.log('=== REFERRER DEBUG ===');
+            console.log('Saved referrer from Router tracking:', savedReferrer);
+            console.log('Product slug:', product.slug);
+            
+            // Use saved referrer from Router tracking or fallback to collection
+            if (savedReferrer) {
+                this.referrerUrl = savedReferrer || '/';
+                console.log('✓ Using saved referrer from Router');
+            } else {
+                this.referrerUrl = `/category/${product.collections[0]?.slug}`;
+                console.log('✓ Using fallback (collection page)');
+            }
+            
+            console.log('Final referrer URL:', this.referrerUrl);
+            console.log('=== END DEBUG ===');
             
             // Extract video source from variant's featuredAsset if it's a video file
             this.videoSource = this.extractVideoSource(product);
-            
-            console.log('lastCollectionSlug:', lastCollectionSlug, document.referrer);
 
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
 
@@ -201,6 +225,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      */
     closeProductDetails(): void {
         console.log('Closing product details, navigating to referrerUrl:', this.referrerUrl);
+        
+        // Clear saved referrer when leaving product pages
+        this.stateService.setState('productPageReferrer', null);
+        
         this.referrerUrl && this.router.navigateByUrl(this.referrerUrl);
     }
 
@@ -457,6 +485,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         if (this.sub) {
             this.sub.unsubscribe();
+        // Note: We don't clear productPageReferrer here to preserve it for next/previous navigation
             this.referrerUrl = null;
         }
         // Ensure body scroll is restored
