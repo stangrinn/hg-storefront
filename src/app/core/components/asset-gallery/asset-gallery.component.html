@@ -27,6 +27,7 @@
 
     <!-- Volume control button -->
     <button 
+        *ngIf="isVideoVisible && isFirstAssetSelected()"
         class="volume-button"
         (mouseenter)="onVolumeButtonEnter()"
         (mouseleave)="onVolumeButtonLeave()"
