@@ -22,8 +22,6 @@ export function app() {
     server.set('view engine', 'html');
     server.set('views', distFolder);
 
-    // Example Express Rest API endpoints
-    // app.get('/api/**', (req, res) => { });
     // Serve static files from /browser
     server.get('*.*', express.static(distFolder, {
         maxAge: '1y',
@@ -31,6 +29,10 @@ export function app() {
 
     // All regular routes use the Universal engine
     server.get('*', (req, res) => {
+        // Skip SSR for static files
+        if (req.url.includes('.')) {
+            return res.status(404).send('Not found');
+        }
         res.render(indexHtml, {req, providers: [{provide: APP_BASE_HREF, useValue: req.baseUrl}]});
     });
 

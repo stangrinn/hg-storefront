@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -5,8 +6,10 @@ import {
     Component,
     ElementRef,
     HostListener,
+    Inject,
     Input,
     OnChanges,
+    PLATFORM_ID,
     ViewChild,
 } from '@angular/core';
 
@@ -39,7 +42,10 @@ export class ProductCardComponent implements OnChanges, AfterViewInit {
     /** Flag to track if user has interacted with the page */
     private static userHasInteracted = false;
 
-    constructor(private cdr: ChangeDetectorRef) {}
+    constructor(
+        private cdr: ChangeDetectorRef,
+        @Inject(PLATFORM_ID) private platformId: object,
+    ) {}
 
     /**
      * Track first user interaction to enable video autoplay.
@@ -66,8 +72,8 @@ export class ProductCardComponent implements OnChanges, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        // Preload video for faster playback on hover
-        if (this.videoPlayer?.nativeElement && this.videoSource) {
+        // Preload video for faster playback on hover - only in browser
+        if (isPlatformBrowser(this.platformId) && this.videoPlayer?.nativeElement && this.videoSource) {
             const video = this.videoPlayer.nativeElement;
             video.preload = 'auto';
             video.load();
@@ -91,7 +97,7 @@ export class ProductCardComponent implements OnChanges, AfterViewInit {
      * Shows and plays the video on mouse hover.
      */
     onMouseOver(): void {
-        if (!this.videoSource) return;
+        if (!this.videoSource || !isPlatformBrowser(this.platformId)) return;
 
         this.isVideoVisible = true;
         this.cdr.markForCheck();
@@ -115,7 +121,7 @@ export class ProductCardComponent implements OnChanges, AfterViewInit {
      * Hides the video and stops playback on mouse out.
      */
     onMouseOut(): void {
-        if (!this.videoSource) return;
+        if (!this.videoSource || !isPlatformBrowser(this.platformId)) return;
 
         this.isVideoVisible = false;
         this.cdr.markForCheck();

@@ -8,6 +8,12 @@ import { SupportComponent } from './core/components/support/support.component';
 
 export const routes: Route[] = [
     {
+        path: '',
+        component: ProductListComponent,
+        pathMatch: 'full',
+        data: { animation: 'HomePage' },
+    },
+    {
         path: 'about',
         component: AboutMeComponent,
         data: { animation: 'AboutPage' },
@@ -48,5 +54,10 @@ export const routes: Route[] = [
         path: 'checkout',
         loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule),
         data: { animation: 'CheckoutPage' },
+    },
+    {
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full',
     },
 ];
