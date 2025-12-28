@@ -8,16 +8,16 @@ ARG API_URL
 ENV API_URL=${API_URL}
 
 # Copy package files
-COPY package.json ./
+COPY package.json yarn.lock ./
 
-# Install dependencies fresh (ignore lock files to avoid version conflicts)
-RUN npm install --legacy-peer-deps
+# Install dependencies with yarn (same as on server)
+RUN yarn install --frozen-lockfile --network-timeout 600000
 
 # Copy source code
 COPY . .
 
 # Build the Angular application with SSR
-RUN npm run build:ssr
+RUN yarn build:ssr
 
 # Production stage
 FROM node:20-alpine
