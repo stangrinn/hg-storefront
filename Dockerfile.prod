@@ -1,5 +1,5 @@
 # Multi-stage build for production
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 
 WORKDIR /usr/src/app
 
@@ -10,8 +10,10 @@ ENV API_URL=${API_URL}
 # Copy package files
 COPY package.json yarn.lock ./
 
-# Install dependencies with yarn (same as on server)
-RUN yarn install --frozen-lockfile --network-timeout 600000
+# Clean install dependencies with yarn
+RUN rm -rf node_modules && \
+    yarn cache clean && \
+    yarn install --frozen-lockfile --network-timeout 600000
 
 # Copy source code
 COPY . .
@@ -20,12 +22,12 @@ COPY . .
 RUN yarn build:ssr
 
 # Production stage
-FROM node:20-alpine
+FROM node:20
 
 WORKDIR /usr/src/app
 
 # Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
+RUN apt-get update && apt-get install -y dumb-init && rm -rf /var/lib/apt/lists/*
 
 # Install PM2 globally
 RUN npm install -g pm2
