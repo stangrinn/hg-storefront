@@ -1,5 +1,6 @@
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
@@ -99,7 +100,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private activeService: ActiveService,
         private route: ActivatedRoute,
         private router: Router,
-        private cDRef: ChangeDetectorRef) {
+        private cDRef: ChangeDetectorRef,
+        @Inject(PLATFORM_ID) private platformId: object) {
         // Track current URL before navigating away - save it as potential referrer
         this.router.events.pipe(
             filter((event): event is NavigationEnd => event instanceof NavigationEnd)
@@ -137,21 +139,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             
             this.selectedVariant = product.variants[0];
 
-            console.log('=== REFERRER DEBUG ===');
-            console.log('Saved referrer from Router tracking:', savedReferrer);
-            console.log('Product slug:', product.slug);
-            
             // Use saved referrer from Router tracking or fallback to collection
             if (savedReferrer) {
                 this.referrerUrl = savedReferrer || '/';
-                console.log('✓ Using saved referrer from Router');
+                // console.log('✓ Using saved referrer from Router');
             } else {
                 this.referrerUrl = `/category/${product.collections[0]?.slug}`;
-                console.log('✓ Using fallback (collection page)');
+                // console.log('✓ Using fallback (collection page)');
             }
-            
-            console.log('Final referrer URL:', this.referrerUrl);
-            console.log('=== END DEBUG ===');
+
             
             // Extract video source from variant's featuredAsset if it's a video file
             this.videoSource = this.extractVideoSource(product);
@@ -403,8 +399,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      */
     openPreorderModal(): void {
         this.isPreorderModalOpen = true;
-        // Prevent body scroll when modal is open
-        document.body.style.overflow = 'hidden';
+        // Prevent body scroll when modal is open - only in browser
+        if (isPlatformBrowser(this.platformId)) {
+            document.body.style.overflow = 'hidden';
+        }
     }
 
     /**
@@ -412,7 +410,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      */
     closePreorderModal(): void {
         this.isPreorderModalOpen = false;
-        document.body.style.overflow = '';
+        
+        if (isPlatformBrowser(this.platformId)) {
+            document.body.style.overflow = '';
+        }
+        
         this.resetPreorderForm();
     }
 
@@ -441,10 +443,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      * Submits the preorder form.
      */
     submitPreorder(): void {
+        
         if (!this.isPreorderFormValid() || this.isSubmitting) return;
         
         this.isSubmitting = true;
-
+        
         // Send preorder to Vendure backend
         this.dataService.mutate(REGISTER_PREORDER, {
             productId: this.product?.id,
@@ -456,13 +459,18 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             comment: this.preorderForm.comment || null,
         }).subscribe({
             next: () => {
+                
                 this.isSubmitting = false;
+                
                 this.closePreorderModal();
+
                 this.notificationService.notify({
                     title: 'Interest Registered',
                     type: 'info',
                     duration: 5000,
                 }).subscribe();
+
+                this.cDRef.markForCheck();
             },
             error: (error) => {
                 this.isSubmitting = false;
@@ -488,8 +496,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         // Note: We don't clear productPageReferrer here to preserve it for next/previous navigation
             this.referrerUrl = null;
         }
-        // Ensure body scroll is restored
-        document.body.style.overflow = '';
+        // Ensure body scroll is restored - only in browser
+        if (isPlatformBrowser(this.platformId)) {
+            document.body.style.overflow = '';
+        }
     }
 
 }

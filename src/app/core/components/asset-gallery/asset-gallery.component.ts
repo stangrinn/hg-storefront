@@ -210,7 +210,7 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
      */
     onMouseLeave(): void {
         if (!this.videoSource) return;
-        console.log('Mouse leave the video play triggered');
+        
         this.isVideoVisible = false;
         this.isMuted = true;
         this.cdr.markForCheck();

@@ -266,9 +266,12 @@
         }
 
         &__product-collection {
-            font-size: 14px;
+            font-size: 18px;
             font-family: 'Montserrat';
             text-transform: capitalize;
+            &.price {
+                font-family: 'Orbitron', sans-serif;
+            }
         }
     }
 

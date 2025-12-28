@@ -120,17 +120,17 @@
             <img _ngcontent-ng-c1138095943="" width="24" height="24" src="assets/icons/hg-close.svg" alt="Close">
         </button>
 
-        <h2 class="preorder-modal__title">PRE-ORDER</h2>
-        <div class="flex gap-2 items-center">
+        <!-- <h2 class="preorder-modal__title">PRE-ORDER</h2> -->
+        <div class="flex gap-6 items-center">
             <div>
                 <img class="preorder-modal__product-image"
                     ng-if="product?.featuredAsset"
-                    [src]="product?.featuredAsset | assetPreview:50" alt="{{ product?.name }}" />
+                    [src]="product?.featuredAsset | assetPreview:98:130" alt="{{ product?.name }}" />
             </div>
-            <div>
-                <h1>{{ product?.name }}</h1>
-                <h1 class="preorder-modal__product-collection">{{ product?.collections[0].slug }} collection</h1>
-                <h1 class="preorder-modal__product-collection">$ {{ product?.variants[0]?.price / 100 }}</h1>
+            <div class="flex flex-col gap-2">
+                <h1 class="text-3xl">{{ product?.name }}</h1>
+                <h1 class="preorder-modal__product-collection">{{ product?.collections[0].slug.replaceAll('-',' ') }} collection</h1>
+                <h1 class="preorder-modal__product-collection price">$ {{ product?.variants[0]?.price / 100 }}</h1>
             </div>
         </div>
         <p class="preorder-modal__subtitle">
