@@ -1,5 +1,5 @@
 # Multi-stage build for production
-FROM node:16-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /usr/src/app
 
@@ -8,29 +8,19 @@ ARG API_URL
 ENV API_URL=${API_URL}
 
 # Copy package files
-COPY package.json yarn.lock* package-lock.json* ./
+COPY package.json ./
 
-# Clean install dependencies with cache clearing
-RUN rm -rf node_modules && \
-    if [ -f yarn.lock ]; then \
-        yarn cache clean && \
-        yarn install --frozen-lockfile --network-timeout 100000; \
-    elif [ -f package-lock.json ]; then \
-        npm cache clean --force && \
-        npm ci; \
-    else \
-        npm install; \
-    fi
+# Install dependencies fresh (ignore lock files to avoid version conflicts)
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
 # Build the Angular application with SSR
-RUN if [ -f yarn.lock ]; then yarn build:ssr; \
-    else npm run build:ssr; fi
+RUN npm run build:ssr
 
 # Production stage
-FROM node:16-alpine
+FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
