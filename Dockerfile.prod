@@ -38,14 +38,15 @@ COPY --from=builder /usr/src/app/dist ./dist
 # Copy server files
 COPY --from=builder /usr/src/app/server.ts ./
 COPY --from=builder /usr/src/app/package.json ./
+COPY --from=builder /usr/src/app/yarn.lock ./
 COPY --from=builder /usr/src/app/process.json ./
 
-# Install only production dependencies
-RUN npm install --only=production
+# Install only production dependencies with yarn
+RUN yarn install --production --frozen-lockfile
 
 # Set non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001 && \
+RUN groupadd -g 1001 nodejs && \
+    useradd -u 1001 -g nodejs nodejs && \
     chown -R nodejs:nodejs /usr/src/app
 
 USER nodejs
