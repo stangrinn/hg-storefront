@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.gitignore
+.editorconfig
+.angular
+*.md
+.vscode
+coverage
+.nyc_output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
