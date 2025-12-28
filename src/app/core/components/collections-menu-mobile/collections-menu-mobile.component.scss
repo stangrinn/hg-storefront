@@ -22,12 +22,23 @@
         @apply pointer-events-none fixed inset-y-0 left-0 flex w-[20%];
 
         ul li a {
-            @apply block text-gray-700 cursor-pointer w-full hover:bg-gray-50 hover:text-black items-center font-medium;
+            @apply block text-gray-700 cursor-pointer w-full items-center font-medium;
             padding: 8px 16px;
             margin-bottom: 12px;
             font-size: 14px;
             text-transform: uppercase;
             font-weight: 500;
+            transition: color 0.3s;
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.5);
+                color: #000;
+            }
+        }
+
+        &-backdrop {
+            @apply flex h-full flex-col shadow-xl;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(30px);
         }
 
         &-title {
@@ -64,18 +75,27 @@
 
         .extra-footer {
             
-            padding: 50px 16px;
+            padding: 50px 0px;
             flex-direction: column;
             row-gap: 16px;
 
             h3 {
                 font-size: 18px;
+                padding: 8px 16px;
+                padding-bottom: 40px;
             }
 
             a {
                 font-size: 14px;
                 font-weight: 500;
                 @apply block text-gray-700;
+                padding: 8px 16px;
+                transition: color 0.3s;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.5);
+                    color: #000;
+                }
             }
 
         }
