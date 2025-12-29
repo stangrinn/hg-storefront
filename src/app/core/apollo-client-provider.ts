@@ -102,7 +102,10 @@ export function apolloOptionsFactory(
     });
 
     const {apiHost, apiPort, shopApiPath} = environment;
-    const uri = `${apiHost}:${apiPort}/${shopApiPath}`;
+    // Build URI based on environment - empty apiHost means relative URL
+    const uri = apiHost 
+        ? `${apiHost}${apiPort && apiPort !== 80 && apiPort !== 443 ? ':' + apiPort : ''}/${shopApiPath}`
+        : `/${shopApiPath}`;
     const options: Options = {
         uri,
         withCredentials: false,
