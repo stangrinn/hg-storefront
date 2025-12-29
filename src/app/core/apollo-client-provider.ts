@@ -102,10 +102,25 @@ export function apolloOptionsFactory(
     });
 
     const {apiHost, apiPort, shopApiPath} = environment;
-    // Build URI based on environment - empty apiHost means relative URL
-    const uri = apiHost 
-        ? `${apiHost}${apiPort && apiPort !== 80 && apiPort !== 443 ? ':' + apiPort : ''}/${shopApiPath}`
-        : `/${shopApiPath}`;
+    
+    // Determine if we're in SSR (server-side) or browser context
+    const isServer = !isPlatformBrowser(platformId);
+    
+    // Build URI - use absolute URL for SSR, relative for browser
+    let uri: string;
+    if (isServer) {
+        // SSR: use environment variables or fallback to backend
+        const serverApiUrl = typeof process !== 'undefined' && process.env?.['API_URL'] 
+            ? process.env['API_URL']
+            : 'http://backend:3000';
+        uri = `${serverApiUrl}/${shopApiPath}`;
+    } else {
+        // Browser: use relative URL (proxied through nginx) or configured host
+        uri = apiHost 
+            ? `${apiHost}${apiPort && apiPort !== 80 && apiPort !== 443 ? ':' + apiPort : ''}/${shopApiPath}`
+            : `/${shopApiPath}`;
+    }
+    
     const options: Options = {
         uri,
         withCredentials: false,
