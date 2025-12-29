@@ -2,10 +2,14 @@
   "apps": [
     {
       "script": "dist/server/main.js",
-      "name": "angular-storefront-server",
+      "name": "hg-storefront-server",
+      "instances": 2,
+      "exec_mode": "cluster",
       "max_memory_restart": "1G",
       "cron_restart": "0 3 */1 * *",
-      "kill_timeout": 2000
+      "kill_timeout": 2000,
+      "wait_ready": true,
+      "listen_timeout": 10000
     }
   ]
 }
