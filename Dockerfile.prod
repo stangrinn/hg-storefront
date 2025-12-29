@@ -18,8 +18,8 @@ RUN rm -rf node_modules && \
 # Copy source code
 COPY . .
 
-# Build the Angular application with SSR
-RUN yarn build:ssr
+# Build the Angular application with SSR using docker configuration
+RUN yarn build:ssr:docker
 
 # Production stage
 FROM node:20
