@@ -1,8 +1,8 @@
 export const environment = {
     production: true,
-    apiHost: '',
-    apiPort: 80,
-    shopApiPath: 'shop-api',
+    apiHost: 'https://helenagrinshpun.art/shop-api',
+    apiPort: 443,
+    shopApiPath: '',
     baseHref: '/',
-    tokenMethod: 'bearer',
+    tokenMethod: 'cookie',
 };
