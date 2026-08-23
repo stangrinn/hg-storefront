@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "strict": true,
     "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,

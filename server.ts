@@ -1,11 +1,21 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import 'zone.js/node';
 
 import { AppServerModule } from './src/main.server';
+
+function readAppVersion(): string {
+    try {
+        const packageJsonPath = join(process.cwd(), 'package.json');
+        const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {version?: string};
+        return packageJson.version || 'unknown';
+    } catch (err) {
+        return 'unknown';
+    }
+}
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
@@ -41,11 +51,13 @@ export function app() {
 
 function run() {
     const port = process.env.PORT || 4000;
+    const version = readAppVersion();
 
     // Start up the Node server
     const server = app();
     server.listen(port, () => {
         console.log(`Node Express server listening on http://localhost:${port}`);
+        console.log(`[hg-storefront] server version ${version}`);
     });
 }
 

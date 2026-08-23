@@ -20,6 +20,9 @@ concurrency:
   group: deploy-${{ github.event.inputs.stage || github.ref_name }}
   cancel-in-progress: false
 
+permissions:
+  contents: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -57,8 +60,46 @@ jobs:
 
           echo "stage=${stage}" >> "$GITHUB_OUTPUT"
 
+      - name: Checkout
+        if: github.event_name == 'push'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Bump package version
+        if: github.event_name == 'push'
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          messages="$(jq -r '.commits[].message // empty' "$GITHUB_EVENT_PATH")"
+          bump="patch"
+
+          if printf '%s\n' "$messages" | grep -Eq 'BREAKING CHANGE|^[[:alpha:]][[:alnum:]_-]*(\([^)]*\))?!:'; then
+            bump="major"
+          elif printf '%s\n' "$messages" | grep -Eq '^feat(\([^)]*\))?:'; then
+            bump="minor"
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          npm version "$bump" --no-git-tag-version
+          new_version="$(node -p "require('./package.json').version")"
+
+          git add package.json package-lock.json 2>/dev/null || git add package.json
+          git commit -m "chore: bump version to v${new_version} [skip ci]"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "version=${new_version}" >> "$GITHUB_OUTPUT"
+
       - name: Deploy on Hetzner
         shell: bash
+        env:
+          DEPLOY_SHA: ${{ steps.version.outputs.sha || github.sha }}
         run: |
           set -euo pipefail
 
@@ -73,4 +114,4 @@ jobs:
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=yes \
             "${HETZNER_USER}@${HETZNER_HOST}" \
-            "sudo /usr/local/bin/hgart-deploy '${{ steps.stage.outputs.stage }}' '${GITHUB_REPOSITORY}' '${GITHUB_SHA}'"
+            "sudo /usr/local/bin/hgart-deploy '${{ steps.stage.outputs.stage }}' '${GITHUB_REPOSITORY}' '${DEPLOY_SHA}'"
