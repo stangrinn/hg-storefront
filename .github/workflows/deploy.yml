@@ -26,6 +26,8 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event_name == 'workflow_dispatch' && (github.event.inputs.stage == 'prod' && 'Production' || 'Development') || (github.ref_name == 'main' && 'Production' || 'Development') }}
     env:
       HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
       HETZNER_USER: ${{ secrets.HETZNER_USER || 'deploy' }}
