@@ -62,11 +62,9 @@
                                 "scripts": true,
                                 "styles": {
                                     "minify": true,
-                                    "inlineCritical": false
+                                    "inlineCritical": true
                                 },
-                                "fonts": {
-                                    "inline": false
-                                }
+                                "fonts": true
                             },
                             "outputHashing": "all",
                             "sourceMap": false,

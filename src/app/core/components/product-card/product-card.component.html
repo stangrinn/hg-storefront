@@ -2,22 +2,7 @@
     <a class="group flex flex-col" prefetch="intent" [routerLink]="['/product', product.slug]">
         <div 
             class="img-wrapper" 
-            [style.background-image]="'url(' + currentImage + ')'"
-            (mouseenter)="onMouseOver()"
-            (mouseleave)="onMouseOut()">
-            
-            <!-- Video overlay for hover effect -->
-            <video 
-                #videoPlayer
-                class="video-overlay"
-                [class.visible]="isVideoVisible"
-                [class.hidden]="!videoSource"
-                [src]="videoSource"
-                muted
-                loop
-                playsinline
-                preload="auto">
-            </video>
+            [style.background-image]="'url(' + currentImage + ')'">
         </div>
         <div class="h-3"></div>
     </a>

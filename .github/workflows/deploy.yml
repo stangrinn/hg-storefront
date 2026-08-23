@@ -1,0 +1,67 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - develop
+      - main
+      - prod
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: "Target stage"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - prod
+
+concurrency:
+  group: deploy-${{ github.event.inputs.stage || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
+      HETZNER_USER: ${{ secrets.HETZNER_USER || 'deploy' }}
+      HETZNER_PORT: ${{ secrets.HETZNER_PORT || '22' }}
+    steps:
+      - name: Resolve stage
+        id: stage
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            stage="${{ github.event.inputs.stage }}"
+          elif [ "${GITHUB_REF_NAME}" = "develop" ]; then
+            stage="dev"
+          elif [ "${GITHUB_REF_NAME}" = "main" ] || [ "${GITHUB_REF_NAME}" = "prod" ]; then
+            stage="prod"
+          else
+            echo "Unsupported branch: ${GITHUB_REF_NAME}" >&2
+            exit 1
+          fi
+
+          echo "stage=${stage}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy on Hetzner
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -n "${HETZNER_HOST}"
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/hgart_deploy
+          chmod 600 ~/.ssh/hgart_deploy
+          ssh-keyscan -p "${HETZNER_PORT}" -H "${HETZNER_HOST}" >> ~/.ssh/known_hosts
+
+          ssh -i ~/.ssh/hgart_deploy \
+            -p "${HETZNER_PORT}" \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            "${HETZNER_USER}@${HETZNER_HOST}" \
+            "sudo /usr/local/bin/hgart-deploy '${{ steps.stage.outputs.stage }}' '${GITHUB_REPOSITORY}' '${GITHUB_SHA}'"

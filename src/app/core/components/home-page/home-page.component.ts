@@ -126,16 +126,6 @@ const SEARCH_PRODUCTS = gql`
                 productAsset {
                     id
                     preview
-                    source
-                    focalPoint {
-                        x
-                        y
-                    }
-                }
-                productVariantAsset {
-                    id
-                    preview
-                    source
                     focalPoint {
                         x
                         y
