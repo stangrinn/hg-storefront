@@ -3,9 +3,8 @@ name: Deploy
 on:
   push:
     branches:
-      - develop
+      - dev
       - main
-      - prod
   workflow_dispatch:
     inputs:
       stage:
@@ -37,9 +36,19 @@ jobs:
 
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             stage="${{ github.event.inputs.stage }}"
-          elif [ "${GITHUB_REF_NAME}" = "develop" ]; then
+
+            if [ "${stage}" = "dev" ] && [ "${GITHUB_REF_NAME}" != "dev" ]; then
+              echo "Dev deploys must run from the dev branch" >&2
+              exit 1
+            fi
+
+            if [ "${stage}" = "prod" ] && [ "${GITHUB_REF_NAME}" != "main" ]; then
+              echo "Prod deploys must run from the main branch" >&2
+              exit 1
+            fi
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
             stage="dev"
-          elif [ "${GITHUB_REF_NAME}" = "main" ] || [ "${GITHUB_REF_NAME}" = "prod" ]; then
+          elif [ "${GITHUB_REF_NAME}" = "main" ]; then
             stage="prod"
           else
             echo "Unsupported branch: ${GITHUB_REF_NAME}" >&2
