@@ -1,24 +1,27 @@
-<hgart-layout>
-    <hgart-layout-header>
-        <div class="content-holder">
-            <div class="content-holder-items">
-                <hgart-mobile-menu-toggle class="mb-[26px]"></hgart-mobile-menu-toggle>
+<hgart-layout [class.theme-light]="!isDarkTheme">
+    <hgart-layout-header class="site-header">
+        <div class="site-header__ceiling" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+        </div>
 
-                <div class="w-[250px]">
-                    <a [routerLink]="['/']" class="logo-link">
-                        <img alt="Helena Grinshpun ARt" class="w-[280px]" src="assets/logo.png">
-                    </a>
-                </div>
+        <hgart-mobile-menu-toggle class="site-header__menu"></hgart-mobile-menu-toggle>
 
-                <!-- <div class="content-holder-centered">
-                    <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle>
+        <a [routerLink]="['/']" class="site-header__logo" aria-label="Helena Grinshpun Art home">
+            <img alt="" src="assets/header/logo-mark.svg">
+            <span>HELENA GRINSHPUN ART</span>
+        </a>
 
-                    <hgart-account-link class=""></hgart-account-link>
-                </div> -->
-            </div>
+        <div class="site-header__utilities">
+            <button (click)="toggleTheme()" class="site-header__theme" type="button"
+                [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'">
+                <img alt="" [class.site-header__theme-icon--light]="!isDarkTheme" src="assets/header/theme-dark.svg">
+            </button>
 
-            <div class="dashed"> </div>
+            <button class="site-header__like" type="button" aria-label="Favourite artworks">
+                <img alt="" src="assets/header/like.svg">
+            </button>
 
+            <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle>
         </div>
     </hgart-layout-header>
 
@@ -35,64 +38,37 @@
     </div>
 
     <hgart-layout-footer>
-        <footer aria-labelledby="footer-heading" class="border-t mt-[80px]">
+        <footer aria-labelledby="footer-heading" class="site-footer">
             <h2 class="sr-only" id="footer-heading">Footer</h2>
-
-            <div class="pl-[24px] pr-[24px]">
-                <div class="footer-wrapper footer-grid">
-                    <!-- Left column -->
-                    <div class="footer-left">
-                        <!-- <h3 class="text-sm font-semibold  tracking-wider uppercase">
-                            HELENA GRINSHPUN ART
-                        </h3> -->
-
-                        <!-- Calligraphic slogan matching the design mockup -->
-                        <p class="slogan text-gray-700">Dreams transformed into reality with AI + AR</p>
-
-                        <div class="footer-bottom mt-8 ">
-
-                            <div class="flex gap-1">
-                                <a href="https://www.instagram.com/helena_grinshpun/" target="_blank"
-                                    class="text-xs text-gray-600 font-semibold">INSTA</a>
-                                <a href="https://www.facebook.com/h.grinshpun" target="_blank"
-                                    class="text-xs text-gray-600 font-semibold">FB</a>
-                            </div>
-
-                            <div class="footer-bottom">
-                                <span class="text-xs text-gray-600 font-medium">©2025 HELENA GRINSHPUN ART. ALL RIGHTS
-                                    RESERVED.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Middle column (with left divider) -->
-                    <div class="border-l footer-center">
-                        <h3 class="text-sm font-semibold tracking-wider uppercase">
-                            USEFUL LINKS
-                        </h3>
-                        <div>
-                            <div><a [routerLink]="['/support']">SUPPORT AND FAQ</a></div>
-                            <div><a [routerLink]="['/privacy-policy']">PRIVACY POLICY</a></div>
-                        </div>
-                    </div>
-
-                    <!-- Right column (with left divider) -->
-                    <div class="border-l footer-right">
-                        <h3 class="text-sm font-semibold  tracking-wider uppercase">
-                            CONTACT
-                        </h3>
-
-                        <div>
-                            <div>
-                                <a [routerLink]="['/about']">ABOUT ME</a>
-                            </div>
-                            <div>
-                                <a href="mailto:hello@helenagrinshpun.art" class="text-base inline-block">HELLO
-                                    HELENAGRINSHPUN.ART</a>
-                            </div>
-                        </div>
-                    </div>
+            <div class="site-footer__brand">
+                <div>
+                    <p class="site-footer__slogan">Dreams transformed into reality with Art + AR</p>
+                    <p class="site-footer__identity">HELENA GRINSHPUN ART</p>
                 </div>
+                <div class="site-footer__bottom">
+                    <div class="site-footer__social">
+                        <a href="https://www.instagram.com/helena_grinshpun/" target="_blank">insta</a>
+                        <a href="https://www.facebook.com/h.grinshpun" target="_blank">fb</a>
+                        <a href="https://linkedin.com" target="_blank">in</a>
+                    </div>
+                    <p>© 2026 Helena Grinshpun Art. All rights reserved.</p>
+                </div>
+            </div>
+            <div class="site-footer__divider" aria-hidden="true"></div>
+            <nav class="site-footer__links" aria-label="Useful links">
+                <h3>Useful Links</h3>
+                <a href="mailto:hello@helenagrinshpun.art">contact us</a>
+                <a [routerLink]="['/support']">faq</a>
+                <a [routerLink]="['/privacy-policy']">privacy policy</a>
+                <a href="#">terms &amp; conditions</a>
+            </nav>
+            <div class="site-footer__divider" aria-hidden="true"></div>
+            <div class="site-footer__contact">
+                <h3>Contact</h3>
+                <p>Open Daily 09:00-19:00</p>
+                <p class="muted">Saturday Closed</p>
+                <p>Cyprus, Limassol</p>
+                <a href="mailto:hello@helenagrinshpun.art">hello@helenagrinshpun.art</a>
             </div>
         </footer>
     </hgart-layout-footer>

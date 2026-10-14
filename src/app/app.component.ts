@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ChildrenOutletContexts, Router, RouterEvent } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -16,6 +17,7 @@ import { StateService } from './core/providers/state/state.service';
     animations: [fadeAnimation, routeAnimations, slideAnimation],
 })
 export class AppComponent implements OnInit {
+    isDarkTheme = true;
     cartDrawerVisible$: Observable<boolean>;
     mobileNavVisible$: Observable<boolean>;
     isHomePage$: Observable<boolean>;
@@ -39,10 +41,14 @@ export class AppComponent implements OnInit {
     constructor(private router: Router,
                 private stateService: StateService,
                 private dataService: DataService,
-                private contexts: ChildrenOutletContexts) {
+                private contexts: ChildrenOutletContexts,
+                @Inject(PLATFORM_ID) private platformId: object) {
     }
 
     ngOnInit(): void {
+        if (isPlatformBrowser(this.platformId)) {
+            this.isDarkTheme = window.localStorage.getItem('hgart-theme') !== 'light';
+        }
         this.cartDrawerVisible$ = this.stateService.select(state => state.cartDrawerOpen);
         this.mobileNavVisible$ = this.stateService.select(state => state.mobileNavMenuIsOpen);
         this.isHomePage$ = this.router.events.pipe(
@@ -55,6 +61,13 @@ export class AppComponent implements OnInit {
         }).pipe(
             map(({collections}) => collections.items)
         );
+    }
+
+    toggleTheme() {
+        this.isDarkTheme = !this.isDarkTheme;
+        if (isPlatformBrowser(this.platformId)) {
+            window.localStorage.setItem('hgart-theme', this.isDarkTheme ? 'dark' : 'light');
+        }
     }
 
     openCartDrawer() {

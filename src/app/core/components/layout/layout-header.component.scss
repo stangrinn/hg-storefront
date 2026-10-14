@@ -3,7 +3,8 @@
 
     .floating-container {
         position: relative;
-        background-color: white;
+        height: var(--layout-header-height, auto);
+        background-color: var(--layout-header-background, white);
     }
 
     &.floating {
