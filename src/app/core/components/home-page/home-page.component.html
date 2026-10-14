@@ -1,52 +1,197 @@
-<div class="mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <ng-container *ngIf="collectionsWithProducts$ | async as collections; else loading">
-        <ng-container *ngFor="let item of collections">
-            <!-- Collection Section -->
-            <section class="mb-16 last:mb-0">
-                <!-- Collection Title -->
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl sm:text-4xl text-gray-900 uppercase mb-2 tracking-[2px] font-semibold">
-                        {{ item.collection.name }}
-                    </h2>
-                    <p class="text-sm text-gray-500 uppercase tracking-wider">
-                        Limited to {{ item.products.length }} items · Printed on fine art paper or canvas
-                    </p>
+<main class="home">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero__wall" aria-hidden="true">
+                <div class="hero__art hero__art--small">
+                    <img src="assets/home/hero-blue.png" alt="">
+                    <span class="hero__prompt">A surreal art portrait of a mysterious woman between dreaming and awakening. Her hair expands around her in flowing waves, while the darkness dissolves into a landscape of clouds and distant light. Tiny luminous particles rise like fragments of a dream.</span>
                 </div>
-
-                <!-- Products Grid -->
-                <div class="flex flex-wrap justify-center gap-y-10 gap-x-6" *ngIf="item.products.length > 0">
-                    <hgart-product-card 
-                        *ngFor="let product of item.products" 
-                        [product]="product"
-                        
-                        >
-                    </hgart-product-card>
+                <div class="hero__art hero__art--medium">
+                    <img src="assets/home/hero-green.png" alt="">
+                    <span class="hero__prompt">A surreal portrait of a woman emerging from darkness. Light travels through her delicate hair and transforms into brilliant filaments. A vast atmospheric landscape surrounds her as the world changes before she opens her eyes.</span>
                 </div>
-                
-                <!-- Debug: Show if no products -->
-                <div *ngIf="item.products.length === 0" class="text-center text-gray-500">
-                    No products in this collection yet
+                <div class="hero__art hero__art--large">
+                    <img src="assets/home/hero-artwork.png" alt="Surreal portrait from the HG ARt collection">
                 </div>
-            </section>
-        </ng-container>
-    </ng-container>
-
-    <!-- Loading State -->
-    <ng-template #loading>
-        <section class="mb-16" *ngFor="let _ of [1, 2]">
-            <!-- Title Skeleton -->
-            <div class="text-center mb-8 animate-pulse">
-                <div class="h-10 bg-gray-200 rounded w-64 mx-auto mb-2"></div>
-                <div class="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
+                <div class="hero__art hero__art--medium">
+                    <img src="assets/home/hero-rain.png" alt="">
+                    <span class="hero__prompt">A mysterious woman stands motionless in a nocturnal landscape. Her hair drifts like threads of time, disappearing into darkness. Deep midnight blue, charcoal and muted ivory create a quiet feeling of stillness and anticipation.</span>
+                </div>
+                <div class="hero__art hero__art--small">
+                    <img src="assets/home/hero-gold.png" alt="">
+                    <span class="hero__prompt">A luminous moon glows behind her head like a celestial halo. Silver-white hair expands into waves of flowers and delicate golden botanical forms. Layers of petals and light surround her without obscuring her face.</span>
+                </div>
             </div>
-            
-            <!-- Products Grid Skeleton -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-                <hgart-product-card 
-                    *ngFor="let _ of [1, 2, 3, 4]" 
-                    [product]="null">
-                </hgart-product-card>
+
+            <div class="hero__caption">
+                <div class="hero__title-group">
+                    <span class="eyebrow eyebrow--vertical">EXHB. N°05</span>
+                    <h1 id="hero-title">Enter the other<br>world</h1>
+                </div>
+                <div class="hero__meta">
+                    <div>
+                        <span class="eyebrow">Experience specification</span>
+                        <p>FIVE characters. FIVE desires. ONE artist.</p>
+                    </div>
+                    <a *ngIf="primaryCollection$ | async as primaryCollection" class="outline-button" [routerLink]="['/category', primaryCollection.slug]">
+                        Explore the collection <span aria-hidden="true">→</span>
+                    </a>
+                </div>
             </div>
         </section>
-    </ng-template>
-</div>
+
+        <section class="section section--steps" aria-labelledby="flow-title">
+            <header class="section-heading">
+                <h2 id="flow-title">Designed to Flow.</h2>
+                <p>A character doesn't have to stay inside a frame.</p>
+                <img src="assets/home/flourish.svg" alt="">
+            </header>
+
+            <div class="steps-grid">
+                <article class="step-card">
+                    <span class="step-card__number">I</span>
+                    <h3>Place the artwork</h3>
+                    <p>Position your chosen piece within the gallery space, vertically on the wall.</p>
+                    <div class="step-card__image"><img src="assets/home/figma-frame71.png" alt="Artwork displayed in a gallery space"></div>
+                    <footer><img src="assets/home/brush-line.svg" alt=""><span>Step one</span></footer>
+                </article>
+                <article class="step-card">
+                    <span class="step-card__number">II</span>
+                    <h3>Engage the iPhone</h3>
+                    <p>Activate the HG ARt application and direct your attention toward the artwork, establishing a digital connection.</p>
+                    <div class="step-card__image step-card__image--engage">
+                        <img src="assets/home/figma-engage-overlay.png" alt="Visitors using their phones with an artwork">
+                    </div>
+                    <footer><img src="assets/home/brush-line.svg" alt=""><span>Step two</span></footer>
+                </article>
+                <article class="step-card">
+                    <span class="step-card__number">III</span>
+                    <h3>Enter the world</h3>
+                    <p>Experience art in an entirely new dimension.</p>
+                    <div class="step-card__image"><img src="assets/home/step-phone.png" alt="Artwork viewed through a phone"></div>
+                    <footer><img src="assets/home/brush-line.svg" alt=""><span>Step three</span></footer>
+                </article>
+            </div>
+        </section>
+
+        <div class="graphic-divider graphic-divider--dots" aria-hidden="true"></div>
+
+        <section class="statement">
+            <h2>Not just characters.</h2>
+            <p class="statement__subtitle">A living experience.</p>
+            <img src="assets/home/flourish.svg" alt="">
+            <p>This artwork transforms the atmosphere around it.</p>
+        </section>
+
+        <div class="graphic-divider graphic-divider--line" aria-hidden="true"></div>
+
+        <section class="section section--evolution" aria-labelledby="evolution-title">
+            <header class="section-heading section-heading--compact">
+                <p>The evolution</p>
+                <h2 id="evolution-title">From static to alive.</h2>
+            </header>
+
+            <div class="comparison-grid">
+                <div class="comparison-row" *ngFor="let row of comparisonRows; let rowIndex = index">
+                    <div class="comparison-row__cards">
+                        <article class="comparison-card comparison-card--static">
+                            <span class="eyebrow">Casual art</span>
+                            <h3>{{ row.staticTitle }}</h3>
+                            <img [src]="row.staticImage" [alt]="row.staticTitle + ' landscape artwork'">
+                        </article>
+                        <article class="comparison-card comparison-card--alive">
+                            <span class="eyebrow">HG art</span>
+                            <h3>{{ row.aliveTitle }}</h3>
+                            <img *ngIf="row.aliveImage; else ownership" [src]="row.aliveImage" [alt]="row.aliveTitle + ' artwork'">
+                            <ng-template #ownership>
+                                <div class="comparison-card__ownership">
+                                    <p>Exclusively owned<br>One authentic passport<br>Backed by a verified NFT<br>NFC activation.</p>
+                                    <img src="assets/home/flourish.svg" alt="">
+                                    <p>Each piece includes:<br>A dedicated artwork profile<br>A private collector cabinet<br>Secure registration and provenance tracking.</p>
+                                </div>
+                            </ng-template>
+                        </article>
+                    </div>
+                    <div class="comparison-row__dots" aria-hidden="true">
+                        <span *ngFor="let dot of comparisonRows; let dotIndex = index" [class.is-active]="dotIndex === rowIndex"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="graphic-divider graphic-divider--overlap" aria-hidden="true"></div>
+
+        <section class="statement statement--wide">
+            <h2>Every world has a space</h2>
+            <p class="statement__subtitle">Where memories are made</p>
+            <img src="assets/home/flourish.svg" alt="">
+            <p>Five ways to transform your environment.</p>
+        </section>
+
+        <div class="graphic-divider graphic-divider--wave" aria-hidden="true"></div>
+
+        <section class="section section--experience" aria-label="Everyday home moments">
+            <div class="experience-card">
+                <div class="experience-card__image">
+                    <img src="assets/home/experience-room.png" alt="Visitor exploring an artwork at home">
+                </div>
+                <div class="experience-card__copy">
+                    <span class="eyebrow">Space 01</span>
+                    <h2>Everyday home<br>moments</h2>
+                    <h3>Art that just fits your day</h3>
+                    <p>You’re making coffee, scrolling your phone, moving from room to room—and the art quietly shifts with you. It’s not a “setup,” it’s just there, like music in the background, changing the feel of the space without asking for attention.</p>
+                    <div class="progress-dots" aria-hidden="true"><span></span><i></i><i></i><i></i><i></i></div>
+                    <span class="eyebrow">1 / 5</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section section--ar" aria-labelledby="ar-title">
+            <header class="section-heading">
+                <h2 id="ar-title">Enter the artwork</h2>
+                <p>Experience the world respond to you</p>
+                <span class="ar-badge">AR ready</span>
+                <small>See how AR recognition works with proper framing. This artwork shows proper framing with mat borders, making it perfect for AR recognition. The black space around the artwork allows our system to detect the full piece.</small>
+            </header>
+
+            <div class="ar-flow">
+                <div class="ar-flow__column">
+                    <article><b>I</b><h3>Download HQ Art</h3><p>Download the application to begin the experience.</p></article>
+                    <article><b>III</b><h3>Submit Access</h3><p>Give camera access so the system can detect the artwork.</p></article>
+                </div>
+                <div class="ar-flow__art">
+                    <img src="assets/home/ar-priestess.png" alt="AR-ready artwork">
+                </div>
+                <div class="ar-flow__column">
+                    <article><b>II</b><h3>Direct on the artwork</h3><p>Point the device at the full artwork to recognise the piece.</p></article>
+                    <article><b>IV</b><h3>Enjoy the AR</h3><p>Watch the artwork extend beyond its physical frame.</p></article>
+                </div>
+            </div>
+        </section>
+
+        <div class="graphic-divider graphic-divider--texture" aria-hidden="true"></div>
+
+        <section class="faq" aria-labelledby="faq-title">
+            <header class="section-heading">
+                <h2 id="faq-title">Frequently Asked</h2>
+                <img src="assets/home/flourish.svg" alt="">
+                <small>Everything you need to know about HG ARt and augmented reality experiences.</small>
+            </header>
+
+            <div class="faq-grid">
+                <article class="faq-card" *ngFor="let faq of faqs">
+                    <span>{{ faq.numeral }}</span>
+                    <h3>{{ faq.question }}</h3>
+                    <p>{{ faq.answer }}</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="closing-cta">
+            <div>
+                <h2>The worlds are only the beginning.</h2>
+                <img src="assets/home/flourish.svg" alt="">
+                <p>Explore Helena’s art universe<br>between skins.</p>
+            </div>
+            <a *ngIf="primaryCollection$ | async as primaryCollection" class="solid-button" [routerLink]="['/category', primaryCollection.slug]">Enter the main collection</a>
+        </section>
+</main>

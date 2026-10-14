@@ -1,16 +1,22 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { SafeUrl } from '@angular/platform-browser';
 import { gql } from 'apollo-angular';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 
-import { environment } from '../../../../environments/environment';
-import { GetCollectionsQuery, SearchProductsQuery, SearchProductsQueryVariables } from '../../../common/generated-types';
+import { GetCollectionsQuery } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
 
-interface CollectionWithProducts {
-    collection: GetCollectionsQuery['collections']['items'][0];
-    products: SearchProductsQuery['search']['items'];
+interface HomeFaq {
+    numeral: string;
+    question: string;
+    answer: string;
+}
+
+interface ComparisonRow {
+    staticTitle: string;
+    aliveTitle: string;
+    staticImage: string;
+    aliveImage?: string;
 }
 
 @Component({
@@ -20,72 +26,66 @@ interface CollectionWithProducts {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent implements OnInit {
+    readonly comparisonRows: ComparisonRow[] = [
+        { staticTitle: 'Static', aliveTitle: 'Alive', staticImage: 'assets/home/comparison-static-1.jpeg', aliveImage: 'assets/home/comparison-alive-1.png' },
+        { staticTitle: 'One moment', aliveTitle: 'Ever-changing', staticImage: 'assets/home/comparison-static-2.jpeg', aliveImage: 'assets/home/comparison-alive-2.png' },
+        { staticTitle: 'Observed', aliveTitle: 'Experienced', staticImage: 'assets/home/comparison-static-3.jpeg', aliveImage: 'assets/home/comparison-alive-3.png' },
+        { staticTitle: 'Easily replicated', aliveTitle: 'Ownership system', staticImage: 'assets/home/comparison-static-3.jpeg' },
+    ];
 
-    collectionsWithProducts$: Observable<CollectionWithProducts[]>;
-    heroImage: SafeUrl;
+    readonly faqs: HomeFaq[] = [
+        {
+            numeral: 'I',
+            question: 'How does AR recognition work?',
+            answer: 'Our advanced AR system uses computer vision to detect properly framed artworks with mat borders. The space around the artwork allows the system to identify and track the piece for a seamless augmented-reality experience.',
+        },
+        {
+            numeral: 'II',
+            question: 'What devices are compatible?',
+            answer: 'HG ARt is designed for modern iPhone and iPad devices. A current operating system and a camera-enabled device provide the best experience.',
+        },
+        {
+            numeral: 'III',
+            question: 'Do I need special framing?',
+            answer: 'A clean frame and a visible border create the contrast used to detect the artwork and maintain accurate tracking throughout the experience.',
+        },
+        {
+            numeral: 'IV',
+            question: 'Can I use my own artwork?',
+            answer: 'The experience is built around Helena’s AR-ready works. Each piece is prepared and tested so its digital layer aligns with the physical artwork.',
+        },
+        {
+            numeral: 'V',
+            question: 'Is there a subscription fee?',
+            answer: 'No subscription is required to explore the collection. Availability and access details are shown with each artwork.',
+        },
+        {
+            numeral: 'VI',
+            question: 'How do I get support?',
+            answer: 'Visit the support page or contact us by email. We will help with installation, artwork recognition and access to the AR experience.',
+        },
+    ];
+
+    primaryCollection$: Observable<GetCollectionsQuery['collections']['items'][0] | undefined>;
 
     constructor(private dataService: DataService) {
     }
 
     ngOnInit(): void {
-        const collections$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
+        this.primaryCollection$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
             options: {
                 take: 50,
-                
                 sort: {
-                    name: 'ASC'
-                }
+                    name: 'ASC',
+                },
             },
         }).pipe(
-            map(({ collections }) => {
-                // console.log('All collections:', collections.items);
-                // Filter root collections and exclude 'Kids Posters' (id: '12')
-                return collections.items.filter(c => 
-                    c.parent && c.parent.id === '1' && c.id !== '12'
-                );
-            })
+            map(({ collections }) => collections.items.find(collection =>
+                collection.parent && collection.parent.id === '1' && collection.id !== '12'
+            )),
+            shareReplay(1)
         );
-
-        this.collectionsWithProducts$ = collections$.pipe(
-            switchMap(rootCollections => {
-                // console.log('Root collections:', rootCollections);
-
-                if (rootCollections.length === 0) {
-                    return of([]);
-                }
-
-                // Create observables for each collection's products
-                const observables = rootCollections.map(collection =>
-                    this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
-                        input: {
-                            collectionSlug: collection.slug,
-                            groupByProduct: true,
-                            take: 200,
-                        }
-                    }).pipe(
-                        map(result => {
-                            // console.log(`Products for ${collection.name}:`, result.search.items);
-                            return {
-                                collection,
-                                products: result.search.items
-                            };
-                        })
-                    )
-                );
-
-                // Combine all product queries
-                return combineLatest(observables);
-            })
-        );
-
-        this.heroImage = this.getHeroImageUrl();
     }
-
-    private getHeroImageUrl(): string {
-        const { apiHost, apiPort } = environment;
-        return `${apiHost}:${apiPort}/assets/preview/a2/thomas-serer-420833-unsplash__preview.jpg`;
-    }
-
 }
 
 const GET_COLLECTIONS = gql`
@@ -105,34 +105,6 @@ const GET_COLLECTIONS = gql`
                     preview
                 }
             }
-        }
-    }
-`;
-
-const SEARCH_PRODUCTS = gql`
-    query SearchProducts($input: SearchInput!) {
-        search(input: $input) {
-            items {
-                productId
-                slug
-                productName
-                description
-                priceWithTax {
-                    ... on PriceRange {
-                        min
-                        max
-                    }
-                }
-                productAsset {
-                    id
-                    preview
-                    focalPoint {
-                        x
-                        y
-                    }
-                }
-            }
-            totalItems
         }
     }
 `;
