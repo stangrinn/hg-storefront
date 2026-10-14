@@ -13,17 +13,18 @@
                         <div class="drawer-content-holder">
 
                             <div>
-                                <div class="drawer-content-title tracking-wider">
+                                <div class="drawer-content-title">
                                     Collections
                                     <button class="btn" (click)="close()">
-                                        <img width="24" height="24" src="assets/icons/hg-close.svg" alt="Close">
+                                        <img src="assets/header/menu-close.svg" alt="Close">
                                     </button>
                                 </div>
 
                                 <ul class="drawer-content-list" *ngIf="collectionTree$ | async as tree">
 
                                     <li *ngFor="let collection of tree.children">
-                                        <a 
+                                        <a
+                                            [class.active]="selected0 === collection.id"
                                             tabindex="0" (click)="onL0Click($event, collection)"
                                             (keydown)="onL0Keydown($event, collection)">{{ collection.name }}</a>
 
@@ -47,39 +48,21 @@
                                 </ul>
                             </div>
 
-                            <div class="dashed"></div>
+                            <div class="menu-divider" aria-hidden="true"></div>
 
-                            <div class="extra-footer"> <!-- Middle column (with left divider) -->
-                                <div class="border-l extra-footer-center">
-                                    <h3 class="font-semibold tracking-wider uppercase pb-[40px]">
-                                        USEFUL LINKS
-                                    </h3>
-                                    <div>
-                                        <div class="pb-[42px]">
-                                            <a [routerLink]="['/support']">SUPPORT AND FAQ</a>
-                                        </div>
-                                        <div class="pb-[42px]">
-                                            <a [routerLink]="['/privacy-policy']">PRIVACY POLICY</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="extra-footer">
+                                <h3>Useful links</h3>
+                                <a [routerLink]="['/support']">SUPPORT AND FAQ</a>
+                                <a [routerLink]="['/privacy-policy']">PRIVACY POLICY</a>
+                            </div>
 
-                                <!-- Right column (with left divider) -->
-                                <div class="border-l extra-footer-right">
-                                    <h3 class="font-semibold  tracking-wider uppercase pb-[40px]">
-                                        CONTACT
-                                    </h3>
+                            <div class="menu-divider" aria-hidden="true"></div>
 
-                                    <div>
-                                        <div class="pb-[42px]">
-                                            <a [routerLink]="['/about']">ABOUT ME</a>
-                                        </div>
-                                        <div class="pb-[42px]">
-                                            <a href="mailto:hello@helenagrinshpun.art"
-                                                class="text-base inline-block">HELLO (AT) HELENAGRINSHPUN.ART</a>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="extra-footer extra-footer--contact">
+                                <h3>Contact</h3>
+                                <a [routerLink]="['/about']">ABOUT ME</a>
+                                <a href="mailto:hello@helenagrinshpun.art">HELLO@HELENAGRINSHPUN.ART</a>
+                                <div class="menu-auth"><span>LOGIN</span><span>/</span><a href="#">REGISTER</a></div>
                             </div>
                         </div>
                     </div>

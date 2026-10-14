@@ -1,103 +1,193 @@
-@import "variables";
+// Figma: Carousel/Menu (582:7081)
+$text-primary: #f7f7f5;
+$text-secondary: #e0ded9;
+$text-muted: #8a8a8f;
+$highlight-bg: rgba(217, 217, 217, 0.2);
+
+// Horizontal bleed of the highlight bar around the text column (24px from the edge vs 36px text inset).
+$highlight-bleed-x: 12px;
+
+// 40px tall bar around a 14.4px line.
+$highlight-padding-y: 12.8px;
 
 :host {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     position: fixed;
-    height: 100vh;
-    width: 100%;
     top: 0;
     left: 0;
     bottom: 0;
+    width: 416px;
+    height: 100vh;
+    z-index: 30 !important;
     transform: translateX(-102vw) translateX(3rem);
     transition: transform 0.3s;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: rgba(15, 15, 16, 0.9);
+    backdrop-filter: blur(18px);
 
     &.visible {
         transform: translateX(0);
     }
 
-    .drawer-content {
-        @apply pointer-events-none fixed inset-y-0 left-0 flex w-[20%];
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+}
 
-        ul li a {
-            @apply block text-gray-700 cursor-pointer w-full items-center font-medium;
-            padding: 8px 16px;
-            margin-bottom: 12px;
-            font-size: 14px;
-            text-transform: uppercase;
-            font-weight: 500;
-            transition: color 0.3s;
-            &:hover {
-                background-color: rgba(255, 255, 255, 0.5);
-                color: #000;
-            }
+.drawer-content {
+    position: relative;
+    display: block;
+    width: 100%;
+    pointer-events: none;
+
+    > div {
+        width: 100%;
+    }
+
+    &-backdrop {
+        width: 100%;
+        min-height: 100vh;
+    }
+
+    &-holder {
+        padding: 66px 36px 123px;
+    }
+
+    &-title {
+        display: flex;
+        width: 100%;
+        height: 22px;
+        align-items: center;
+        justify-content: space-between;
+        color: $text-secondary;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1;
+
+        button {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: 0;
+            background: transparent;
         }
 
-        &-backdrop {
-            @apply flex h-full flex-col shadow-xl;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(30px);
+        img {
+            display: block;
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &-list {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+        margin: 48px 0 3px;
+        padding: 0;
+        list-style: none;
+
+        ul {
+            margin: 32px 0 0;
+            padding: 0;
+            list-style: none;
         }
 
-        &-title {
-            @apply text-[18px] font-bold uppercase;
-            padding: 8px 0 8px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        ul li + li {
+            margin-top: 32px;
         }
 
-        &-holder {
-            @apply overflow-y-hidden sm:px-6;
-            padding: 66px 52px;
-
-            .dashed {
-                background-image: url("/assets/icons/dashed.svg");
-                width: 100%;
-                height: 2px;
-            }
+        li {
+            margin: 0;
+            padding: 0;
         }
+    }
+}
 
-        &-list {
-            padding-top: 42px;
-            padding-bottom: 50px;
-        }
+// Shared look of every menu link: Orbitron caption, muted, with a full-width highlight bar on hover/active.
+.drawer-content-list a,
+.extra-footer > a {
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    color: $text-muted;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
 
-        @media (max-width: 1268px) {
-            width: 40%;
-        }
+    &:hover,
+    &.active {
+        // Negative margins keep the layout stable while the bar grows around the text.
+        margin: (-$highlight-padding-y) (-$highlight-bleed-x);
+        padding: $highlight-padding-y $highlight-bleed-x;
+        background: $highlight-bg;
+        color: $text-secondary;
+    }
+}
 
-        @media (max-width: 768px) {
-            width: 100%;
-        }
+.menu-divider {
+    position: relative;
+    width: 100%;
+    height: 12px;
+    margin: 45px 0;
 
-        .extra-footer {
-            
-            padding: 50px 0px;
-            flex-direction: column;
-            row-gap: 16px;
+    // Brush stroke is drawn at its natural size and overflows the 12px box, as in the design.
+    &::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: -2px;
+        width: 346px;
+        height: 15.45px;
+        background: url('/assets/header/menu-divider.svg') no-repeat 0 0 / 100% 100%;
+    }
+}
 
-            h3 {
-                font-size: 18px;
-                padding: 8px 16px;
-                padding-bottom: 40px;
-            }
+.extra-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 42.5px;
+    padding: 0;
 
-            a {
-                font-size: 14px;
-                font-weight: 500;
-                @apply block text-gray-700;
-                padding: 8px 16px;
-                transition: color 0.3s;
+    h3 {
+        margin: 0;
+        padding: 0;
+        color: $text-secondary;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1;
+    }
+}
 
-                &:hover {
-                    background-color: rgba(255, 255, 255, 0.5);
-                    color: #000;
-                }
-            }
+.menu-auth {
+    display: flex;
+    gap: 22px;
+    color: $text-muted;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    line-height: 1.2;
+    text-transform: uppercase;
 
+    a {
+        color: $text-primary;
+        font-weight: 700;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #fff;
         }
     }
 }
