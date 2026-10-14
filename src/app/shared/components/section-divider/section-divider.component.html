@@ -1,0 +1,47 @@
+<ng-container [ngSwitch]="variant">
+    <ng-container *ngSwitchCase="'diagonal'">
+        <span class="layer layer--band"></span>
+        <span class="layer layer--dots-row"></span>
+        <span class="layer layer--rule"></span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'gradient'">
+        <span class="layer layer--base"></span>
+        <span class="layer layer--edge layer--edge-left"></span>
+        <span class="layer layer--edge layer--edge-right"></span>
+        <span class="layer layer--line"></span>
+        <span class="layer layer--diamond"></span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'overlap'">
+        <span class="layer layer--band layer--band-front"></span>
+        <span class="layer layer--band layer--band-back"></span>
+        <span class="layer layer--rule layer--rule-top"></span>
+        <span class="layer layer--rule layer--rule-bottom"></span>
+        <span class="layer layer--ticks"></span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'wave'">
+        <span class="layer layer--base"></span>
+        <span class="layer layer--band layer--band-left"></span>
+        <span class="layer layer--band layer--band-right"></span>
+        <span class="layer layer--line layer--line-left"></span>
+        <span class="layer layer--line layer--line-right"></span>
+        <span class="layer layer--dots"><i></i><i></i><i></i></span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'texture'">
+        <span class="layer layer--band"></span>
+        <span class="layer layer--rule layer--rule-top"></span>
+        <span class="layer layer--rule layer--rule-bottom"></span>
+        <span class="layer layer--ticks"></span>
+        <span class="layer layer--tick-center"></span>
+        <span class="layer layer--diamond"></span>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'sash'">
+        <span class="layer layer--mark layer--mark-left"></span>
+        <span class="layer layer--label">hg art</span>
+        <span class="layer layer--mark layer--mark-right"></span>
+    </ng-container>
+</ng-container>

@@ -1,0 +1,367 @@
+// Geometry is taken from the Figma frames at 1920px (Main 1920 → divider-*); widths that the design pins to the
+// viewport edges or centre are expressed relative to them so the dividers keep working on narrow screens.
+:host {
+    --divider-primary: #0f0f10;
+    --divider-surface: #252527;
+    --divider-secondary: #1a1a1c;
+    --divider-muted: #e0ded9;
+    --divider-text-muted: #8a8a8f;
+
+    display: block;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--divider-primary);
+}
+
+:host-context(.theme-light) {
+    --divider-primary: #f7f7f5;
+    --divider-surface: #fff;
+    --divider-secondary: #f2efea;
+}
+
+:host([data-variant='diagonal']) {
+    height: 120px;
+}
+
+:host([data-variant='gradient']) {
+    height: 96px;
+}
+
+:host([data-variant='overlap']) {
+    height: 140px;
+}
+
+:host([data-variant='wave']) {
+    height: 112px;
+}
+
+:host([data-variant='texture']) {
+    height: 80px;
+    background: var(--divider-surface);
+}
+
+:host([data-variant='sash']) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 96px;
+    padding: 0 clamp(16px, 4.2vw, 80px);
+    background: linear-gradient(90deg, var(--divider-primary) 0%, var(--divider-surface) 40%, var(--divider-surface) 60%, var(--divider-primary) 100%);
+}
+
+// Parallax hook: `--divider-parallax` (unitless, -1..1) is written on the host; each layer scales it by its own
+// `--layer-depth`. `translate` is used instead of `transform` so it composes with the rotations below.
+.layer {
+    position: absolute;
+    pointer-events: none;
+    translate: 0 calc(var(--divider-parallax, 0) * var(--layer-depth, 0px));
+}
+
+.layer--base {
+    --layer-depth: 0px;
+
+    inset: 0;
+}
+
+.layer--band {
+    --layer-depth: 10px;
+}
+
+.layer--line,
+.layer--rule,
+.layer--ticks,
+.layer--tick-center {
+    --layer-depth: 16px;
+}
+
+.layer--diamond,
+.layer--dots,
+.layer--dots-row,
+.layer--mark,
+.layer--label {
+    --layer-depth: 24px;
+}
+
+.layer--rule {
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--divider-muted);
+}
+
+.layer--diamond {
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    background: var(--divider-text-muted);
+    rotate: 45deg;
+}
+
+.layer--ticks,
+.layer--tick-center {
+    background-color: transparent;
+    background-image: linear-gradient(90deg, var(--divider-text-muted) 1px, transparent 1px);
+}
+
+// diagonal-1
+:host([data-variant='diagonal']) {
+    .layer--band {
+        top: -26.7px;
+        left: -60px;
+        right: -60px;
+        height: 80px;
+        background: var(--divider-surface);
+        rotate: -1.5deg;
+    }
+
+    .layer--dots-row {
+        top: 40px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: url('/assets/home/divider-diagonal-dots.svg') center / 1920px 40px no-repeat;
+    }
+
+    .layer--rule {
+        top: 114px;
+        opacity: 0.5;
+    }
+}
+
+// gradient-2
+:host([data-variant='gradient']) {
+    .layer--base {
+        background: linear-gradient(180deg, var(--divider-surface), var(--divider-primary));
+    }
+
+    .layer--edge {
+        --layer-depth: 10px;
+
+        top: 32px;
+        width: min(480px, 25%);
+        height: 32px;
+        opacity: 0.5;
+
+        &-left {
+            left: 0;
+            background: linear-gradient(90deg, var(--divider-muted), transparent);
+        }
+
+        &-right {
+            right: 0;
+            background: linear-gradient(270deg, var(--divider-muted), transparent);
+        }
+    }
+
+    .layer--line {
+        top: 47px;
+        left: 50%;
+        width: min(1000px, 60%);
+        height: 1px;
+        background: var(--divider-muted);
+        opacity: 0.8;
+        translate: -50% calc(var(--divider-parallax, 0) * var(--layer-depth, 0px));
+    }
+
+    .layer--diamond {
+        top: 50px;
+        opacity: 0.3;
+    }
+}
+
+// overlap-3
+:host([data-variant='overlap']) {
+    .layer--band-front {
+        --layer-depth: 14px;
+
+        top: 11px;
+        left: -102px;
+        width: 1200px;
+        height: 100px;
+        background: var(--divider-surface);
+        rotate: 2deg;
+    }
+
+    .layer--band-back {
+        --layer-depth: 28px;
+
+        top: 38px;
+        left: 700px;
+        width: 1400px;
+        height: 60px;
+        background: var(--divider-secondary);
+        opacity: 0.7;
+        rotate: -1deg;
+    }
+
+    .layer--rule {
+        opacity: 0.4;
+
+        &-top {
+            top: 0;
+        }
+
+        &-bottom {
+            top: 139px;
+        }
+    }
+
+    // Seven 1px ticks every 240px, centred on the viewport (x = 240 … 1680 at 1920).
+    .layer--ticks {
+        top: 55px;
+        left: 120px;
+        right: 120px;
+        height: 30px;
+        background-size: 240px 100%;
+        background-position-x: calc(50% + 120px);
+        opacity: 0.2;
+    }
+}
+
+// wave-4
+:host([data-variant='wave']) {
+    .layer--base {
+        background: linear-gradient(90deg, var(--divider-surface), var(--divider-secondary) 50%, var(--divider-primary));
+    }
+
+    .layer--band {
+        --layer-depth: 14px;
+
+        top: 20px;
+        height: 72px;
+        opacity: 0.35;
+        transform-origin: 0 0;
+
+        &-left {
+            left: 0;
+            width: min(600px, 45%);
+            background: linear-gradient(90deg, var(--divider-muted), transparent);
+            rotate: 3deg;
+        }
+
+        &-right {
+            right: -100px;
+            width: min(700px, 52%);
+            background: linear-gradient(90deg, transparent, var(--divider-muted));
+            rotate: -3deg;
+        }
+    }
+
+    .layer--line {
+        top: 55px;
+        width: min(340px, calc(50% - 76px));
+        height: 1px;
+        background: var(--divider-text-muted);
+        opacity: 0.25;
+
+        &-left {
+            right: calc(50% + 60px);
+        }
+
+        &-right {
+            left: calc(50% + 60px);
+        }
+    }
+
+    .layer--dots {
+        top: 50px;
+        left: 50%;
+        display: flex;
+        gap: 3px;
+        translate: -50% calc(var(--divider-parallax, 0) * var(--layer-depth, 0px));
+
+        i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--divider-text-muted);
+            opacity: 0.2;
+
+            &:nth-child(2) {
+                opacity: 0.3;
+            }
+        }
+    }
+}
+
+// texture-5
+:host([data-variant='texture']) {
+    .layer--band {
+        top: 28px;
+        left: 0;
+        right: 0;
+        height: 24px;
+        background: linear-gradient(90deg, var(--divider-primary), var(--divider-secondary) 50%, var(--divider-primary));
+    }
+
+    .layer--rule {
+        opacity: 0.5;
+
+        &-top {
+            top: 0;
+        }
+
+        &-bottom {
+            top: 79px;
+        }
+    }
+
+    // Eight ticks every 192px around a taller centre tick (x = 192 … 1728 at 1920); the centre one is masked out
+    // here and drawn by `.layer--tick-center`.
+    .layer--ticks {
+        top: 32px;
+        left: 96px;
+        right: 96px;
+        height: 16px;
+        background-size: 192px 100%;
+        background-position-x: calc(50% + 96px);
+        mask: linear-gradient(90deg, #000 calc(50% - 1px), transparent calc(50% - 1px) calc(50% + 1px), #000 calc(50% + 1px));
+        opacity: 0.15;
+    }
+
+    .layer--tick-center {
+        top: 28px;
+        left: 50%;
+        width: 1px;
+        height: 24px;
+        opacity: 0.3;
+    }
+
+    .layer--diamond {
+        top: 36px;
+        width: 8px;
+        height: 8px;
+        margin-left: -4px;
+        opacity: 0.25;
+    }
+}
+
+// sash-6 (the hand-drawn mark is mirrored on the right)
+:host([data-variant='sash']) {
+    .layer {
+        position: relative;
+    }
+
+    .layer--mark {
+        flex: none;
+        width: min(192px, 30vw);
+        aspect-ratio: 192 / 29.0633;
+        background: url('/assets/home/divider-sash.svg') center / 100% 100% no-repeat;
+
+        &-right {
+            scale: -1 1;
+        }
+    }
+
+    .layer--label {
+        color: var(--divider-text-muted);
+        font-family: 'Orbitron', sans-serif;
+        font-size: 10px;
+        letter-spacing: 3.5px;
+        line-height: 1;
+        white-space: nowrap;
+        opacity: 0.5;
+    }
+}

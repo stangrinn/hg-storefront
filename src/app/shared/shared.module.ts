@@ -23,6 +23,7 @@ import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { RadioCardFieldsetComponent } from './components/radio-card/radio-card-fieldset.component';
 import { RadioCardComponent } from './components/radio-card/radio-card.component';
+import { SectionDividerComponent } from './components/section-divider/section-divider.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { AssetPreviewPipe } from './pipes/asset-preview.pipe';
 import { FormatPricePipe } from './pipes/format-price.pipe';
@@ -52,6 +53,7 @@ const SHARED_DECLARATIONS = [
     RadioCardComponent,
     RadioCardFieldsetComponent,
     CartTotalsComponent,
+    SectionDividerComponent,
 ];
 
 const IMPORTS = [
