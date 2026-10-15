@@ -1,0 +1,90 @@
+<div class="contact">
+    <nav class="contact__breadcrumb" aria-label="Breadcrumb">
+        <button class="contact__back" type="button" aria-label="Go back" (click)="goBack()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <a class="contact__crumb" [routerLink]="['/']">Home</a>
+        <span class="contact__slash" aria-hidden="true">/</span>
+        <span class="contact__crumb contact__crumb--current">Contact Us</span>
+    </nav>
+
+    <header class="contact__title">
+        <p class="contact__eyebrow">Get in touch · Studio &amp; Gallery</p>
+        <h1>Contact us</h1>
+        <img class="contact__brush contact__brush--title" src="assets/home/brush-line.svg" alt="">
+    </header>
+
+    <div class="contact__content">
+        <form class="contact__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            <div class="contact__lead">
+                <p>Have a question about a particular artwork, our custom commissions, or the HG Art AR app compatibility?</p>
+                <p>Send us a message, and our studio team will respond within 24 hours.</p>
+            </div>
+
+            <div class="contact__fields">
+                <label class="contact__field">
+                    <span>Full name</span>
+                    <input type="text" formControlName="name" placeholder="Enter your name..." autocomplete="name"
+                           [class.contact__invalid]="form.controls.name.touched && form.controls.name.invalid">
+                </label>
+
+                <label class="contact__field">
+                    <span>Email address</span>
+                    <input type="email" formControlName="email" placeholder="Enter your email..." autocomplete="email"
+                           [class.contact__invalid]="form.controls.email.touched && form.controls.email.invalid">
+                </label>
+
+                <label class="contact__field">
+                    <span>Subject</span>
+                    <input type="text" formControlName="subject" placeholder="How can we help you?">
+                </label>
+
+                <label class="contact__field">
+                    <span>Your message</span>
+                    <textarea formControlName="message" placeholder="Describe your inquiry in detail..."
+                              [class.contact__invalid]="form.controls.message.touched && form.controls.message.invalid"></textarea>
+                </label>
+            </div>
+
+            <button class="contact__submit" type="submit">Submit message</button>
+        </form>
+
+        <div class="contact__aside">
+            <section class="contact__section">
+                <header>
+                    <p class="contact__eyebrow">A note from Helena</p>
+                    <h2>Preorder interest is now open</h2>
+                    <img class="contact__brush" src="assets/home/brush-line.svg" alt="">
+                </header>
+                <p>This collection is currently in a preorder phase. I'm inviting collectors to express their interest now so I can gauge demand before the first editions become available. By clicking Preorder, you're reserving a place in line and helping me understand which pieces should be released first.</p>
+                <p class="contact__muted">If you're interested in owning a piece, I'd love to hear from you. Share your preferred artwork, size, and any details that help me understand how the work will live in your space. You'll be among the first to know when the collection opens, and you'll receive updates before the public release.</p>
+            </section>
+
+            <section class="contact__section">
+                <header>
+                    <p class="contact__eyebrow">Frequently asked</p>
+                    <h2>About preorder interest</h2>
+                    <img class="contact__brush" src="assets/home/brush-line.svg" alt="">
+                </header>
+                <div *ngFor="let item of faq" class="contact__qa">
+                    <h3>{{ item.question }}</h3>
+                    <p>{{ item.answer }}</p>
+                </div>
+            </section>
+
+            <section class="contact__section">
+                <header>
+                    <p class="contact__eyebrow">The studio</p>
+                    <h2>A quiet space for art and conversation</h2>
+                    <img class="contact__brush" src="assets/home/brush-line.svg" alt="">
+                </header>
+                <div class="contact__media">
+                    <img src="assets/home/contact-studio.jpg" alt="The HG Art studio gallery space">
+                </div>
+                <p class="contact__muted">Right now, the studio is focused on gathering interest for the next release. I'm using this preorder phase to understand which pieces collectors are most drawn to, which sizes are in highest demand, and how the work should be presented when it finally arrives.</p>
+            </section>
+        </div>
+    </div>
+</div>

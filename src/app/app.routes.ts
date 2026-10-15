@@ -1,9 +1,11 @@
 import { Route } from '@angular/router';
 
 import { AboutMeComponent } from './core/components/about-me/about-me.component';
+import { ContactComponent } from './core/components/contact/contact.component';
 import { PrivacyPolicyComponent } from './core/components/privacy-policy/privacy-policy.component';
 import { ProductDetailComponent } from './core/components/product-detail/product-detail.component';
 import { ProductListComponent } from './core/components/product-list/product-list.component';
+import { TermsComponent } from './core/components/terms/terms.component';
 import { SupportComponent } from './core/components/support/support.component';
 
 export const routes: Route[] = [
@@ -17,6 +19,16 @@ export const routes: Route[] = [
         path: 'about',
         component: AboutMeComponent,
         data: { animation: 'AboutPage' },
+    },
+    {
+        path: 'contact',
+        component: ContactComponent,
+        data: { animation: 'ContactPage' },
+    },
+    {
+        path: 'terms',
+        component: TermsComponent,
+        data: { animation: 'TermsPage' },
     },
     {
         path: 'support',
