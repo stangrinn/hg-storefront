@@ -1,6 +1,6 @@
+import { Location, ViewportScroller } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ViewportScroller } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'hgart-privacy-policy',
@@ -10,39 +10,20 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class PrivacyPolicyComponent implements OnInit {
     constructor(
         private viewportScroller: ViewportScroller,
-        private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private location: Location,
     ) {}
 
     ngOnInit(): void {
-        // Handle initial fragment on page load
         this.route.fragment.subscribe(fragment => {
             if (fragment) {
                 // Small delay to ensure DOM is ready
-                setTimeout(() => {
-                    this.viewportScroller.scrollToAnchor(fragment);
-                }, 100);
+                setTimeout(() => this.viewportScroller.scrollToAnchor(fragment), 100);
             }
         });
     }
 
-    /**
-     * Scrolls to a specific section on the page by its ID
-     * Updates the URL fragment to enable browser history navigation
-     * @param sectionId - The ID of the section to scroll to
-     * @param event - The click event (to prevent default navigation)
-     */
-    scrollToSection(sectionId: string, event: Event): void {
-        event.preventDefault();
-        
-        // Update URL with fragment (adds to browser history)
-        this.router.navigate([], {
-            relativeTo: this.route,
-            fragment: sectionId,
-            replaceUrl: false
-        });
-        
-        // Scroll to the section
-        this.viewportScroller.scrollToAnchor(sectionId);
+    goBack(): void {
+        this.location.back();
     }
 }
