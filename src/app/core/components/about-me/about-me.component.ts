@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,4 +7,9 @@ import { Component } from '@angular/core';
     styleUrls: ['./about-me.component.scss'],
 })
 export class AboutMeComponent {
+    constructor(private location: Location) {}
+
+    goBack(): void {
+        this.location.back();
+    }
 }

@@ -1,20 +1,231 @@
 :host {
     display: block;
     min-height: 80vh;
-
-    .page {
-        &-wrapper {
-            @apply max-w-4xl mx-auto px-4 py-16;
-        }
-
-        &-content {
-            @apply space-y-8 text-gray-700 leading-relaxed;
-            font-family: 'Montserrat', sans-serif;
-        }
-    }
-
+    background: var(--about-bg);
+    --about-bg: #0f0f10;
+    --about-title: #e0ded9;
+    --about-text: #e0ded9;
+    --about-muted: #a1a1a7;
 }
 
-.prose {
-    max-width: 65ch;
+:host-context(.theme-light) {
+    --about-bg: #f7f7f5;
+    --about-title: #242321;
+    --about-text: #242321;
+    --about-muted: #6b6b70;
+}
+
+.about {
+    color: var(--about-text);
+}
+
+.about__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 8px 52px;
+    font-family: Orbitron, sans-serif;
+    font-size: 9px;
+    letter-spacing: 4.86px;
+}
+
+.about__back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    padding: 0 8px;
+    color: var(--about-muted);
+}
+
+.about__crumb {
+    padding: 0 8px;
+    color: var(--about-muted);
+    text-decoration: none;
+
+    &--current {
+        color: var(--about-title);
+    }
+}
+
+.about__slash {
+    font-size: 10px;
+    letter-spacing: 3.5px;
+    color: var(--about-muted);
+    opacity: 0.4;
+}
+
+.about__intro {
+    display: flex;
+    gap: 120px;
+    align-items: center;
+    padding: 120px;
+}
+
+.about__portrait {
+    position: relative;
+    flex: none;
+    width: 677px;
+    max-width: 45%;
+    aspect-ratio: 677 / 877;
+    overflow: hidden;
+
+    img {
+        position: absolute;
+        top: 0;
+        left: -15.63%;
+        width: 129.53%;
+        height: 100%;
+        max-width: none;
+        object-fit: cover;
+    }
+}
+
+.about__copy {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 40px;
+    min-width: 0;
+}
+
+.about__eyebrow {
+    font: 400 12px/1 Orbitron, sans-serif;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--about-muted);
+}
+
+.about__ornament {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 229px;
+    height: 5px;
+
+    span {
+        flex: 1;
+        height: 1px;
+        background: var(--about-muted);
+        opacity: 0.4;
+    }
+
+    i {
+        flex: none;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--about-muted);
+    }
+}
+
+.about__name {
+    font: 300 96px/1.12 'Cormorant Garamond', serif;
+    letter-spacing: -3.84px;
+    color: var(--about-title);
+}
+
+.about__quote {
+    font: 400 18px/1.4 Montserrat, sans-serif;
+    color: var(--about-muted);
+}
+
+.about__divider {
+    width: 192px;
+    height: 12px;
+    margin-bottom: -3.45px;
+    object-fit: fill;
+}
+
+.about__story {
+    display: flex;
+    gap: 140px;
+    padding: 140px 180px;
+}
+
+.about__story-heading {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: 24px;
+    width: 480px;
+}
+
+.about__story-title {
+    font: 400 72px/1.12 'Cormorant Garamond', serif;
+    letter-spacing: -2.88px;
+    color: var(--about-title);
+}
+
+.about__bio {
+    flex: 1;
+    max-width: 680px;
+    font: 300 16px/26px Montserrat, sans-serif;
+
+    p + p {
+        margin-top: 26px;
+    }
+}
+
+:host-context(.theme-light) .about__divider {
+    filter: brightness(0) invert(0.16);
+}
+
+@media (max-width: 1279px) {
+    .about__intro {
+        gap: 64px;
+        padding: 64px 48px;
+    }
+
+    .about__name {
+        font-size: 72px;
+        letter-spacing: -2.88px;
+    }
+
+    .about__story {
+        gap: 64px;
+        padding: 80px 48px;
+    }
+
+    .about__story-heading {
+        width: 320px;
+    }
+
+    .about__story-title {
+        font-size: 56px;
+    }
+}
+
+@media (max-width: 767px) {
+    .about__breadcrumb {
+        padding: 8px 16px;
+    }
+
+    .about__intro,
+    .about__story {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 40px;
+        padding: 40px 24px;
+    }
+
+    .about__portrait {
+        width: 100%;
+        max-width: none;
+    }
+
+    .about__name {
+        font-size: 56px;
+        letter-spacing: -2.24px;
+    }
+
+    .about__story-heading {
+        width: auto;
+    }
+
+    .about__story-title {
+        font-size: 44px;
+        letter-spacing: -1.76px;
+    }
 }
