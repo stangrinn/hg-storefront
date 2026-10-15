@@ -21,13 +21,14 @@
                 <img alt="" src="assets/header/like.svg">
             </button>
 
-            <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle>
+            <!-- Temporarily hidden: cart -->
+            <!-- <hgart-cart-toggle (toggle)="openCartDrawer()"></hgart-cart-toggle> -->
         </div>
     </hgart-layout-header>
 
     <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" class="z-10"></hgart-collections-menu-mobile>
 
-    <hgart-cart-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-cart-drawer>
+    <!-- <hgart-cart-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-cart-drawer> -->
 
     <div style="flex: 1;" [@fadeAnimation]="getRouteAnimationData()">
         <hgart-home-page *ngIf="isHomePage$ | async; else main" style="flex: 1;"></hgart-home-page>
