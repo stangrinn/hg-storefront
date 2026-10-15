@@ -365,3 +365,8 @@
         opacity: 0.5;
     }
 }
+
+// The exported hand-drawn mark is #e0ded9 for the dark theme; the light Figma variant uses dark ink.
+:host-context(.theme-light) .layer--mark {
+    filter: brightness(0) invert(0.16);
+}

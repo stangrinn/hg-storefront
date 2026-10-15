@@ -81,7 +81,14 @@
 }
 
 :host ::ng-deep .theme-light .site-header__logo span {
-    color: #55555a;
+    color: #8a8a8f;
+}
+
+// The exported SVGs are drawn for the dark header (#e0ded9); this turns them into the dark ink of the light theme.
+:host ::ng-deep .theme-light .site-header__logo img,
+:host ::ng-deep .theme-light .site-header__like img,
+:host ::ng-deep .theme-light .site-header__menu img {
+    filter: brightness(0) invert(0.16);
 }
 
 :host ::ng-deep .theme-light .site-header__utilities hgart-cart-toggle button {

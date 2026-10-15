@@ -25,6 +25,7 @@ import { RadioCardFieldsetComponent } from './components/radio-card/radio-card-f
 import { RadioCardComponent } from './components/radio-card/radio-card.component';
 import { SectionDividerComponent } from './components/section-divider/section-divider.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { ParallaxDirective } from './directives/parallax.directive';
 import { AssetPreviewPipe } from './pipes/asset-preview.pipe';
 import { FormatPricePipe } from './pipes/format-price.pipe';
 import { ProductUrlPipe } from './pipes/product-url.pipe';
@@ -54,6 +55,7 @@ const SHARED_DECLARATIONS = [
     RadioCardFieldsetComponent,
     CartTotalsComponent,
     SectionDividerComponent,
+    ParallaxDirective,
 ];
 
 const IMPORTS = [
