@@ -1,30 +1,183 @@
-//@import "variables";
-//
 :host {
-    .prod-desc {
-        @apply text-lg text-gray-600 text-center max-w-3xl mb-8 leading-relaxed;
+    --collection-bg: #0f0f10;
+    --collection-title: #f7f7f5;
+    --collection-text: #e0ded9;
+    --collection-muted: #8a8a8f;
+
+    display: block;
+    background: var(--collection-bg);
+    color: var(--collection-text);
+}
+
+:host-context(.theme-light) {
+    --collection-bg: #f7f7f5;
+    --collection-title: #0f0f10;
+    --collection-text: #2a2a2d;
+}
+
+.collection__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 8px 52px;
+    font-family: Orbitron, sans-serif;
+    font-size: 9px;
+    letter-spacing: 4.86px;
+}
+
+.collection__back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 24px;
+    padding: 0 8px;
+    color: var(--collection-muted);
+}
+
+.collection__crumb {
+    padding: 0 8px;
+    color: var(--collection-muted);
+    text-decoration: none;
+
+    &--current {
+        color: var(--collection-title);
     }
 }
 
-//
+.collection__slash {
+    font-size: 10px;
+    letter-spacing: 3.5px;
+    color: var(--collection-muted);
+    opacity: 0.4;
+}
 
-// Center items in last incomplete row
-.product-grid {
+.collection__intro {
     display: flex;
-    flex-wrap: wrap;
-    gap: 2.5rem 1.5rem;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 120px clamp(24px, 8.3vw, 160px) 104px;
+    text-align: center;
+}
 
-    hgart-product-card {
-        width: 100%;
-        max-width: 320px;
+.collection__eyebrow {
+    margin: 0;
+    font-family: Orbitron, sans-serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--collection-muted);
+}
 
-        @media (min-width: 640px) {
-            width: calc(50% - 0.75rem);
-        }
+.collection__ornament {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 229px;
+    height: 5px;
 
-        @media (min-width: 1024px) {
-            width: calc(25% - 1.125rem);
-        }
+    span {
+        flex: 1;
+        height: 1px;
+        background: var(--collection-muted);
+        opacity: 0.4;
     }
+
+    i {
+        flex: none;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--collection-muted);
+    }
+}
+
+.collection__title {
+    max-width: 1120px;
+    margin: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(44px, 3.75vw, 72px);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    line-height: 0.89;
+    color: var(--collection-text);
+}
+
+.collection__description {
+    max-width: 720px;
+    font-family: Montserrat, sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 26px;
+    color: var(--collection-text);
+
+    ::ng-deep p {
+        margin: 0;
+    }
+}
+
+.collection__divider {
+    width: 192px;
+    height: 15.45px;
+    margin-bottom: -3.45px;
+}
+
+:host-context(.theme-light) .collection__divider {
+    filter: brightness(0) invert(0.16);
+}
+
+.collection__children {
+    padding: 0 clamp(24px, 5.2vw, 100px) 64px;
+}
+
+.collection__children-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.collection__toolbar {
+    padding: 48px clamp(24px, 5.2vw, 100px);
+
+    p {
+        margin: 0;
+        font-family: Orbitron, sans-serif;
+        font-size: 12px;
+        letter-spacing: 4px;
+        line-height: 1;
+        text-transform: uppercase;
+        color: var(--collection-muted);
+    }
+}
+
+.collection__search {
+    padding: 48px clamp(24px, 5.2vw, 100px) 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 400;
+    color: var(--collection-title);
+}
+
+.collection__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 56px clamp(24px, 5vw, 96px);
+    padding: 0 clamp(24px, 5.2vw, 100px) 140px;
+
+    @media (max-width: 1023px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @media (max-width: 639px) {
+        grid-template-columns: minmax(0, 1fr);
+        padding-bottom: 80px;
+    }
+}
+
+.load-more {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 80px;
 }

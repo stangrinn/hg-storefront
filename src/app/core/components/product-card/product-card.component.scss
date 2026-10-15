@@ -1,11 +1,65 @@
 :host {
-    .img-wrapper {
-        @apply overflow-hidden border-8 border-solid border-black relative;
-        background-size: cover;
-        background-position: center;
-        aspect-ratio: 3/4;
-        width: 229px + 16px; // 229px image width + 8px border on each side
-        height: 304px + 16px; // 304px image height + 8px border on each side
-        transition: transform 0.3s ease-in-out;
+    display: block;
+    min-width: 0;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #f7f7f5;
+    text-decoration: none;
+}
+
+.card__mount {
+    display: flex;
+    justify-content: center;
+    padding: 34px;
+    background: #1a1a1c;
+}
+
+.card__art {
+    width: 100%;
+    max-width: 432px;
+    aspect-ratio: 3 / 4;
+    padding: 6px;
+    overflow: hidden;
+    background: #090a0c;
+    box-shadow: 0 18px 30px rgb(0 0 0 / 72%);
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 2px;
+        object-fit: cover;
+    }
+}
+
+.card__title {
+    margin: 0;
+    font-family: Montserrat, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.card--placeholder .card__art {
+    animation: card-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes card-pulse {
+    50% {
+        opacity: 0.5;
+    }
+}
+
+:host-context(.theme-light) {
+    .card {
+        color: #0f0f10;
+    }
+
+    .card__mount {
+        background: #f2efea;
     }
 }

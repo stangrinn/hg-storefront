@@ -1,15 +1,14 @@
-<ng-container *ngIf="product">
-    <a class="group flex flex-col" prefetch="intent" [routerLink]="['/product', product.slug]">
-        <div 
-            class="img-wrapper" 
-            [style.background-image]="'url(' + currentImage + ')'">
+<a *ngIf="product; else placeholder" class="card" prefetch="intent" [routerLink]="['/product', product.slug]">
+    <div class="card__mount">
+        <div class="card__art">
+            <img [src]="currentImage" [alt]="product.productName">
         </div>
-        <div class="h-3"></div>
-    </a>
-</ng-container>
+    </div>
+    <p class="card__title">{{ product.productName }}</p>
+</a>
 
 <ng-template #placeholder>
-    <div class="flex flex-col animate-pulse">
-        <div class="bg-gray-200 rounded-lg aspect-[3/4]"></div>
+    <div class="card card--placeholder">
+        <div class="card__mount"><div class="card__art"></div></div>
     </div>
 </ng-template>

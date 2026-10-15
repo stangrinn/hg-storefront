@@ -1,32 +1,46 @@
-<div class="mx-auto px-4">
+<div class="collection">
     <ng-container *ngIf="collection$ | async as collection">
-        <div class="flex justify-center items-center flex-col">
-            <h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-                {{collection.name}}
-            </h2>
-            <p *ngIf="collection.description" class="prod-desc" [innerHTML]="collection.description">
+        <nav class="collection__breadcrumb" aria-label="Breadcrumb">
+            <button class="collection__back" type="button" aria-label="Go back" (click)="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+            <a class="collection__crumb" [routerLink]="['/']">Home</a>
+            <span class="collection__slash" aria-hidden="true">/</span>
+            <span class="collection__crumb collection__crumb--current">{{ collection.name }}</span>
+        </nav>
+
+        <header class="collection__intro">
+            <p class="collection__eyebrow">
+                HG ART · DIGITAL EDITIONS 01—{{ pad(totalResults$ | async) }}
             </p>
-        </div>
-        <!-- <hgart-collection-breadcrumbs [breadcrumbs]="breadcrumbs$ | async"></hgart-collection-breadcrumbs> -->
+            <div class="collection__ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+            <h1 class="collection__title">{{ collection.name }}</h1>
+            <div *ngIf="collection.description" class="collection__description" [innerHTML]="collection.description"></div>
+            <img class="collection__divider" src="assets/home/flourish.svg" alt="">
+        </header>
+
         <ng-container *ngIf="collection.children.length">
-            <div class="max-w-2xl mx-auto py-16 sm:py-16 lg:max-w-none border-b mb-16">
-                <h2 class="text-2xl font-light text-gray-900">
-                    Collections
-                </h2>
-                <div class="mt-6 grid max-w-xs sm:max-w-none mx-auto sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+            <div class="collection__children">
+                <div class="collection__children-grid">
                     <hgart-collection-card *ngFor="let child of collection.children" [collection]="child">
                     </hgart-collection-card>
                 </div>
             </div>
         </ng-container>
+
+        <div class="collection__toolbar">
+            <p>{{ pad(totalResults$ | async) }} ARTWORKS</p>
+        </div>
     </ng-container>
 
-    <h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8" *ngIf="searchTerm$ | async as term">
-        Results for <span class="font-medium">"{{ term }}"</span>
+    <h2 class="collection__search" *ngIf="searchTerm$ | async as term">
+        Results for <span>"{{ term }}"</span>
     </h2>
 
     <div>
-        <div class="flex flex-wrap justify-center gap-y-10 gap-x-6">
+        <div class="collection__grid">
             <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
 
                 <hgart-product-card *ngFor="let product of products$ | async; trackBy: trackByProductId"
@@ -36,8 +50,7 @@
             </ng-container>
 
             <ng-template #placeholders>
-                <hgart-product-card *ngFor="let product of placeholderProducts" [product]="product"
-                    class="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)] max-w-xs"></hgart-product-card>
+                <hgart-product-card *ngFor="let product of placeholderProducts" [product]="product"></hgart-product-card>
             </ng-template>
         </div>
 

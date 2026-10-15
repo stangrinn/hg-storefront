@@ -1,100 +1,101 @@
-<div class="product-detail-wrapper">
-    <div class="product-detail-container">
+<div class="pd">
+    <nav class="pd__breadcrumb" aria-label="Breadcrumb">
+        <button class="pd__back" type="button" aria-label="Go back" (click)="closeProductDetails()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <a class="pd__crumb" [routerLink]="['/']">Home</a>
+        <ng-container *ngIf="product?.collections[0] as collection">
+            <span class="pd__slash" aria-hidden="true">/</span>
+            <a class="pd__crumb" [routerLink]="['/category', collection.slug]">{{ collectionName }}</a>
+        </ng-container>
+        <span class="pd__slash" aria-hidden="true">/</span>
+        <span class="pd__crumb pd__crumb--current">{{ product?.name }}</span>
+    </nav>
 
-        <div class="product-grid">
-            <div class="product-nav product-nav-prev" (click)="nextOrPreviousProduct(false)"></div>
-
-            <div class="product-main-content">
+    <section class="pd__detail">
+        <div class="pd__top">
+            <div class="pd__presentation">
                 <hgart-asset-gallery [assets]="product?.assets" [selectedAssetId]="product?.featuredAsset?.id"
                     [videoSource]="videoSource" />
+            </div>
 
-                <div class="product-info">
+            <div class="pd__info">
+                <p class="pd__label">{{ collectionName }}</p>
+                <h1 class="pd__title">{{ product?.name ?? ' ' }}</h1>
+                <hr class="pd__rule">
 
-                    <div class="product-header">
-
-                        <div class="product-header__content">
-                            <div class="product-header__titles">
-                                <h2 class="product-title">
-                                    {{ product?.name ?? ' ' }}
-                                </h2>
-
-                                <div *ngIf="product?.collections[0].slug" class="product-collection-name">
-                                    {{ product?.collections[0].slug.replaceAll('-',' ') }} collection
-                                </div>
-                            </div>
-
-
-                            <button class="preorder-btn" (click)="openPreorderModal()" [ngClass]="{
-                                    'preorder-btn--disabled': inFlight,
-                                    'preorder-btn--active': !inFlight
-                                }">
-                                <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">PREORDER</div>
-
-                                <ng-template #inCartCount>
-                                    <fa-icon icon="check" class="preorder-btn__icon"></fa-icon>
-                                    <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
-                                </ng-template>
-
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="variant-selector" *ngIf="product?.variants.length > 1">
-                        <label htmlFor="option" class="variant-selector__label">
-                            Select option
-                        </label>
-                        <select [(ngModel)]="selectedVariant" class="variant-selector__select">
-                            <option *ngFor="let variant of product?.variants" [ngValue]="variant">{{ variant.name }}
-                            </option>
-                        </select>
-                    </div>
+                <div class="variant-selector" *ngIf="product?.variants.length > 1">
+                    <label htmlFor="option" class="variant-selector__label">Select option</label>
+                    <select [(ngModel)]="selectedVariant" class="variant-selector__select">
+                        <option *ngFor="let variant of product?.variants" [ngValue]="variant">{{ variant.name }}</option>
+                    </select>
                 </div>
-            </div>
 
-            <div>
-                <div class="product-close" (click)="closeProductDetails()"></div>
-                <div (click)="nextOrPreviousProduct(true)" class="product-nav product-nav-next"></div>
-            </div>
+                <button class="pd__cta" (click)="openPreorderModal()" [disabled]="inFlight">
+                    <ng-container *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">REGISTER INTEREST</ng-container>
 
+                    <ng-template #inCartCount>
+                        <fa-icon icon="check" class="pd__cta-icon"></fa-icon>
+                        <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
+                    </ng-template>
+                </button>
+
+                <p class="pd__note">Pricing is shared personally after you register interest.</p>
+
+                <div class="pd__toast">
+                    <span class="pd__toast-bar"></span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M10 9v5M10 6.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    <p>Non-binding interest. No payment is taken.</p>
+                </div>
+
+                <p class="pd__ar">AR EXPERIENCE INCLUDED · CERTIFICATE OF AUTHENTICITY</p>
+            </div>
         </div>
 
-    </div>
-
-    <div class="tabs">
-        <!-- Tabs Navigation -->
-        <div class="tabs__nav">
-            <nav class="tabs__nav-list">
-                <button type="button" (click)="setActiveTab('description')" class="tabs__tab" [ngClass]="{
-                        'tabs__tab--active': activeTab === 'description',
-                        'tabs__tab--inactive': activeTab !== 'description'
-                    }">
+        <div class="pd__tabs">
+            <nav class="pd__tab-list">
+                <button type="button" class="pd__tab" [class.pd__tab--active]="activeTab === 'description'"
+                    (click)="setActiveTab('description')">
                     Description
                 </button>
-                <button *ngIf="hasAdditionalInfo()" type="button" (click)="setActiveTab('additionalInfo')"
-                    class="tabs__tab" [ngClass]="{
-                        'tabs__tab--active': activeTab === 'additionalInfo',
-                        'tabs__tab--inactive': activeTab !== 'additionalInfo'
-                    }">
+                <button *ngIf="hasAdditionalInfo()" type="button" class="pd__tab"
+                    [class.pd__tab--active]="activeTab === 'additionalInfo'" (click)="setActiveTab('additionalInfo')">
                     Additional Information
                 </button>
             </nav>
-        </div>
 
-        <!-- Tab Content -->
-        <div class="tabs__content">
-            <!-- Description Tab -->
-            <div *ngIf="activeTab === 'description'" class="tabs__panel">
-                <h3 class="tabs__panel-title">Description</h3>
-                <div class="tabs__panel-content" [innerHTML]="product?.description | safeHtml"></div>
-            </div>
-
-            <!-- Additional Information Tab -->
-            <div *ngIf="activeTab === 'additionalInfo' && hasAdditionalInfo()" class="tabs__panel">
-                <h3 class="tabs__panel-title">Additional Information</h3>
-                <div class="tabs__panel-content" [innerHTML]="getAdditionalInfo() | safeHtml"></div>
-            </div>
+            <div class="pd__panel" *ngIf="activeTab === 'description'" [innerHTML]="product?.description | safeHtml"></div>
+            <div class="pd__panel" *ngIf="activeTab === 'additionalInfo' && hasAdditionalInfo()"
+                [innerHTML]="getAdditionalInfo() | safeHtml"></div>
         </div>
-    </div>
+    </section>
+
+    <section class="pd__related" *ngIf="relatedProducts.length">
+        <header class="pd__related-header">
+            <div>
+                <p class="pd__label">RELATED ARTWORKS</p>
+                <h2 class="pd__related-title">OTHER WORKS FROM THE SERIES</h2>
+            </div>
+            <div class="pd__related-controls">
+                <button type="button" aria-label="Previous artworks" (click)="scrollRelated(-1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </button>
+                <button type="button" aria-label="Next artworks" (click)="scrollRelated(1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="pd__related-row" #relatedRow>
+            <hgart-product-card *ngFor="let item of relatedProducts; trackBy: trackByProductId" [product]="item"
+                class="pd__related-card"></hgart-product-card>
+        </div>
+    </section>
 </div>
 
 <ng-template #addedToCartTemplate let-variant="variant" let-quantity="quantity" let-close="closeFn">

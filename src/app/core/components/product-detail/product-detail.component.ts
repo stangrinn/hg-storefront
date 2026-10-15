@@ -1,6 +1,6 @@
 
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
@@ -11,13 +11,16 @@ import {
     GetProductDetailQuery,
     GetProductDetailQueryVariables,
     SearchCollectionProductsQuery,
-    SearchCollectionProductsQueryVariables
+    SearchCollectionProductsQueryVariables,
+    SearchProductsQuery,
+    SearchProductsQueryVariables
 } from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data/data.service';
 import { NotificationService } from '../../providers/notification/notification.service';
 import { StateService } from '../../providers/state/state.service';
 
+import { SEARCH_PRODUCTS } from '../product-list/product-list.graphql';
 import { ADD_TO_CART, GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
 import { REGISTER_PREORDER } from './preorder.graphql';
 import { ActiveService } from '../../providers/active/active.service';
@@ -90,6 +93,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** URL from which user navigated to this page */
     private referrerUrl: string | null = null;
 
+    @ViewChild('relatedRow')
+    private relatedRow?: ElementRef<HTMLElement>;
+
+    /** Other artworks from the same collection */
+    relatedProducts: SearchProductsQuery['search']['items'] = [];
+
     @ViewChild('addedToCartTemplate', { static: true })
     private addToCartTemplate: TemplateRef<unknown>;
     private sub: Subscription;
@@ -156,6 +165,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
             this.breadcrumbs = collection ? collection.breadcrumbs : [];
 
+            this.loadRelatedProducts(product.id, collection?.id);
+
             this.cDRef.markForCheck();
         });
 
@@ -166,6 +177,36 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             for (const line of order?.lines ?? []) {
                 this.qtyInCart[line.productVariant.id] = line.quantity;
             }
+        });
+    }
+
+    get collectionName(): string {
+        const custom = this.product?.customFields?.artCollectionName;
+        const slug = this.product?.collections[0]?.slug;
+        return custom || slug?.replace(/-/g, ' ') || '';
+    }
+
+    trackByProductId(index: number, item: SearchProductsQuery['search']['items'][number]) {
+        return item.productId;
+    }
+
+    scrollRelated(direction: 1 | -1): void {
+        const row = this.relatedRow?.nativeElement;
+        if (row) {
+            row.scrollBy({ left: direction * row.clientWidth * 0.8, behavior: 'smooth' });
+        }
+    }
+
+    private loadRelatedProducts(productId: string, collectionId?: string): void {
+        this.relatedProducts = [];
+        if (!collectionId) {
+            return;
+        }
+        this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
+            input: { collectionId, groupByProduct: true, take: 12 },
+        }).pipe(take(1)).subscribe(data => {
+            this.relatedProducts = data.search.items.filter(item => item.productId !== productId);
+            this.cDRef.markForCheck();
         });
     }
 

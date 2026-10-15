@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -44,7 +45,8 @@ export class ProductListComponent implements OnInit {
     constructor(private dataService: DataService,
                 private route: ActivatedRoute,
                 private stateService: StateService,
-                private sanitizer: DomSanitizer) { }
+                private sanitizer: DomSanitizer,
+                private location: Location) { }
 
     ngOnInit() {
         const perPage = 24;
@@ -197,6 +199,14 @@ export class ProductListComponent implements OnInit {
         );
 
         // console.log('ProductListComponent initialized', this.collection$);
+    }
+
+    pad(value: number | null): string {
+        return String(value ?? 0).padStart(2, '0');
+    }
+
+    goBack() {
+        this.location.back();
     }
 
     trackByProductId(index: number, item: SearchItem) {
