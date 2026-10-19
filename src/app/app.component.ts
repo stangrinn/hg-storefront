@@ -7,6 +7,7 @@ import { filter, map } from 'rxjs/operators';
 import { GetCollectionsQuery, GetCollectionsQueryVariables } from './common/generated-types';
 import { GET_COLLECTIONS } from './common/graphql/documents.graphql';
 import { routeAnimations, fadeAnimation, slideAnimation } from './core/animations/route-animations';
+import { FavouritesService } from './core/providers/favourites/favourites.service';
 import { DataService } from './core/providers/data/data.service';
 import { StateService } from './core/providers/state/state.service';
 
@@ -18,7 +19,9 @@ import { StateService } from './core/providers/state/state.service';
 })
 export class AppComponent implements OnInit {
     isDarkTheme = true;
+    /** Drives the Saved (favourites) drawer; the key predates the cart being replaced by favourites. */
     cartDrawerVisible$: Observable<boolean>;
+    favouritesCount$: Observable<number>;
     mobileNavVisible$: Observable<boolean>;
     isHomePage$: Observable<boolean>;
     topCollections$: Observable<GetCollectionsQuery['collections']['items']>;
@@ -41,6 +44,7 @@ export class AppComponent implements OnInit {
     constructor(private router: Router,
                 private stateService: StateService,
                 private dataService: DataService,
+                private favourites: FavouritesService,
                 private contexts: ChildrenOutletContexts,
                 @Inject(PLATFORM_ID) private platformId: object) {
     }
@@ -50,6 +54,7 @@ export class AppComponent implements OnInit {
             this.isDarkTheme = window.localStorage.getItem('hgart-theme') !== 'light';
         }
         this.cartDrawerVisible$ = this.stateService.select(state => state.cartDrawerOpen);
+        this.favouritesCount$ = this.favourites.count$;
         this.mobileNavVisible$ = this.stateService.select(state => state.mobileNavMenuIsOpen);
         this.isHomePage$ = this.router.events.pipe(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

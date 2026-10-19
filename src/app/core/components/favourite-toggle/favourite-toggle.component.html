@@ -1,0 +1,13 @@
+<ng-container *ngIf="favourites.items$ | async as items">
+    <button type="button" class="fav" [class.fav--overlay]="variant === 'overlay'" [class.fav--inline]="variant === 'inline'" [class.fav--active]="item && favourites.has(item.slug)"
+        [attr.aria-pressed]="item && favourites.has(item.slug)"
+        [attr.aria-label]="item && favourites.has(item.slug) ? 'Remove from favourites' : 'Save to favourites'"
+        [disabled]="!item" (click)="toggle($event)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path class="fav__shape"
+                d="M12 21L4 13C1.5 10.5 2 6 5.5 4C7.5 3 9.5 3.5 12 6C14.5 3.5 16.5 3 18.5 4C22 6 22.5 10.5 20 13L12 21Z"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M12 6V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+    </button>
+</ng-container>

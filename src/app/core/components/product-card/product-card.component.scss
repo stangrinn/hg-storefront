@@ -1,6 +1,12 @@
+/* position anchors the overlay favourite toggle */
 :host {
+    position: relative;
     display: block;
     min-width: 0;
+}
+
+:host(:hover) hgart-favourite-toggle {
+    --fav-visible: 1;
 }
 
 .card {

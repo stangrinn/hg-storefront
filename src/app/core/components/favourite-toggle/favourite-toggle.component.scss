@@ -1,0 +1,82 @@
+:host {
+    display: block;
+    flex: none;
+    color: #f7f7f5;
+}
+
+:host-context(.theme-light) {
+    color: #2a2a2d;
+}
+
+.fav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    transition: background-color 0.2s ease;
+
+    &--active .fav__shape {
+        fill: currentColor;
+    }
+}
+
+:host([data-variant='inline']) .fav {
+    width: 56px;
+    height: 56px;
+    border: 1px solid #e0ded9;
+}
+
+:host-context(.theme-light) .fav--inline {
+    border-color: #2a2a2d;
+}
+
+:host([data-variant='overlay']) {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 2;
+    color: #f7f7f5;
+}
+
+:host([data-variant='overlay']) .fav {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #f7f7f5;
+    border-radius: 50%;
+    background: rgb(15 15 16 / 30%);
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    &--active {
+        border-color: #3a3a3d;
+    }
+}
+
+:host-context(.theme-light) .fav--overlay {
+    color: #0f0f10;
+    border-color: #2a2a2d;
+    background: rgb(255 255 255 / 90%);
+
+    &.fav--active {
+        border-color: #dddad3;
+    }
+}
+
+/* Desktop: the overlay shows on card hover/focus or when saved; tablet and below: always visible */
+@media (hover: hover) and (min-width: 1025px) {
+    :host([data-variant='overlay']) .fav {
+        opacity: var(--fav-visible, 0);
+        transition: opacity 0.2s ease, background-color 0.2s ease;
+    }
+
+    :host([data-variant='overlay']) .fav:focus-visible,
+    :host([data-variant='overlay']) .fav--active {
+        opacity: 1;
+    }
+}

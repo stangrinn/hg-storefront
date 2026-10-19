@@ -13,6 +13,12 @@
     }
 }
 
+:host ::ng-deep hgart-layout > .header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
 :host ::ng-deep .theme-light {
     --layout-header-background: #f7f7f5;
     --page-background: #f7f7f5;
@@ -192,8 +198,29 @@
 }
 
 .site-header__like {
+    position: relative;
     width: 24px;
     height: 24px;
+}
+
+.site-header__like-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    min-width: 16px;
+    padding: 0 4px;
+    font-family: Orbitron, sans-serif;
+    font-size: 10px;
+    line-height: 16px;
+    color: #0f0f10;
+    text-align: center;
+    background: #f7f7f5;
+    border-radius: 8px;
+}
+
+:host ::ng-deep .theme-light .site-header__like-badge {
+    color: #f7f7f5;
+    background: #0f0f10;
 }
 
 .site-header__theme img,
@@ -422,6 +449,7 @@ hgart-layout-footer footer .footer-grid>div+div+div {
 
 .site-footer__links a {
     color: #e0ded9;
+    font-size: 14px;
 }
 
 .site-footer__contact a {
@@ -521,26 +549,33 @@ hgart-layout-footer footer .footer-grid>div+div+div {
 }
 
 :host ::ng-deep .theme-light .site-footer {
-    background: #f7f7f5;
+    background: #ffffff;
+    border-top: 1px solid #e0ded9;
 }
 
 :host ::ng-deep .theme-light .site-footer__slogan,
 :host ::ng-deep .theme-light .site-footer h3,
-:host ::ng-deep .theme-light .site-footer__contact p,
-:host ::ng-deep .theme-light .site-footer__social a {
-    color: #2a2a2d;
-}
-
-:host ::ng-deep .theme-light .site-footer h3 {
+:host ::ng-deep .theme-light .site-footer__contact p {
     color: #2a2a2d !important;
 }
 
+:host ::ng-deep .theme-light .site-footer__social a,
 :host ::ng-deep .theme-light .site-footer__contact a {
     color: #0f0f10;
 }
 
+:host ::ng-deep .theme-light .site-footer__identity,
+:host ::ng-deep .theme-light .site-footer__bottom > p,
+:host ::ng-deep .theme-light .site-footer__contact p.muted {
+    color: #66666b !important;
+}
+
+:host ::ng-deep .theme-light .site-footer__links a {
+    color: #2a2a2d;
+}
+
 :host ::ng-deep .theme-light .site-footer__divider {
-    background: #8a8a8f;
+    background: #e0ded9;
 }
 
 @media (max-width: 900px) {

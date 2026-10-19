@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { SearchProductsQuery } from '../../../common/generated-types';
+import { FavouriteItem } from '../../providers/favourites/favourites.service';
 
 /**
  * ProductCardComponent displays a product card preview image.
@@ -21,6 +22,19 @@ export class ProductCardComponent implements OnChanges {
 
     /** Currently displayed preview image URL */
     currentImage: string;
+
+    get favouriteItem(): FavouriteItem | null {
+        if (!this.product) {
+            return null;
+        }
+
+        return {
+            id: this.product.productId,
+            slug: this.product.slug,
+            name: this.product.productName,
+            image: this.product.productAsset?.preview ?? null,
+        };
+    }
 
     ngOnChanges(): void {
         if (this.product?.productAsset?.preview) {

@@ -1,0 +1,54 @@
+<div class="drawer" [class.drawer--visible]="visible" role="dialog" aria-modal="true" aria-labelledby="saved-title"
+    [attr.aria-hidden]="!visible">
+    <div class="drawer__backdrop" (click)="close()"></div>
+
+    <aside class="drawer__panel" *ngIf="favourites.items$ | async as items">
+        <header class="drawer__header">
+            <div class="drawer__heading">
+                <p class="drawer__eyebrow">YOUR FAVOURITES · {{ items.length }}</p>
+                <h2 class="drawer__title" id="saved-title">Saved artworks</h2>
+            </div>
+
+            <button type="button" class="drawer__close" aria-label="Close saved artworks" (click)="close()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 5L19 19M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+        </header>
+
+        <p class="drawer__note">Saved on this device only. No account needed — clearing your browser data removes the list.</p>
+
+        <div class="drawer__body">
+            <ul class="drawer__list" *ngIf="items.length; else empty">
+                <li class="drawer__item" *ngFor="let item of items; trackBy: trackBySlug">
+                    <a class="drawer__thumb" [routerLink]="['/product', item.slug]" (click)="close()">
+                        <img *ngIf="item.image" [src]="item.image + '?preset=tiny'" [alt]="item.name">
+                    </a>
+
+                    <div class="drawer__info">
+                        <p class="drawer__collection" *ngIf="item.collection">{{ item.collection }}</p>
+                        <a class="drawer__name" [routerLink]="['/product', item.slug]" (click)="close()">{{ item.name }}</a>
+                        <button type="button" class="drawer__interest" (click)="registerInterest(item)">REGISTER INTEREST</button>
+                    </div>
+
+                    <button type="button" class="drawer__remove" aria-label="Remove from favourites"
+                        (click)="favourites.remove(item.slug)">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M12 21L4 13C1.5 10.5 2 6 5.5 4C7.5 3 9.5 3.5 12 6C14.5 3.5 16.5 3 18.5 4C22 6 22.5 10.5 20 13L12 21Z"
+                                fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </li>
+            </ul>
+
+            <ng-template #empty>
+                <p class="drawer__empty">No saved artworks yet. Tap the heart on an artwork to save it.</p>
+            </ng-template>
+        </div>
+
+        <footer class="drawer__footer" *ngIf="items.length">
+            <button type="button" class="drawer__cta" (click)="registerInterestInAll()">REGISTER INTEREST IN ALL ({{ items.length }})</button>
+            <p class="drawer__footnote">Non-binding. No payment is taken.</p>
+        </footer>
+    </aside>
+</div>

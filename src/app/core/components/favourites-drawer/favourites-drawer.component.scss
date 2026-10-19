@@ -1,0 +1,250 @@
+.drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    visibility: hidden;
+    transition: visibility 0.3s;
+
+    &--visible {
+        visibility: visible;
+    }
+}
+
+.drawer__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(15 15 16 / 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    .drawer--visible & {
+        opacity: 1;
+    }
+}
+
+.drawer__panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 480px;
+    max-width: 100%;
+    padding: 66px 36px 32px;
+    overflow-y: auto;
+    color: #f7f7f5;
+    background: rgb(15 15 16 / 90%);
+    backdrop-filter: blur(12px);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+
+    .drawer--visible & {
+        transform: translateX(0);
+    }
+}
+
+.drawer__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.drawer__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.drawer__eyebrow {
+    margin: 0;
+    font-family: Orbitron, sans-serif;
+    font-size: 11px;
+    letter-spacing: 3.85px;
+    color: #a1a1a7;
+}
+
+.drawer__title {
+    margin: 0;
+    font-family: Montserrat, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.drawer__close,
+.drawer__remove {
+    flex: none;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+}
+
+.drawer__note {
+    margin: 0;
+    font-family: Montserrat, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    color: #e0ded9;
+}
+
+.drawer__body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    border-top: 1px solid #2a2a2d;
+}
+
+.drawer__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.drawer__item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 0;
+    border-bottom: 1px solid #2a2a2d;
+}
+
+.drawer__thumb {
+    flex: none;
+    width: 72px;
+    height: 96px;
+    overflow: hidden;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.drawer__info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.drawer__collection {
+    margin: 0;
+    font-family: Orbitron, sans-serif;
+    font-size: 11px;
+    letter-spacing: 3.85px;
+    color: #a1a1a7;
+    text-transform: uppercase;
+}
+
+.drawer__name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.drawer__interest {
+    align-self: flex-start;
+    padding: 8px 0 0;
+    font-family: Orbitron, sans-serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-position: from-font;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+}
+
+.drawer__remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgb(37 37 39 / 90%);
+    border: 1px solid #2a2a2d;
+    border-radius: 20px;
+}
+
+.drawer__empty {
+    margin: 24px 0 0;
+    font-family: Montserrat, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    color: #a1a1a7;
+}
+
+.drawer__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 32px;
+    margin-top: auto;
+}
+
+.drawer__cta {
+    height: 56px;
+    padding: 0 16px;
+    font-family: Orbitron, sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    white-space: nowrap;
+    color: #0f0f10;
+    cursor: pointer;
+    background: #fff;
+    border: 0;
+
+    &:disabled {
+        opacity: 0.6;
+    }
+}
+
+.drawer__footnote {
+    margin: 0;
+    font-family: Montserrat, sans-serif;
+    font-size: 12px;
+    line-height: 18px;
+    color: #a1a1a7;
+    text-align: center;
+}
+
+:host-context(.theme-light) {
+    .drawer__panel {
+        color: #0f0f10;
+        background: rgb(247 247 245 / 92%);
+    }
+
+    .drawer__eyebrow,
+    .drawer__collection,
+    .drawer__empty,
+    .drawer__footnote {
+        color: #66666b;
+    }
+
+    .drawer__note {
+        color: #2a2a2d;
+    }
+
+    .drawer__body,
+    .drawer__item {
+        border-color: #dddad3;
+    }
+
+    .drawer__remove {
+        background: rgb(255 255 255 / 90%);
+        border-color: #dddad3;
+    }
+
+    .drawer__cta {
+        color: #f7f7f5;
+        background: #0f0f10;
+    }
+}

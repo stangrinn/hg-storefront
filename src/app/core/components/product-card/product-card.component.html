@@ -7,6 +7,8 @@
     <p class="card__title">{{ product.productName }}</p>
 </a>
 
+<hgart-favourite-toggle *ngIf="product" [item]="favouriteItem" variant="overlay"></hgart-favourite-toggle>
+
 <ng-template #placeholder>
     <div class="card card--placeholder">
         <div class="card__mount"><div class="card__art"></div></div>
