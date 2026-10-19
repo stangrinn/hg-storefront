@@ -1,0 +1,109 @@
+@use '../interest-layout' as *;
+
+:host {
+    display: block;
+    --pd-bg: #0f0f10;
+    --pd-surface: #252527;
+    --pd-circle: #1a1a1c;
+    --pd-text: #f7f7f5;
+    --pd-text-2: #e0ded9;
+    --pd-muted: #a1a1a7;
+    --pd-border: #4a4641;
+    --pd-btn-bg: #fff;
+    --pd-btn-text: #000;
+
+    font-family: Montserrat, sans-serif;
+
+    @include interest-layout;
+
+    .ir__section {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        line-height: 18px;
+        letter-spacing: 0.24px;
+        color: var(--pd-muted);
+    }
+
+    .ir__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--pd-border);
+    }
+
+    .ir__item {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        padding: 20px 0;
+        border-bottom: 1px solid var(--pd-border);
+    }
+
+    .ir__thumb {
+        flex: none;
+        width: 84px;
+        height: 112px;
+        overflow: hidden;
+        background: var(--pd-circle);
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .ir__item-text {
+        display: flex;
+        flex: 1 1 0;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    .ir__item-name {
+        overflow: hidden;
+        font: 400 28px/1.15 'Cormorant Garamond', serif;
+        color: var(--pd-text);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .ir__item-collection {
+        font-size: 12px;
+        letter-spacing: 0.24px;
+        color: var(--pd-muted);
+    }
+
+    .ir__remove {
+        padding: 8px 0;
+        font: 400 11px/1 Orbitron, sans-serif;
+        letter-spacing: 3.85px;
+        color: var(--pd-muted);
+        background: none;
+        border: 0;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--pd-text);
+        }
+    }
+
+    .ir__body--empty {
+        padding-bottom: 64px;
+    }
+}
+
+:host-context(.theme-light) {
+    --pd-bg: #f7f7f5;
+    --pd-surface: #f2efea;
+    --pd-circle: #fff;
+    --pd-text: #0f0f10;
+    --pd-text-2: #242321;
+    --pd-muted: #6b6b70;
+    --pd-border: #dddad3;
+    --pd-btn-bg: #0f0f10;
+    --pd-btn-text: #fff;
+}

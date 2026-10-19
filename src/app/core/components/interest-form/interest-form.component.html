@@ -1,0 +1,68 @@
+<form class="ir__form" (ngSubmit)="submit()" novalidate>
+    <p class="ir__eyebrow">Your contact details</p>
+    <h2 class="ir__form-title">Let’s Stay in Touch</h2>
+    <p class="ir__form-text">Please enter or confirm your details. I’ll use them only to reply about {{ plural ? 'these works' : 'this work' }}. * Required fields</p>
+
+    <div class="ir__fields">
+        <div class="ir__field">
+            <label class="ir__label" for="ir-name">Full name *</label>
+            <input id="ir-name" class="ir__input" [class.ir__input--error]="nameError" type="text" name="name"
+                placeholder="Your full name" autocomplete="name" [(ngModel)]="model.name" />
+            <p class="ir__error" *ngIf="nameError" role="alert">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" /><path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                {{ nameError }}
+            </p>
+        </div>
+
+        <div class="ir__field">
+            <label class="ir__label" for="ir-email">Email address *</label>
+            <input id="ir-email" class="ir__input" [class.ir__input--error]="emailError" type="email" name="email"
+                placeholder="name@example.com" autocomplete="email" [(ngModel)]="model.email" />
+            <p class="ir__error" *ngIf="emailError" role="alert">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" /><path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+                {{ emailError }}
+            </p>
+            <p class="ir__hint">Please check this address carefully so I can reach you.</p>
+        </div>
+
+        <div class="ir__field">
+            <label class="ir__label" for="ir-country">Country / region · Optional</label>
+            <input id="ir-country" class="ir__input" type="text" name="country" autocomplete="country-name"
+                [(ngModel)]="model.country" />
+        </div>
+    </div>
+
+    <hr class="ir__rule">
+
+    <div class="ir__fields">
+        <p class="ir__eyebrow">Make it personal · Optional</p>
+
+        <div class="ir__field">
+            <label class="ir__label" for="ir-pref">Artwork preferences</label>
+            <input id="ir-pref" class="ir__input" type="text" name="preferences"
+                placeholder="e.g. medium format, dark frame" [(ngModel)]="model.preferences" />
+        </div>
+
+        <div class="ir__field">
+            <label class="ir__label" for="ir-comment">A message for Helena</label>
+            <textarea id="ir-comment" class="ir__input ir__input--area" name="comment" rows="4"
+                placeholder="Anything you would like me to know?" [(ngModel)]="model.comment"></textarea>
+        </div>
+    </div>
+
+    <div class="ir__submission">
+        <p class="ir__privacy">Your details will be used to respond to this enquiry, in accordance with the
+            <a routerLink="/privacy-policy" target="_blank">Privacy Policy</a>.</p>
+
+        <p class="ir__toast" *ngIf="errorCount" role="alert">
+            <span class="ir__toast-bar"></span>
+            Please fix the {{ errorCount }} highlighted {{ errorCount === 1 ? 'field' : 'fields' }}.
+        </p>
+
+        <button type="submit" class="ir__submit" [disabled]="submitting">
+            {{ submitting ? 'SENDING…' : 'SUBMIT INTEREST' }}
+        </button>
+
+        <p class="ir__after">Helena will reply personally about availability, pricing and next steps.</p>
+    </div>
+</form>

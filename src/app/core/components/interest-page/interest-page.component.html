@@ -1,0 +1,74 @@
+<div class="ir" *ngIf="favourites.items$ | async as items">
+    <div class="ir__intro">
+        <div class="ir__nav">
+            <a class="ir__back" routerLink="/">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                BACK TO ARTWORKS
+            </a>
+            <p class="ir__steps"><span>01&nbsp;&nbsp;YOUR FAVOURITES</span><span class="ir__steps-current">02&nbsp;&nbsp;REVIEW &amp; SUBMIT</span></p>
+        </div>
+
+        <div class="ir__heading">
+            <div>
+                <p class="ir__eyebrow">A conversation begins here</p>
+                <h1 class="ir__title">Review Your Interest</h1>
+            </div>
+            <p class="ir__lead">Your saved works, in one request. Share how I can reach you and I’ll be in touch about each piece.</p>
+        </div>
+    </div>
+
+    <div class="ir__body" *ngIf="items.length; else empty">
+        <div class="ir__artwork">
+            <p class="ir__section">
+                <span>Your selected artworks</span>
+                <span>{{ items.length }} {{ items.length === 1 ? 'work' : 'works' }}</span>
+            </p>
+
+            <ul class="ir__list">
+                <li class="ir__item" *ngFor="let item of items; trackBy: trackBySlug">
+                    <a class="ir__thumb" [routerLink]="['/product', item.slug]">
+                        <img *ngIf="item.image" [src]="item.image + '?preset=tiny'" [alt]="item.name">
+                    </a>
+
+                    <div class="ir__item-text">
+                        <a class="ir__item-name" [routerLink]="['/product', item.slug]">{{ item.name }}</a>
+                        <p class="ir__item-collection" *ngIf="item.collection">{{ item.collection }}</p>
+                    </div>
+
+                    <button type="button" class="ir__remove" (click)="favourites.remove(item.slug)">REMOVE</button>
+                </li>
+            </ul>
+
+            <div class="ir__notice">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+                <div>
+                    <p class="ir__notice-title">No payment is taken.</p>
+                    <p class="ir__notice-text">This is a non-binding expression of interest, not a purchase or reservation. Availability is not guaranteed.</p>
+                </div>
+            </div>
+        </div>
+
+        <hgart-interest-form [plural]="true" [submitting]="isSubmitting" (submitted)="submit(items, $event)"></hgart-interest-form>
+    </div>
+
+    <ng-template #empty>
+        <div class="ir__body ir__body--empty">
+            <p class="ir__item-collection">No saved artworks yet. Tap the heart on an artwork to save it, then come back here.</p>
+        </div>
+    </ng-template>
+
+    <div class="ir__next">
+        <hr class="ir__rule">
+        <p class="ir__eyebrow">What happens after you submit?</p>
+        <ol class="ir__steps-list">
+            <li><span>01</span><div><p class="ir__step-title">Personal review</p><p>I’ll review your interest and check each artwork’s availability.</p></div></li>
+            <li><span>02</span><div><p class="ir__step-title">A conversation</p><p>I’ll be in touch to discuss pricing, options and your preferences.</p></div></li>
+            <li><span>03</span><div><p class="ir__step-title">Your next steps</p><p>We’ll agree on the details together before any commitment.</p></div></li>
+        </ol>
+    </div>
+</div>

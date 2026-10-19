@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 
 import { AboutMeComponent } from './core/components/about-me/about-me.component';
 import { ContactComponent } from './core/components/contact/contact.component';
+import { InterestPageComponent } from './core/components/interest-page/interest-page.component';
 import { PrivacyPolicyComponent } from './core/components/privacy-policy/privacy-policy.component';
 import { ProductDetailComponent } from './core/components/product-detail/product-detail.component';
 import { ProductListComponent } from './core/components/product-list/product-list.component';
@@ -24,6 +25,11 @@ export const routes: Route[] = [
         path: 'contact',
         component: ContactComponent,
         data: { animation: 'ContactPage' },
+    },
+    {
+        path: 'interest',
+        component: InterestPageComponent,
+        data: { animation: 'InterestPage' },
     },
     {
         path: 'terms',

@@ -1,0 +1,230 @@
+@mixin interest-layout {
+    .ir {
+        color: var(--pd-text-2);
+        background: var(--pd-bg);
+    }
+
+    .ir__intro {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        padding: 36px 60px 48px;
+    }
+
+    .ir__nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        font-size: 12px;
+        letter-spacing: 0.24px;
+    }
+
+    .ir__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0;
+        color: var(--pd-text-2);
+        background: none;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .ir__steps {
+        display: flex;
+        gap: 24px;
+        color: var(--pd-muted);
+    }
+
+    .ir__steps-current {
+        color: var(--pd-text);
+    }
+
+    .ir__heading {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 80px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--pd-border);
+    }
+
+    .ir__eyebrow {
+        font-size: 12px;
+        line-height: 18px;
+        letter-spacing: 0.24px;
+        color: var(--pd-muted);
+    }
+
+    .ir__title {
+        margin-top: 20px;
+        font: 400 72px/1.12 'Cormorant Garamond', serif;
+        letter-spacing: -2.88px;
+        color: var(--pd-text);
+    }
+
+    .ir__lead {
+        flex: 0 1 460px;
+        font-size: 18px;
+    }
+
+    .ir__body {
+        display: flex;
+        gap: 100px;
+        align-items: flex-start;
+        padding: 0 60px 64px;
+    }
+
+    .ir__artwork {
+        display: flex;
+        flex: 0 1 600px;
+        flex-direction: column;
+        gap: 24px;
+        min-width: 0;
+    }
+
+    .ir__mount {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 17px 0;
+        background: var(--pd-circle);
+    }
+
+    .ir__art {
+        width: min(420px, 80%);
+        aspect-ratio: 3 / 4;
+        padding: 6px;
+        background: #090a0c;
+        box-shadow: 0 18px 30px rgb(0 0 0 / 72%);
+
+        img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 2px;
+            object-fit: cover;
+        }
+    }
+
+    .ir__meta {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .ir__art-name {
+        font: 400 48px/1.1 'Cormorant Garamond', serif;
+        letter-spacing: -1.92px;
+        color: var(--pd-text);
+    }
+
+    .ir__art-author {
+        font-size: 18px;
+    }
+
+    .ir__art-collection {
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 26px;
+        color: var(--pd-muted);
+    }
+
+    .ir__notice {
+        display: flex;
+        gap: 16px;
+        padding: 24px;
+        border: 1px solid var(--pd-border);
+        color: var(--pd-text);
+
+        svg {
+            flex: none;
+        }
+    }
+
+    .ir__notice-title {
+        margin-bottom: 8px;
+        font-size: 18px;
+    }
+
+    .ir__notice-text {
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 26px;
+        color: var(--pd-muted);
+    }
+
+    .ir__rule {
+        height: 1px;
+        margin: 0;
+        border: 0;
+        background: var(--pd-border);
+    }
+
+    .ir__next {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        padding: 0 60px 64px;
+    }
+
+    .ir__steps-list {
+        display: flex;
+        gap: 64px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+
+        li {
+            display: flex;
+            flex: 1 1 0;
+            gap: 24px;
+            min-width: 0;
+            font-size: 14px;
+            line-height: 22px;
+
+            > span {
+                font: 400 48px/1 'Cormorant Garamond', serif;
+                letter-spacing: -1.92px;
+                color: var(--pd-muted);
+            }
+        }
+    }
+
+    .ir__step-title {
+        margin-bottom: 12px;
+        font-size: 12px;
+        letter-spacing: 0.24px;
+        color: var(--pd-text);
+    }
+
+    @media (max-width: 1024px) {
+        .ir__intro,
+        .ir__body,
+        .ir__next {
+            padding-right: 24px;
+            padding-left: 24px;
+        }
+
+        .ir__heading,
+        .ir__body,
+        .ir__steps-list {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 32px;
+        }
+
+        .ir__title {
+            font-size: 48px;
+        }
+
+        .ir__lead {
+            flex: none;
+        }
+
+        .ir__artwork {
+            flex: none;
+        }
+    }
+}

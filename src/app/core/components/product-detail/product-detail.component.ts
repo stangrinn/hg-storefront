@@ -16,12 +16,14 @@ import {
     SearchProductsQueryVariables
 } from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
+import { FavouriteItem } from '../../providers/favourites/favourites.service';
 import { DataService } from '../../providers/data/data.service';
 import { NotificationService } from '../../providers/notification/notification.service';
 import { StateService } from '../../providers/state/state.service';
 
 import { SEARCH_PRODUCTS } from '../product-list/product-list.graphql';
 import { ADD_TO_CART, GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
+import { InterestFormValue } from '../interest-form/interest-form.component';
 import { REGISTER_PREORDER } from './preorder.graphql';
 import { ActiveService } from '../../providers/active/active.service';
 
@@ -29,21 +31,6 @@ type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number]
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
 /** Available tabs for product detail page */
 type ProductTab = 'description' | 'additionalInfo';
-
-/** Purchase readiness options */
-interface PurchaseReadinessOption {
-    value: string;
-    label: string;
-}
-
-/** Preorder form data */
-interface PreorderFormData {
-    name: string;
-    email: string;
-    whatsapp: string;
-    purchaseReadiness: string;
-    comment: string;
-}
 
 @Component({
     selector: 'hgart-product-detail',
@@ -67,26 +54,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** Video source URL for gallery hover effect */
     videoSource: string | null = null;
     
-    /** Preorder modal visibility */
-    isPreorderModalOpen = false;
-    
-    /** Preorder form data */
-    preorderForm: PreorderFormData = {
-        name: '',
-        email: '',
-        whatsapp: '',
-        purchaseReadiness: '',
-        comment: ''
-    };
-    
-    /** Purchase readiness dropdown options */
-    purchaseReadinessOptions: PurchaseReadinessOption[] = [
-        { value: 'ready', label: 'Ready to buy now' },
-        { value: 'soon', label: 'Planning to buy soon' },
-        { value: 'interested', label: 'Just interested' },
-        { value: 'gift', label: 'Looking for a gift' }
-    ];
-    
+    /** Whether the in-page interest form replaces the artwork view */
+    isInterestFormOpen = false;
+
     /** Form submission state */
     isSubmitting = false;
 
@@ -167,8 +137,17 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
             this.loadRelatedProducts(product.id, collection?.id);
 
+            this.openInterestFromQuery();
+
             this.cDRef.markForCheck();
         });
+
+        this.sub.add(this.route.queryParamMap.pipe(
+            filter(params => params.has('interest') && !!this.product),
+        ).subscribe(() => {
+            this.openInterestFromQuery();
+            this.cDRef.markForCheck();
+        }));
 
         this.activeService.activeOrder$.subscribe(order => {
             
@@ -178,6 +157,21 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.qtyInCart[line.productVariant.id] = line.quantity;
             }
         });
+    }
+
+    /** Item stored in the guest favourites for the current artwork. */
+    get favouriteItem(): FavouriteItem | null {
+        if (!this.product) {
+            return null;
+        }
+
+        return {
+            id: this.product.id,
+            slug: this.product.slug,
+            name: this.product.name,
+            image: this.product.featuredAsset?.preview ?? null,
+            collection: this.collectionName,
+        };
     }
 
     get collectionName(): string {
@@ -435,75 +429,58 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         return videoExtensions.some(ext => lowerSource.includes(ext));
     }
 
-    /**
-     * Opens the preorder modal.
-     */
-    openPreorderModal(): void {
-        this.isPreorderModalOpen = true;
-        // Prevent body scroll when modal is open - only in browser
-        if (isPlatformBrowser(this.platformId)) {
-            document.body.style.overflow = 'hidden';
+    /** Opens the interest form when arriving from the Saved drawer (?interest=1). */
+    private openInterestFromQuery(): void {
+        if (!this.route.snapshot.queryParamMap.has('interest') || this.isInterestFormOpen) {
+            return;
         }
+
+        this.openInterestForm();
+        this.router.navigate([], { queryParams: { interest: null }, queryParamsHandling: 'merge', replaceUrl: true });
     }
 
-    /**
-     * Closes the preorder modal and resets form.
-     */
-    closePreorderModal(): void {
-        this.isPreorderModalOpen = false;
-        
+    /** Opens the in-page interest form. */
+    openInterestForm(): void {
+        this.isInterestFormOpen = true;
+
         if (isPlatformBrowser(this.platformId)) {
-            document.body.style.overflow = '';
+            window.scrollTo({ top: 0 });
         }
-        
-        this.resetPreorderForm();
+
+        this.cDRef.markForCheck();
     }
 
-    /**
-     * Resets the preorder form to initial state.
-     */
-    private resetPreorderForm(): void {
-        this.preorderForm = {
-            name: '',
-            email: '',
-            whatsapp: '',
-            purchaseReadiness: '',
-            comment: ''
-        };
+    /** Returns to the artwork view and resets the form. */
+    closeInterestForm(): void {
+        this.isInterestFormOpen = false;
+
+        if (isPlatformBrowser(this.platformId)) {
+            window.scrollTo({ top: 0 });
+        }
+
+        this.cDRef.markForCheck();
     }
 
-    /**
-     * Validates the preorder form.
-     * @returns True if form is valid
-     */
-    isPreorderFormValid(): boolean {
-        return !!(this.preorderForm.name.trim() && this.preorderForm.email.trim());
-    }
+    /** Sends the interest request for this artwork. */
+    submitPreorder(value: InterestFormValue): void {
+        if (this.isSubmitting) {
+            return;
+        }
 
-    /**
-     * Submits the preorder form.
-     */
-    submitPreorder(): void {
-        
-        if (!this.isPreorderFormValid() || this.isSubmitting) return;
-        
         this.isSubmitting = true;
-        
-        // Send preorder to Vendure backend
+
         this.dataService.mutate(REGISTER_PREORDER, {
             productId: this.product?.id,
             variantId: this.selectedVariant?.id,
-            customerName: this.preorderForm.name,
-            customerEmail: this.preorderForm.email,
-            whatsapp: this.preorderForm.whatsapp || null,
-            purchaseReadiness: this.preorderForm.purchaseReadiness || null,
-            comment: this.preorderForm.comment || null,
+            customerName: value.name,
+            customerEmail: value.email,
+            whatsapp: null,
+            purchaseReadiness: null,
+            comment: value.details || null,
         }).subscribe({
             next: () => {
-                
                 this.isSubmitting = false;
-                
-                this.closePreorderModal();
+                this.closeInterestForm();
 
                 this.notificationService.notify({
                     title: 'Interest Registered',
@@ -513,22 +490,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
                 this.cDRef.markForCheck();
             },
-            error: (error) => {
+            error: () => {
                 this.isSubmitting = false;
-                console.error('Preorder submission failed:', error);
                 this.notificationService.error('Failed to register interest. Please try again.').subscribe();
+                this.cDRef.markForCheck();
             }
         });
-    }
-
-    /**
-     * Handles click on modal backdrop to close modal.
-     * @param event - Click event
-     */
-    onModalBackdropClick(event: MouseEvent): void {
-        if ((event.target as HTMLElement).classList.contains('preorder-modal-overlay')) {
-            this.closePreorderModal();
-        }
     }
 
     ngOnDestroy() {
@@ -536,10 +503,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.sub.unsubscribe();
         // Note: We don't clear productPageReferrer here to preserve it for next/previous navigation
             this.referrerUrl = null;
-        }
-        // Ensure body scroll is restored - only in browser
-        if (isPlatformBrowser(this.platformId)) {
-            document.body.style.overflow = '';
         }
     }
 

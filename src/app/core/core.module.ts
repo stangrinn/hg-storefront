@@ -15,6 +15,10 @@ import { AccountLinkComponent } from './components/account-link/account-link.com
 import { AssetGalleryComponent } from './components/asset-gallery/asset-gallery.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
+import { FavouriteToggleComponent } from './components/favourite-toggle/favourite-toggle.component';
+import { InterestFormComponent } from './components/interest-form/interest-form.component';
+import { InterestPageComponent } from './components/interest-page/interest-page.component';
+import { FavouritesDrawerComponent } from './components/favourites-drawer/favourites-drawer.component';
 import { CollectionBreadcrumbsComponent } from './components/collection-breadcrumbs/collection-breadcrumbs.component';
 import { CollectionsMenuMobileComponent } from './components/collections-menu-mobile/collections-menu-mobile.component';
 import { CollectionsMenuComponent } from './components/collections-menu/collections-menu.component';
@@ -57,6 +61,10 @@ const CORE_COMPONENTS = [
     ProductListControlsComponent,
     ProductSearchBarComponent,
     AssetGalleryComponent,
+    FavouriteToggleComponent,
+    FavouritesDrawerComponent,
+    InterestFormComponent,
+    InterestPageComponent,
 ];
 
 @NgModule({

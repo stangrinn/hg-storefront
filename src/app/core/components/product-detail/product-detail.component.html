@@ -1,4 +1,5 @@
 <div class="pd">
+<ng-container *ngIf="!isInterestFormOpen; else interestForm">
     <nav class="pd__breadcrumb" aria-label="Breadcrumb">
         <button class="pd__back" type="button" aria-label="Go back" (click)="closeProductDetails()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -33,24 +34,13 @@
                     </select>
                 </div>
 
-                <button class="pd__cta" (click)="openPreorderModal()" [disabled]="inFlight">
-                    <ng-container *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">REGISTER INTEREST</ng-container>
+                <div class="pd__actions">
+                    <div class="pd__cta-row">
+                        <button class="pd__cta" (click)="openInterestForm()" [disabled]="!product">REGISTER YOUR INTEREST</button>
+                        <hgart-favourite-toggle [item]="favouriteItem" variant="inline"></hgart-favourite-toggle>
+                    </div>
 
-                    <ng-template #inCartCount>
-                        <fa-icon icon="check" class="pd__cta-icon"></fa-icon>
-                        <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
-                    </ng-template>
-                </button>
-
-                <p class="pd__note">Pricing is shared personally after you register interest.</p>
-
-                <div class="pd__toast">
-                    <span class="pd__toast-bar"></span>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        <circle cx="10" cy="10" r="8.25" stroke="currentColor" stroke-width="1.5" />
-                        <path d="M10 9v5M10 6.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
-                    <p>Non-binding interest. No payment is taken.</p>
+                    <p class="pd__note">Pricing is shared personally after you register interest. No payment is taken.</p>
                 </div>
 
                 <p class="pd__ar">AR EXPERIENCE INCLUDED · CERTIFICATE OF AUTHENTICITY</p>
@@ -96,6 +86,72 @@
                 class="pd__related-card"></hgart-product-card>
         </div>
     </section>
+</ng-container>
+
+<ng-template #interestForm>
+    <section class="ir">
+        <div class="ir__intro">
+            <div class="ir__nav">
+                <button type="button" class="ir__back" (click)="closeInterestForm()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    BACK TO ARTWORK
+                </button>
+                <p class="ir__steps"><span>01&nbsp;&nbsp;THE ARTWORK</span><span class="ir__steps-current">02&nbsp;&nbsp;REVIEW &amp; SUBMIT</span></p>
+            </div>
+
+            <div class="ir__heading">
+                <div>
+                    <p class="ir__eyebrow">A conversation begins here</p>
+                    <h1 class="ir__title">Review Your Interest</h1>
+                </div>
+                <p class="ir__lead">One work, one request. Share how I can reach you and I’ll be in touch about it.</p>
+            </div>
+        </div>
+
+        <div class="ir__body">
+            <div class="ir__artwork">
+                <p class="ir__eyebrow">Your selected artwork</p>
+
+                <div class="ir__mount">
+                    <div class="ir__art">
+                        <img *ngIf="product?.featuredAsset" [src]="product?.featuredAsset | assetPreview:420:560" [alt]="product?.name" />
+                    </div>
+                </div>
+
+                <div class="ir__meta">
+                    <p class="ir__art-name">{{ product?.name }}</p>
+                    <p class="ir__art-author">Helena Grinshpun</p>
+                    <p class="ir__art-collection" *ngIf="collectionName">From the {{ collectionName }} collection</p>
+                </div>
+
+                <div class="ir__notice">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    <div>
+                        <p class="ir__notice-title">No payment is taken.</p>
+                        <p class="ir__notice-text">This is a non-binding expression of interest, not a purchase or reservation. Availability is not guaranteed.</p>
+                    </div>
+                </div>
+            </div>
+
+            <hgart-interest-form [submitting]="isSubmitting" (submitted)="submitPreorder($event)"></hgart-interest-form>
+        </div>
+
+        <div class="ir__next">
+            <hr class="ir__rule">
+            <p class="ir__eyebrow">What happens after you submit?</p>
+            <ol class="ir__steps-list">
+                <li><span>01</span><div><p class="ir__step-title">Personal review</p><p>I’ll review your interest and check the artwork’s availability.</p></div></li>
+                <li><span>02</span><div><p class="ir__step-title">A conversation</p><p>I’ll be in touch to discuss pricing, options and your preferences.</p></div></li>
+                <li><span>03</span><div><p class="ir__step-title">Your next steps</p><p>We’ll agree on the details together before any commitment.</p></div></li>
+            </ol>
+        </div>
+    </section>
+</ng-template>
 </div>
 
 <ng-template #addedToCartTemplate let-variant="variant" let-quantity="quantity" let-close="closeFn">
@@ -113,86 +169,3 @@
         </button>
     </div>
 </ng-template>
-
-<!-- Preorder Modal -->
-<div class="preorder-modal-overlay" *ngIf="isPreorderModalOpen" (click)="onModalBackdropClick($event)">
-    <div class="preorder-modal">
-        <button type="button" class="preorder-modal__close" (click)="closePreorderModal()">
-            <img _ngcontent-ng-c1138095943="" width="24" height="24" src="assets/icons/hg-close.svg" alt="Close">
-        </button>
-
-        <!-- <h2 class="preorder-modal__title">PRE-ORDER</h2> -->
-        <div class="flex gap-6 items-center">
-            <div>
-                <img class="preorder-modal__product-image"
-                    *ngIf="product?.featuredAsset"
-                    [src]="product?.featuredAsset | assetPreview:98:130" alt="{{ product?.name }}" />
-            </div>
-            <div class="flex flex-col gap-2">
-                <h1 class="text-3xl">{{ product?.name }}</h1>
-                <h1 class="preorder-modal__product-collection">{{ product?.collections[0].slug.replaceAll('-',' ') }} collection</h1>
-                <h1 class="preorder-modal__product-collection price">$ {{ product?.variants[0]?.price / 100 }}</h1>
-            </div>
-        </div>
-        <p class="preorder-modal__subtitle">
-            Leave your details to receive an early notification when the artwork is released. No payment required.
-        </p>
-
-        <form class="preorder-form" (ngSubmit)="submitPreorder()">
-            <!-- Name Field -->
-            <div class="preorder-form__field">
-                <label class="preorder-form__label">
-                    Name <span class="preorder-form__required">*</span>
-                </label>
-                <input type="text" class="preorder-form__input" placeholder="Your name" [(ngModel)]="preorderForm.name"
-                    name="name" required />
-            </div>
-
-            <!-- Email Field -->
-            <div class="preorder-form__field">
-                <label class="preorder-form__label">
-                    Email <span class="preorder-form__required">*</span>
-                </label>
-                <input type="email" class="preorder-form__input" placeholder="email@example.com"
-                    [(ngModel)]="preorderForm.email" name="email" required />
-            </div>
-
-            <!-- WhatsApp Field -->
-            <div class="preorder-form__field">
-                <label class="preorder-form__label">WhatsApp</label>
-                <input type="tel" class="preorder-form__input" placeholder="+1 234 567 8900"
-                    [(ngModel)]="preorderForm.whatsapp" name="whatsapp" />
-            </div>
-
-            <!-- Purchase Readiness Field -->
-            <div class="preorder-form__field">
-                <label class="preorder-form__label">Purchase Readiness</label>
-                <select class="preorder-form__select" [(ngModel)]="preorderForm.purchaseReadiness"
-                    name="purchaseReadiness">
-                    <option value="" disabled>Select your interest level</option>
-                    <option *ngFor="let option of purchaseReadinessOptions" [value]="option.value">
-                        {{ option.label }}
-                    </option>
-                </select>
-            </div>
-
-            <!-- Comment Field -->
-            <div class="preorder-form__field">
-                <label class="preorder-form__label">Comment</label>
-                <textarea class="preorder-form__textarea" placeholder="Optional thoughts or questions..."
-                    [(ngModel)]="preorderForm.comment" name="comment" rows="4">
-                </textarea>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="preorder-form__submit" [disabled]="!isPreorderFormValid() || isSubmitting">
-                <span *ngIf="!isSubmitting">SUBMIT INTEREST</span>
-                <span *ngIf="isSubmitting">SUBMITTING...</span>
-            </button>
-
-            <p class="preorder-form__privacy">
-                Your data is used only for release notifications.
-            </p>
-        </form>
-    </div>
-</div>
