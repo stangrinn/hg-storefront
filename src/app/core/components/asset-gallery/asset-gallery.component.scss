@@ -50,13 +50,15 @@
     position: relative;
     flex: 1;
     min-width: 0;
+    // Artwork height never exceeds the viewport (3:4 art + 32px mount padding); the mount hugs the artwork.
+    max-width: calc((100vh - 220px) * 0.75 + 64px);
+    margin: 0 auto;
     padding: 32px;
     background: var(--gallery-mount);
 }
 
 .gallery__art {
-    margin: 0 auto;
-    max-width: 590px;
+    width: 100%;
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: var(--gallery-art);

@@ -191,3 +191,43 @@ $highlight-padding-y: 12.8px;
         }
     }
 }
+
+// Light theme: Figma Carousel/Menu (817:71969). The exported SVGs are drawn for the dark menu, so they are recoloured with a filter.
+:host-context(.theme-light) {
+    background: rgba(229, 229, 229, 0.96);
+
+    .drawer-content-title,
+    .extra-footer h3 {
+        color: #2a2a2d;
+    }
+
+    .drawer-content-title img {
+        filter: brightness(0) invert(0.16);
+    }
+
+    .drawer-content-list a,
+    .extra-footer > a {
+        color: #66666b;
+
+        &:hover,
+        &.active {
+            color: #2a2a2d;
+        }
+    }
+
+    .menu-divider::before {
+        filter: brightness(0) invert(0.16);
+    }
+
+    .menu-auth {
+        color: #66666b;
+
+        a {
+            color: #0f0f10;
+
+            &:hover {
+                color: #000;
+            }
+        }
+    }
+}

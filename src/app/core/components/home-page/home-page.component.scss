@@ -328,6 +328,7 @@ h2,
 .step-card > p {
     min-height: 56px;
     margin-top: 24px;
+    margin-bottom: 24px;
     color: var(--home-muted);
     font-family: 'Montserrat', sans-serif;
     font-size: 18px;
@@ -342,7 +343,7 @@ h2,
     min-height: 0;
     box-sizing: border-box;
     aspect-ratio: 1;
-    margin-top: 24px;
+    margin-top: auto;
     padding: 32px;
     background: var(--home-panel);
     box-shadow: 0 20px 30px rgb(0 0 0 / 20%);
@@ -1006,12 +1007,9 @@ h2,
     --parallax-depth: -22px;
 }
 
-.step-card:nth-child(odd) {
-    --parallax-depth: 14px;
-}
-
-.step-card:nth-child(even) {
-    --parallax-depth: 34px;
+// Same depth for all cards so the row stays aligned like in the design.
+.step-card {
+    --parallax-depth: 20px;
 }
 
 .ar-flow__art {
