@@ -62,7 +62,7 @@ export class DropdownComponent {
     }
 
     onTriggerMouseEnter() {
-        if (this.openOnHover && this.closeFn == null) {
+        if (this.openOnHover && this.closeFn === null) {
             this.open();
         }
     }

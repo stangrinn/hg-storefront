@@ -1,20 +1,28 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    Input,
+} from "@angular/core";
+import { Router } from "@angular/router";
 
-import { SignInMutation, SignInMutationVariables } from '../../../common/generated-types';
-import { DataService } from '../../../core/providers/data/data.service';
-import { StateService } from '../../../core/providers/state/state.service';
+import {
+    SignInMutation,
+    SignInMutationVariables,
+} from "../../../common/generated-types";
+import { DataService } from "../../../core/providers/data/data.service";
+import { StateService } from "../../../core/providers/state/state.service";
 
-import { SIGN_IN } from './sign-in.graphql';
+import { SIGN_IN } from "./sign-in.graphql";
 
 @Component({
-    selector: 'hgart-sign-in',
-    templateUrl: './sign-in.component.html',
-    styleUrls: ['./sign-in.component.scss'],
+    selector: "hgart-sign-in",
+    templateUrl: "./sign-in.component.html",
+    styleUrls: ["./sign-in.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent {
-    @Input() navigateToOnSuccess: any[] | undefined;
+    @Input() navigateToOnSuccess: undefined;
     @Input() displayRegisterLink = true;
 
     emailAddress: string;
@@ -22,31 +30,36 @@ export class SignInComponent {
     rememberMe = false;
     invalidCredentials = false;
 
-    constructor(private dataService: DataService,
-                private stateService: StateService,
-                private router: Router,
-                private changeDetector: ChangeDetectorRef) {}
+    constructor(
+        private dataService: DataService,
+        private stateService: StateService,
+        private router: Router,
+        private changeDetector: ChangeDetectorRef,
+    ) {}
 
     signIn() {
-        this.dataService.mutate<SignInMutation, SignInMutationVariables>(SIGN_IN, {
-            emailAddress: this.emailAddress,
-            password: this.password,
-            rememberMe: this.rememberMe,
-        }).subscribe({
-            next: ({login}) => {
-                switch (login.__typename) {
-                    case 'CurrentUser':
-                        this.stateService.setState('signedIn', true);
-                        const commands = this.navigateToOnSuccess || ['/'];
-                        this.router.navigate(commands);
-                        break;
-                    case 'NativeAuthStrategyError':
-                    case 'InvalidCredentialsError':
-                        this.displayCredentialsError();
-                        break;
-                }
-            },
-        });
+        this.dataService
+            .mutate<SignInMutation, SignInMutationVariables>(SIGN_IN, {
+                emailAddress: this.emailAddress,
+                password: this.password,
+                rememberMe: this.rememberMe,
+            })
+            .subscribe({
+                next: ({ login }) => {
+                    switch (login.__typename) {
+                        case "CurrentUser": {
+                            this.stateService.setState("signedIn", true);
+                            const commands = this.navigateToOnSuccess || ["/"];
+                            this.router.navigate(commands);
+                            break;
+                        }
+                        case "NativeAuthStrategyError":
+                        case "InvalidCredentialsError":
+                            this.displayCredentialsError();
+                            break;
+                    }
+                },
+            });
     }
 
     private displayCredentialsError() {
