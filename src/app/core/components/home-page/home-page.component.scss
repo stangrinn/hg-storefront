@@ -1213,3 +1213,7 @@ h2,
     mask: url('/assets/home/brush-line.svg') left bottom / 120px 8px no-repeat;
     -webkit-mask: url('/assets/home/brush-line.svg') left bottom / 120px 8px no-repeat;
 }
+
+@import "./home-page.mobile";
+
+@import "./home-page.tablet";

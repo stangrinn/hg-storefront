@@ -1,0 +1,8 @@
+:host .menu-toggle__tablet { display: none; }
+
+@media (min-width: 721px) and (max-width: 1023px) {
+    :host-context(.layout--home) {
+        picture { display: none; }
+        .menu-toggle__tablet { display: block; }
+    }
+}

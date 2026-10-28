@@ -64,6 +64,9 @@
                                 <a [routerLink]="['/about']">ABOUT ME</a>
                                 <a [routerLink]="['/contact']">CONTACT US</a>
                                 <a href="mailto:hello@helenagrinshpun.art">HELLO@HELENAGRINSHPUN.ART</a>
+                                <button *ngIf="showThemeControl" class="menu-theme" type="button" (click)="themeChanged.emit()">
+                                    {{ isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme' }}
+                                </button>
                                 <!-- Temporarily hidden: login / register -->
                                 <!-- <div class="menu-auth"><span>LOGIN</span><span>/</span><a href="#">REGISTER</a></div> -->
                             </div>

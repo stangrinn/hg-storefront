@@ -17,6 +17,7 @@ interface ComparisonRow {
     aliveTitle: string;
     staticImage: string;
     aliveImage?: string;
+    mobileSubtitle?: string;
 }
 
 @Component({
@@ -28,8 +29,8 @@ interface ComparisonRow {
 export class HomePageComponent implements OnInit {
     readonly comparisonRows: ComparisonRow[] = [
         { staticTitle: 'Static', aliveTitle: 'Alive', staticImage: 'assets/home/comparison-static-1.jpeg', aliveImage: 'assets/home/comparison-alive-1.png' },
-        { staticTitle: 'One moment', aliveTitle: 'Ever-changing', staticImage: 'assets/home/comparison-static-2.jpeg', aliveImage: 'assets/home/comparison-alive-2.png' },
-        { staticTitle: 'Observed', aliveTitle: 'Experienced', staticImage: 'assets/home/comparison-static-3.jpeg', aliveImage: 'assets/home/comparison-alive-3.png' },
+        { staticTitle: 'One moment', aliveTitle: 'Ever-changing', mobileSubtitle: 'Infinite variations.', staticImage: 'assets/home/comparison-static-2.jpeg', aliveImage: 'assets/home/comparison-alive-2.png' },
+        { staticTitle: 'Observed', aliveTitle: 'Experienced', mobileSubtitle: 'Full immersion.', staticImage: 'assets/home/comparison-static-3.jpeg', aliveImage: 'assets/home/comparison-alive-3.png' },
         { staticTitle: 'Easily replicated', aliveTitle: 'Ownership system', staticImage: 'assets/home/comparison-static-3.jpeg' },
     ];
 

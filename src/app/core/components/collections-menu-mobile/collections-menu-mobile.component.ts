@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,6 +20,10 @@ type CollectionItem = GetCollectionsQuery['collections']['items'][number];
 export class CollectionsMenuMobileComponent implements OnInit {
     @HostBinding('class.visible')
     @Input() visible = false;
+
+    @Input() showThemeControl: boolean | null = false;
+    @Input() isDarkTheme = true;
+    @Output() themeChanged = new EventEmitter<void>();
 
     collectionTree$: Observable<RootNode<CollectionItem>>;
     selected0: string | null = null;

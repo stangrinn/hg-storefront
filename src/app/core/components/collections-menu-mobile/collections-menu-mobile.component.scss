@@ -10,6 +10,27 @@ $highlight-bleed-x: 12px;
 // 40px tall bar around a 14.4px line.
 $highlight-padding-y: 12.8px;
 
+.menu-theme {
+    display: none;
+}
+
+@media (max-width: 720px) {
+    .menu-theme {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 8px 0;
+        border: 0;
+        background: transparent;
+        color: $text-primary;
+        cursor: pointer;
+        font: 12px/1.5 Orbitron, sans-serif;
+        letter-spacing: 2px;
+        text-align: left;
+        text-transform: uppercase;
+    }
+}
+
 :host {
     display: flex;
     flex-direction: column;
@@ -21,7 +42,8 @@ $highlight-padding-y: 12.8px;
     width: 416px;
     height: 100vh;
     z-index: 30 !important;
-    transform: translateX(-102vw) translateX(3rem);
+    visibility: hidden;
+    transform: translateX(-100%);
     transition: transform 0.3s;
     overflow-x: hidden;
     overflow-y: auto;
@@ -29,6 +51,7 @@ $highlight-padding-y: 12.8px;
     backdrop-filter: blur(18px);
 
     &.visible {
+        visibility: visible;
         transform: translateX(0);
     }
 
@@ -231,3 +254,5 @@ $highlight-padding-y: 12.8px;
         }
     }
 }
+
+:host-context(.theme-light) .menu-theme { color: #2a2a2d; }

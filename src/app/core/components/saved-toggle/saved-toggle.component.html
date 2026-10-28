@@ -1,0 +1,4 @@
+<button class="saved-toggle" type="button" aria-label="Saved artworks" (click)="opened.emit()">
+    <img alt="" src="assets/header/saved-mobile.svg">
+    <span class="saved-toggle__badge" *ngIf="count as savedCount">{{ savedCount }}</span>
+</button>

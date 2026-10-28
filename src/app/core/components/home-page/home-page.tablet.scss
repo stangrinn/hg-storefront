@@ -1,0 +1,72 @@
+// Figma Main page 768 (382:4769), between the mobile and wide desktop layouts.
+@media (min-width: 721px) and (max-width: 1023px) {
+    :host {
+        .tablet-only, .tablet-divider { display: block; }
+        .hero { padding-top: 0; }
+        .hero__wall { height: 582px; gap: 14px; overflow: hidden; }
+        .hero__art--large { width: 366px; height: 488px; aspect-ratio: auto; margin-top: -1px; }
+        .hero__art--large + .hero__art--medium { display: block; width: 330px; height: 440px; }
+        .hero__art--large + .hero__art--medium > img { transform: scaleX(-1); }
+        .hero__art--large + .hero__art--medium > .hero__prompt:not(.hero__prompt--tablet) { display: none; }
+        .hero__prompt--tablet > span { position: relative; display: block; top: -310px; }
+        .hero__prompt { padding: 8px 9px; backdrop-filter: blur(10px); }
+        .hero__prompt--tablet { padding: 3px 3px 3px 9px; color: var(--home-muted); font-weight: 400; line-height: normal; }
+        .hero__caption { align-items: center; margin-top: 0; padding: 23px 24px 80px; }
+        .hero__title-group h1 { max-width: 546px; }
+        .hero__title-group h1 br { display: none; }
+        .hero__meta { width: 416px; margin-left: 40px; }
+        .outline-button { padding-inline: 40px; white-space: nowrap; }
+        .section--steps { padding: 96px 32px; }
+        .section--steps .section-heading h2 { max-width: none; padding: 0; }
+        .section--steps .section-heading > p { max-width: none; }
+        .section-heading > img.mobile-only.heading-ornament { display: none; }
+        .steps-grid { max-width: 704px; margin-top: 56px; }
+        .step-card > p { margin-inline: 32px; }
+        .step-card:nth-child(2) > p { margin-inline: 32px; }
+        .step-card__image, .step-card__image--engage, .step-card__image--phone { width: min(644px, 100%); }
+        .step-card__image--place img { width: 211.0345%; left: -51.7241%; top: -88.14%; }
+        .step-card__image--engage { padding-bottom: 26px; }
+        .step-scene--engage .step-scene__gallery { width: 100%; height: 100%; aspect-ratio: auto; }
+        .step-scene--engage .step-scene__background { display: none; }
+        .step-scene--engage .step-scene__overlay { width: 102.931%; left: -1.3793%; top: -27.495%; }
+        .step-card__image--phone { padding-bottom: 0; }
+        .step-scene .step-scene__phone { width: 155.8621%; max-width: none; left: -29.3103%; top: calc(50% - 19.44px); }
+        .step-card footer { width: calc(100% - 48px); }
+        .step-card:first-child footer { width: calc(100% - 64px); }
+        .mobile-diagonal img { left: 0; transform: none; }
+        .statement { min-height: 380px; padding: 74px 32px; }
+        .statement h2 { width: auto; max-width: 704px; overflow-wrap: normal; }
+        .statement__subtitle { font-size: 16px; line-height: 20px; letter-spacing: 5.6px; }
+        .statement > p:last-child { width: 415px; line-height: 26px; }
+        .statement-divider { margin: 0; }
+        .section--evolution { padding: 96px 32px; }
+        .comparison-grid { max-width: 452px; gap: 23px; }
+        .comparison-card--alive, .comparison-row:first-child .comparison-card { height: 718px; padding: 33px; }
+        .comparison-card__label { align-self: flex-start; }
+        .comparison-card__label > img.mobile-only { display: none; }
+        .comparison-card img.comparison-card__brush { align-self: flex-start; }
+        .comparison-card__subtitle { display: none; }
+        .comparison-card > img, .comparison-row:first-child .comparison-card > img { width: 100%; height: 501px; margin: 0; flex: none; }
+        .comparison-card__ownership { flex: none; height: 501px; }
+        .faq { padding: 0 32px 44px; }
+        .faq .section-heading { margin: 0 -17px; padding: 83px 50px 43px; }
+        .faq .section-heading h2 { max-width: none; }
+        .faq .section-heading small { line-height: normal; }
+        .faq-grid { max-width: none; margin-top: 44px; }
+        .faq-card { min-height: 225px; padding: 56px 32px; }
+        .faq-card:first-child { min-height: 254px; border: 0; }
+        .faq-card:nth-child(3), .faq-card:nth-child(4), .faq-card:nth-child(5) { min-height: 254px; }
+        .faq-card p { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .mobile-sash { margin: 0 32px; background: linear-gradient(90deg, #0f0f10, var(--home-panel) 40%, var(--home-panel) 60%, #0f0f10); }
+        .mobile-sash img { top: 32.75px; }
+        .mobile-sash picture:first-child img { left: 80px; }
+        .mobile-sash picture:last-child img { right: 80px; }
+        .closing-cta { margin: 44px 32px 32px; padding: 64px 24px 24px; }
+        .closing-cta p { line-height: normal; }
+    }
+    :host-context(.theme-light) {
+        .outline-button { padding-inline: 40px; }
+        .mobile-sash { background: linear-gradient(90deg, #f7f7f5, #fff 40%, #fff 60%, #f7f7f5); }
+        .closing-cta { background: #fff; }
+    }
+}

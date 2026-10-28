@@ -1,3 +1,7 @@
-<button (click)="toggle()">
-    <img alt="" src="assets/header/menu.svg">
+<button type="button" aria-label="Open collections menu" (click)="toggle()">
+    <picture>
+        <source media="(max-width: 720px)" srcset="assets/header/menu-mobile.svg">
+        <img alt="" src="assets/header/menu.svg">
+    </picture>
+    <img class="menu-toggle__tablet" alt="" src="assets/header/menu-mobile.svg">
 </button>

@@ -17,6 +17,7 @@ import { FavouriteToggleComponent } from './components/favourite-toggle/favourit
 import { InterestFormComponent } from './components/interest-form/interest-form.component';
 import { InterestPageComponent } from './components/interest-page/interest-page.component';
 import { FavouritesDrawerComponent } from './components/favourites-drawer/favourites-drawer.component';
+import { SavedToggleComponent } from './components/saved-toggle/saved-toggle.component';
 import { CollectionBreadcrumbsComponent } from './components/collection-breadcrumbs/collection-breadcrumbs.component';
 import { CollectionsMenuMobileComponent } from './components/collections-menu-mobile/collections-menu-mobile.component';
 import { CollectionsMenuComponent } from './components/collections-menu/collections-menu.component';
@@ -59,6 +60,7 @@ const CORE_COMPONENTS = [
     AssetGalleryComponent,
     FavouriteToggleComponent,
     FavouritesDrawerComponent,
+    SavedToggleComponent,
     InterestFormComponent,
     InterestPageComponent,
 ];
