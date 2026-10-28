@@ -13,7 +13,9 @@ import {
     SearchCollectionProductsQuery,
     SearchCollectionProductsQueryVariables,
     SearchProductsQuery,
-    SearchProductsQueryVariables
+    SearchProductsQueryVariables,
+    RegisterPreOrderMutation,
+    RegisterPreOrderMutationVariables
 } from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { FavouriteItem } from '../../providers/favourites/favourites.service';
@@ -422,6 +424,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      * Checks if the source URL points to a video file.
      * @param source - Asset source URL
      * @returns True if the source is a video file
+
+                if (!result.registerPreOrder.success) {
+                    this.notificationService.error('Failed to register interest. Please try again.').subscribe();
+                    this.cDRef.markForCheck();
+
+                    return;
+                }
+
      */
     private isVideoFile(source: string): boolean {
         const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
@@ -463,22 +473,20 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     /** Sends the interest request for this artwork. */
     submitPreorder(value: InterestFormValue): void {
-        if (this.isSubmitting) {
+        if (this.isSubmitting || !this.product) {
             return;
         }
 
         this.isSubmitting = true;
 
-        this.dataService.mutate(REGISTER_PREORDER, {
-            productId: this.product?.id,
+        this.dataService.mutate<RegisterPreOrderMutation, RegisterPreOrderMutationVariables>(REGISTER_PREORDER, {
+            productId: this.product.id,
             variantId: this.selectedVariant?.id,
             customerName: value.name,
             customerEmail: value.email,
-            whatsapp: null,
-            purchaseReadiness: null,
-            comment: value.details || null,
+            comment: value.details || undefined,
         }).subscribe({
-            next: () => {
+            next: result => {
                 this.isSubmitting = false;
                 this.closeInterestForm();
 

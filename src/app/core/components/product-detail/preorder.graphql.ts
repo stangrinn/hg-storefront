@@ -19,15 +19,7 @@ export const REGISTER_PREORDER = gql`
             purchaseReadiness: $purchaseReadiness
             comment: $comment
         ) {
-            id
-            code
-            state
-            createdAt
-            customer {
-                firstName
-                lastName
-                emailAddress
-            }
+            success
         }
     }
 `;

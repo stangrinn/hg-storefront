@@ -6,7 +6,7 @@
     <div class="ir__fields">
         <div class="ir__field">
             <label class="ir__label" for="ir-name">Full name *</label>
-            <input id="ir-name" class="ir__input" [class.ir__input--error]="nameError" type="text" name="name"
+            <input id="ir-name" class="ir__input" [class.ir__input--error]="nameError" type="text" name="name" maxlength="120"
                 placeholder="Your full name" autocomplete="name" [(ngModel)]="model.name" />
             <p class="ir__error" *ngIf="nameError" role="alert">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" /><path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
@@ -16,7 +16,7 @@
 
         <div class="ir__field">
             <label class="ir__label" for="ir-email">Email address *</label>
-            <input id="ir-email" class="ir__input" [class.ir__input--error]="emailError" type="email" name="email"
+            <input id="ir-email" class="ir__input" [class.ir__input--error]="emailError" type="email" name="email" maxlength="254"
                 placeholder="name@example.com" autocomplete="email" [(ngModel)]="model.email" />
             <p class="ir__error" *ngIf="emailError" role="alert">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" /><path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
@@ -27,7 +27,7 @@
 
         <div class="ir__field">
             <label class="ir__label" for="ir-country">Country / region · Optional</label>
-            <input id="ir-country" class="ir__input" type="text" name="country" autocomplete="country-name"
+            <input id="ir-country" class="ir__input" type="text" name="country" autocomplete="country-name" maxlength="120"
                 [(ngModel)]="model.country" />
         </div>
     </div>
@@ -39,13 +39,13 @@
 
         <div class="ir__field">
             <label class="ir__label" for="ir-pref">Artwork preferences</label>
-            <input id="ir-pref" class="ir__input" type="text" name="preferences"
+            <input id="ir-pref" class="ir__input" type="text" name="preferences" maxlength="500"
                 placeholder="e.g. medium format, dark frame" [(ngModel)]="model.preferences" />
         </div>
 
         <div class="ir__field">
             <label class="ir__label" for="ir-comment">A message for Helena</label>
-            <textarea id="ir-comment" class="ir__input ir__input--area" name="comment" rows="4"
+            <textarea id="ir-comment" class="ir__input ir__input--area" name="comment" rows="4" maxlength="3000"
                 placeholder="Anything you would like me to know?" [(ngModel)]="model.comment"></textarea>
         </div>
     </div>

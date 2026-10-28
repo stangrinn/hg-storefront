@@ -11,9 +11,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
+  /** The `Money` scalar type represents monetary values and supports signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). */
   Money: any;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -1788,7 +1792,7 @@ export type Mutation = {
    * Creates an Order with orderType='preorder'.
    * Can be called by anonymous users.
    */
-  registerPreOrder: Order;
+  registerPreOrder: RegisterPreOrderResult;
   /** Remove all OrderLine from the Order */
   removeAllOrderLines: RemoveOrderItemsResult;
   /** Removes the given coupon code from the active Order */
@@ -2606,8 +2610,6 @@ export enum Permission {
   ReadCustomer = 'ReadCustomer',
   /** Grants permission to read CustomerGroup */
   ReadCustomerGroup = 'ReadCustomerGroup',
-  /** Grants permission to read DashboardGlobalViews */
-  ReadDashboardGlobalViews = 'ReadDashboardGlobalViews',
   /** Grants permission to read Facet */
   ReadFacet = 'ReadFacet',
   /** Grants permission to read Order */
@@ -2683,9 +2685,7 @@ export enum Permission {
   /** Grants permission to update TaxRate */
   UpdateTaxRate = 'UpdateTaxRate',
   /** Grants permission to update Zone */
-  UpdateZone = 'UpdateZone',
-  /** Grants permission to write DashboardGlobalViews */
-  WriteDashboardGlobalViews = 'WriteDashboardGlobalViews'
+  UpdateZone = 'UpdateZone'
 }
 
 /** The price range where the result has more than one price */
@@ -3157,6 +3157,11 @@ export type RegisterCustomerInput = {
   password?: InputMaybe<Scalars['String']>;
   phoneNumber?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
+};
+
+export type RegisterPreOrderResult = {
+  __typename?: 'RegisterPreOrderResult';
+  success: Scalars['Boolean'];
 };
 
 export type RelationCustomFieldConfig = CustomField & {
@@ -3919,7 +3924,7 @@ export type RegisterPreOrderMutationVariables = Exact<{
 }>;
 
 
-export type RegisterPreOrderMutation = { __typename?: 'Mutation', registerPreOrder: { __typename?: 'Order', id: string, code: string, state: string, createdAt: any, customer?: { __typename?: 'Customer', firstName: string, lastName: string, emailAddress: string } } };
+export type RegisterPreOrderMutation = { __typename?: 'Mutation', registerPreOrder: { __typename?: 'RegisterPreOrderResult', success: boolean } };
 
 export type GetProductDetailQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -3948,7 +3953,7 @@ export type SearchProductsQueryVariables = Exact<{
 }>;
 
 
-export type SearchProductsQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productId: string, slug: string, productName: string, description: string, priceWithTax: { __typename?: 'PriceRange', min: any, max: any } | { __typename?: 'SinglePrice' }, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, productVariantAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } } }>, facetValues: Array<{ __typename?: 'FacetValueResult', count: number, facetValue: { __typename?: 'FacetValue', id: string, name: string, facet: { __typename?: 'Facet', id: string, name: string } } }> } };
+export type SearchProductsQuery = { __typename?: 'Query', search: { __typename?: 'SearchResponse', totalItems: number, items: Array<{ __typename?: 'SearchResult', productId: string, slug: string, productName: string, description: string, priceWithTax: { __typename?: 'PriceRange', min: any, max: any } | { __typename?: 'SinglePrice' }, productAsset?: { __typename?: 'SearchResultAsset', id: string, preview: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } } }>, facetValues: Array<{ __typename?: 'FacetValueResult', count: number, facetValue: { __typename?: 'FacetValue', id: string, name: string, facet: { __typename?: 'Facet', id: string, name: string } } }> } };
 
 export type GetCollectionQueryVariables = Exact<{
   id?: InputMaybe<Scalars['ID']>;
