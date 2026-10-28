@@ -15,7 +15,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    color: #f7f7f5;
+    color: var(--hg-text-primary);
     text-decoration: none;
 }
 
@@ -25,7 +25,7 @@
     width: 100%;
     max-width: 500px;
     padding: 34px;
-    background: #1a1a1c;
+    background: var(--hg-bg-secondary);
 }
 
 .card__art {
@@ -72,10 +72,10 @@
 
 :host-context(.theme-light) {
     .card {
-        color: #0f0f10;
+        color: var(--hg-text-primary);
     }
 
     .card__mount {
-        background: #f2efea;
+        background: var(--hg-bg-secondary);
     }
 }

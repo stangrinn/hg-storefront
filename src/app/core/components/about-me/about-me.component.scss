@@ -1,19 +1,20 @@
+@use '../../../../styles/tokens' as hg;
 @use '../breadcrumb' as *;
 :host {
     display: block;
     min-height: 80vh;
     background: var(--about-bg);
-    --about-bg: #0f0f10;
-    --about-title: #e0ded9;
-    --about-text: #e0ded9;
-    --about-muted: #a1a1a7;
+    --about-bg: var(--hg-bg-primary);
+    --about-title: var(--hg-text-secondary);
+    --about-text: var(--hg-text-secondary);
+    --about-muted: var(--hg-text-muted);
 }
 
 :host-context(.theme-light) {
-    --about-bg: #f7f7f5;
-    --about-title: #242321;
-    --about-text: #242321;
-    --about-muted: #6b6b70;
+    --about-bg: var(--hg-bg-primary);
+    --about-title: var(--hg-text-secondary);
+    --about-text: var(--hg-text-secondary);
+    --about-muted: var(--hg-text-muted);
 }
 
 .about {
@@ -33,6 +34,8 @@
 }
 
 .about__back {
+    flex: none;
+    @include hg.focus-ring;
     display: flex;
     align-items: center;
     justify-content: center;

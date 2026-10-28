@@ -1,14 +1,9 @@
-:host {
-    display: block;
-    flex: none;
-    color: #f7f7f5;
-}
+@use '../../../../styles/tokens' as hg;
 
-:host-context(.theme-light) {
-    color: #2a2a2d;
-}
+:host { display: block; flex: none; color: var(--hg-text-primary); }
 
 .fav {
+    @include hg.focus-ring;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,21 +11,16 @@
     color: inherit;
     cursor: pointer;
     background: transparent;
-    transition: background-color 0.2s ease;
-
-    &--active .fav__shape {
-        fill: currentColor;
-    }
+    transition: background-color .2s ease, border-color .2s ease;
+    &:disabled { cursor: not-allowed; opacity: .6; }
 }
 
 :host([data-variant='inline']) .fav {
     width: 56px;
     height: 56px;
-    border: 1px solid #e0ded9;
-}
-
-:host-context(.theme-light) .fav--inline {
-    border-color: #2a2a2d;
+    border: 1px solid var(--hg-border-strong);
+    &:hover:not(:disabled) { background: rgb(255 255 255 / 6%); border-color: var(--hg-text-primary); }
+    &--active { border-color: var(--hg-text-primary); }
 }
 
 :host([data-variant='overlay']) {
@@ -38,58 +28,26 @@
     top: 16px;
     right: 16px;
     z-index: 2;
-    color: #f7f7f5;
 }
 
 :host([data-variant='overlay']) .fav {
     width: 40px;
     height: 40px;
-    border: 1px solid #f7f7f5;
+    border: 1px solid var(--hg-border-subtle);
     border-radius: 50%;
-    background: rgb(15 15 16 / 30%);
+    background: var(--hg-bg-glass);
     backdrop-filter: blur(6px);
-
-    svg {
-        width: 20px;
-        height: 20px;
-    }
-
-    &--active {
-        border-color: #3a3a3d;
-    }
+    &:hover:not(:disabled) { border-color: var(--hg-border-strong); }
 }
 
-:host-context(.theme-light) .fav--overlay {
-    color: #0f0f10;
-    border-color: #2a2a2d;
-    background: rgb(255 255 255 / 90%);
+:host-context(.theme-light) .fav img { filter: brightness(0) invert(.16); }
 
-    img { filter: brightness(0) invert(.16); }
-
-    &.fav--active {
-        border-color: #dddad3;
-    }
-}
-
-/* Desktop: the overlay shows on card hover/focus or when saved; tablet and below: always visible */
+/* Desktop overlay is revealed by card hover/focus or the saved state. */
 @media (hover: hover) and (min-width: 1025px) {
     :host([data-variant='overlay']) .fav {
         opacity: var(--fav-visible, 0);
-        transition: opacity 0.2s ease, background-color 0.2s ease;
+        transition: opacity .2s ease, background-color .2s ease;
     }
-
     :host([data-variant='overlay']) .fav:focus-visible,
-    :host([data-variant='overlay']) .fav--active {
-        opacity: 1;
-    }
-}
-
-.fav__artwork-icon { display: none; }
-
-@media (max-width: 720px) {
-    :host-context(.layout--product) .fav--inline:not(.fav--active) {
-        .fav__artwork-icon { display: block; }
-        svg { display: none; }
-    }
-    :host-context(.theme-light) .fav__artwork-icon { filter: brightness(0) invert(.16); }
+    :host([data-variant='overlay']) .fav--active { opacity: 1; }
 }

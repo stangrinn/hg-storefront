@@ -1,27 +1,28 @@
+@use '../../../../styles/tokens' as hg;
 @use '../breadcrumb' as *;
 :host {
     display: block;
     min-height: 80vh;
     background: var(--contact-bg);
-    --contact-bg: #0f0f10;
-    --contact-title: #f7f7f5;
-    --contact-text: #e0ded9;
-    --contact-muted: #a1a1a7;
-    --contact-border: #a1a1a7;
-    --contact-button-bg: #ffffff;
-    --contact-button-text: #0f0f10;
+    --contact-bg: var(--hg-bg-primary);
+    --contact-title: var(--hg-text-primary);
+    --contact-text: var(--hg-text-secondary);
+    --contact-muted: var(--hg-text-muted);
+    --contact-border: var(--hg-border-subtle);
+    --contact-button-bg: var(--hg-button-bg);
+    --contact-button-text: var(--hg-button-text);
     --contact-shadow: rgba(0, 0, 0, 0.72);
     --contact-brush-filter: none;
 }
 
 :host-context(.theme-light) {
-    --contact-bg: #f7f7f5;
-    --contact-title: #0f0f10;
-    --contact-text: #2a2a2d;
-    --contact-muted: #66666b;
-    --contact-border: #66666b;
-    --contact-button-bg: #0f0f10;
-    --contact-button-text: #f7f7f5;
+    --contact-bg: var(--hg-bg-primary);
+    --contact-title: var(--hg-text-primary);
+    --contact-text: var(--hg-text-secondary);
+    --contact-muted: var(--hg-text-muted);
+    --contact-border: var(--hg-border-subtle);
+    --contact-button-bg: var(--hg-button-bg);
+    --contact-button-text: var(--hg-button-text);
     --contact-shadow: rgba(0, 0, 0, 0.25);
     --contact-brush-filter: brightness(0) invert(0.16);
 }
@@ -40,6 +41,8 @@
 }
 
 .contact__back {
+    flex: none;
+    @include hg.focus-ring;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -130,7 +133,7 @@
     flex-direction: column;
     gap: 8px;
 
-    span {
+    label {
         font: 400 12px/1 Orbitron, sans-serif;
         letter-spacing: 4px;
         text-transform: uppercase;
@@ -139,22 +142,7 @@
 
     input,
     textarea {
-        width: 100%;
-        padding: 12px 20px;
-        font: 400 18px/24px Montserrat, sans-serif;
-        color: var(--contact-title);
-        background: transparent;
-        border: 1px solid var(--contact-border);
-        border-radius: 0;
-        outline: none;
-
-        &::placeholder {
-            color: var(--contact-muted);
-        }
-
-        &:focus {
-            border-color: var(--contact-title);
-        }
+        @include hg.field;
     }
 
     input {
@@ -168,16 +156,15 @@
     }
 }
 
-.contact__invalid.contact__invalid {
-    border-color: #e5484d;
+.contact__error {
+    @include hg.type(helper);
+    color: var(--hg-error);
 }
 
 .contact__submit {
     height: 56px;
     padding: 0 32px;
-    font: 400 14px/1 Orbitron, sans-serif;
-    letter-spacing: 4px;
-    text-transform: uppercase;
+    @include hg.button;
     color: var(--contact-button-text);
     background: var(--contact-button-bg);
     cursor: pointer;

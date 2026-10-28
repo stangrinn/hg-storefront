@@ -1,19 +1,20 @@
+@use '../../../../styles/tokens' as hg;
 @use '../breadcrumb' as *;
 :host {
     display: block;
     min-height: 80vh;
     background: var(--policy-bg);
-    --policy-bg: #0f0f10;
-    --policy-title: #f7f7f5;
-    --policy-text: #e0ded9;
-    --policy-muted: #a1a1a7;
+    --policy-bg: var(--hg-bg-primary);
+    --policy-title: var(--hg-text-primary);
+    --policy-text: var(--hg-text-secondary);
+    --policy-muted: var(--hg-text-muted);
 }
 
 :host-context(.theme-light) {
-    --policy-bg: #f7f7f5;
-    --policy-title: #0f0f10;
-    --policy-text: #242321;
-    --policy-muted: #6b6b70;
+    --policy-bg: var(--hg-bg-primary);
+    --policy-title: var(--hg-text-primary);
+    --policy-text: var(--hg-text-secondary);
+    --policy-muted: var(--hg-text-muted);
 }
 
 .policy {
@@ -30,6 +31,8 @@
 }
 
 .policy__back {
+    flex: none;
+    @include hg.focus-ring;
     display: flex;
     align-items: center;
     justify-content: center;

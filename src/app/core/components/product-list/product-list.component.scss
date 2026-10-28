@@ -1,9 +1,9 @@
 @use '../breadcrumb' as *;
 :host {
-    --collection-bg: #0f0f10;
-    --collection-title: #f7f7f5;
-    --collection-text: #e0ded9;
-    --collection-muted: #8a8a8f;
+    --collection-bg: var(--hg-bg-primary);
+    --collection-title: var(--hg-text-primary);
+    --collection-text: var(--hg-text-secondary);
+    --collection-muted: var(--hg-text-muted);
 
     display: block;
     background: var(--collection-bg);
@@ -11,9 +11,9 @@
 }
 
 :host-context(.theme-light) {
-    --collection-bg: #f7f7f5;
-    --collection-title: #0f0f10;
-    --collection-text: #2a2a2d;
+    --collection-bg: var(--hg-bg-primary);
+    --collection-title: var(--hg-text-primary);
+    --collection-text: var(--hg-text-secondary);
 }
 
 .collection__breadcrumb {

@@ -452,7 +452,7 @@ hgart-layout-footer footer .footer-grid>div+div+div {
     min-height: 305px;
     padding: 60px;
     border: 0;
-    background: #242426;
+    background: var(--hg-bg-surface);
     color: #2a2a2d;
 }
 
@@ -481,7 +481,7 @@ hgart-layout-footer footer .footer-grid>div+div+div {
 .site-footer__identity,
 .site-footer__bottom > p,
 .site-footer__links a {
-    color: #8a8a8f;
+    color: var(--hg-text-muted);
     font-family: 'Orbitron', sans-serif;
     font-size: 12px;
     letter-spacing: 4px;
@@ -505,6 +505,7 @@ hgart-layout-footer footer .footer-grid>div+div+div {
 }
 
 .site-footer__identity {
+    color: #8a8a8f;
     margin-top: 20px;
 }
 

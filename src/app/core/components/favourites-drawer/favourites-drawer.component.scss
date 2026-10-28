@@ -1,3 +1,4 @@
+@use '../../../../styles/tokens' as hg;
 .drawer {
     position: fixed;
     inset: 0;
@@ -34,8 +35,8 @@
     max-width: 100%;
     padding: 66px 36px 32px;
     overflow-y: auto;
-    color: #f7f7f5;
-    background: rgb(15 15 16 / 90%);
+    color: var(--hg-text-primary);
+    background: var(--hg-bg-glass);
     backdrop-filter: blur(12px);
     transform: translateX(100%);
     transition: transform 0.3s ease;
@@ -62,7 +63,7 @@
     font-family: Orbitron, sans-serif;
     font-size: 11px;
     letter-spacing: 3.85px;
-    color: #a1a1a7;
+    color: var(--hg-text-muted);
 }
 
 .drawer__title {
@@ -74,6 +75,7 @@
 
 .drawer__close,
 .drawer__remove {
+    @include hg.focus-ring;
     flex: none;
     padding: 0;
     color: inherit;
@@ -87,14 +89,14 @@
     font-family: Montserrat, sans-serif;
     font-size: 14px;
     line-height: 22px;
-    color: #e0ded9;
+    color: var(--hg-text-secondary);
 }
 
 .drawer__body {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
-    border-top: 1px solid #2a2a2d;
+    border-top: 1px solid var(--hg-border-subtle);
 }
 
 .drawer__list {
@@ -108,7 +110,7 @@
     gap: 20px;
     align-items: flex-start;
     padding: 20px 0;
-    border-bottom: 1px solid #2a2a2d;
+    border-bottom: 1px solid var(--hg-border-subtle);
 }
 
 .drawer__thumb {
@@ -138,7 +140,7 @@
     font-family: Orbitron, sans-serif;
     font-size: 11px;
     letter-spacing: 3.85px;
-    color: #a1a1a7;
+    color: var(--hg-text-muted);
     text-transform: uppercase;
 }
 
@@ -179,7 +181,7 @@
     font-family: Montserrat, sans-serif;
     font-size: 14px;
     line-height: 22px;
-    color: #a1a1a7;
+    color: var(--hg-text-muted);
 }
 
 .drawer__footer {
@@ -191,20 +193,13 @@
 }
 
 .drawer__cta {
-    height: 56px;
     padding: 0 16px;
-    font-family: Orbitron, sans-serif;
-    font-size: 14px;
-    letter-spacing: 3px;
-    white-space: nowrap;
-    color: #0f0f10;
-    cursor: pointer;
-    background: #fff;
-    border: 0;
-
-    &:disabled {
-        opacity: 0.6;
-    }
+    @include hg.button;
+    white-space: normal;
+    height: auto;
+    min-height: 56px;
+    padding-block: 16px;
+    line-height: 1.4;
 }
 
 .drawer__footnote {
@@ -212,39 +207,35 @@
     font-family: Montserrat, sans-serif;
     font-size: 12px;
     line-height: 18px;
-    color: #a1a1a7;
+    color: var(--hg-text-muted);
     text-align: center;
 }
 
 :host-context(.theme-light) {
     .drawer__panel {
-        color: #0f0f10;
-        background: rgb(247 247 245 / 92%);
+        color: var(--hg-text-primary);
+        background: var(--hg-bg-glass);
     }
 
     .drawer__eyebrow,
     .drawer__collection,
     .drawer__empty,
     .drawer__footnote {
-        color: #66666b;
+        color: var(--hg-text-muted);
     }
 
     .drawer__note {
-        color: #2a2a2d;
+        color: var(--hg-text-secondary);
     }
 
     .drawer__body,
     .drawer__item {
-        border-color: #dddad3;
+        border-color: var(--hg-border-subtle);
     }
 
     .drawer__remove {
         background: rgb(255 255 255 / 90%);
-        border-color: #dddad3;
+        border-color: var(--hg-border-subtle);
     }
 
-    .drawer__cta {
-        color: #f7f7f5;
-        background: #0f0f10;
-    }
 }

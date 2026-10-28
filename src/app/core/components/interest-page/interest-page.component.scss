@@ -2,15 +2,15 @@
 
 :host {
     display: block;
-    --pd-bg: #0f0f10;
-    --pd-surface: #252527;
-    --pd-circle: #1a1a1c;
-    --pd-text: #f7f7f5;
-    --pd-text-2: #e0ded9;
-    --pd-muted: #a1a1a7;
-    --pd-border: #4a4641;
-    --pd-btn-bg: #fff;
-    --pd-btn-text: #000;
+    --pd-bg: var(--hg-bg-primary);
+    --pd-surface: var(--hg-bg-surface);
+    --pd-circle: var(--hg-bg-secondary);
+    --pd-text: var(--hg-text-primary);
+    --pd-text-2: var(--hg-text-secondary);
+    --pd-muted: var(--hg-text-muted);
+    --pd-border: var(--hg-border-subtle);
+    --pd-btn-bg: var(--hg-button-bg);
+    --pd-btn-text: var(--hg-button-text);
 
     font-family: Montserrat, sans-serif;
 
@@ -97,13 +97,13 @@
 }
 
 :host-context(.theme-light) {
-    --pd-bg: #f7f7f5;
-    --pd-surface: #f2efea;
-    --pd-circle: #fff;
-    --pd-text: #0f0f10;
-    --pd-text-2: #242321;
-    --pd-muted: #6b6b70;
-    --pd-border: #dddad3;
-    --pd-btn-bg: #0f0f10;
-    --pd-btn-text: #fff;
+    --pd-bg: var(--hg-bg-primary);
+    --pd-surface: var(--hg-bg-surface);
+    --pd-circle: var(--hg-bg-surface);
+    --pd-text: var(--hg-text-primary);
+    --pd-text-2: var(--hg-text-secondary);
+    --pd-muted: var(--hg-text-muted);
+    --pd-border: var(--hg-border-subtle);
+    --pd-btn-bg: var(--hg-button-bg);
+    --pd-btn-text: var(--hg-button-text);
 }

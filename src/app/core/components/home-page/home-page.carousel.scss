@@ -49,6 +49,7 @@
             gap: 12px;
         }
         .progress-dots button {
+            @include hg.focus-ring;
             position: relative;
             width: 6px;
             height: 6px;
@@ -80,7 +81,9 @@
             border-radius: 50%;
             background: var(--home-panel);
             cursor: pointer;
-            box-shadow: 0 4px 15px rgb(0 0 0 / 12%);
+            @include hg.focus-ring;
+            box-shadow: var(--hg-shadow-primary);
+            &:hover:not(:disabled) { box-shadow: var(--hg-shadow-hover); }
         }
         .experience-card__previous {
             left: 24px;

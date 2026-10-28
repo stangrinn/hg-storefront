@@ -1,9 +1,10 @@
+@use '../../../../styles/tokens' as hg;
 :host {
-    --home-ink: #e0ded9;
-    --home-muted: #8a8a8f;
-    --home-panel: #242426;
-    --home-panel-soft: #19191b;
-    --home-border: #454548;
+    --home-ink: var(--hg-text-secondary);
+    --home-muted: var(--hg-text-muted);
+    --home-panel: var(--hg-bg-surface);
+    --home-panel-soft: var(--hg-bg-secondary);
+    --home-border: var(--hg-border-subtle);
 
     display: block;
     background: #0f0f10;
@@ -11,11 +12,11 @@
 }
 
 :host-context(.theme-light) {
-    --home-ink: #0f0f10;
-    --home-muted: #8a8a8f;
-    --home-panel: #fff;
-    --home-panel-soft: #f2efea;
-    --home-border: #dddad3;
+    --home-ink: var(--hg-text-primary);
+    --home-muted: var(--hg-text-muted);
+    --home-panel: var(--hg-bg-surface);
+    --home-panel-soft: var(--hg-bg-secondary);
+    --home-border: var(--hg-border-subtle);
     background: #f7f7f5;
     color: var(--home-ink);
 }
@@ -63,15 +64,9 @@
     color: #fff;
 }
 
-:host-context(.theme-light) .outline-button {
-    border-color: #0f0f10;
-    color: #0f0f10;
-}
 
-:host-context(.theme-light) .outline-button:hover {
-    background: #0f0f10;
-    color: #f7f7f5;
-}
+
+
 
 :host-context(.theme-light) .section-heading > img,
 :host-context(.theme-light) .statement > img,
@@ -230,22 +225,11 @@ h2,
     justify-content: center;
     min-height: 56px;
     padding: 0 32px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    transition: color .2s ease, background-color .2s ease;
+    @include hg.type(button);
+    @include hg.focus-ring;
 }
 
-.outline-button {
-    border: 1px solid #f7f7f5;
-    color: #f7f7f5;
-}
 
-.outline-button:hover {
-    background: #f7f7f5;
-    color: #0f0f10;
-}
 
 .section {
     padding: 112px clamp(28px, 4.2vw, 80px);
@@ -804,14 +788,7 @@ h2,
     margin-top: 24px;
 }
 
-.solid-button {
-    background: #f7f7f5;
-    color: #0f0f10;
-}
 
-.solid-button:hover {
-    background: #dcdcdc;
-}
 
 .home-loading {
     display: flex;
@@ -1047,13 +1024,7 @@ h2,
     line-height: 34px;
 }
 
-:host-context(.theme-light) .outline-button {
-    border-width: 1.5px;
-    min-height: 72px;
-    padding: 0 40px;
-    font-size: 14px;
-    letter-spacing: 4px;
-}
+
 
 :host-context(.theme-light) .section-heading h2,
 :host-context(.theme-light) .statement h2,
@@ -1185,17 +1156,9 @@ h2,
     line-height: 48px;
 }
 
-:host-context(.theme-light) .solid-button {
-    min-height: 56px;
-    background: #000;
-    color: #fff;
-    font-size: 14px;
-    letter-spacing: 4px;
-}
 
-:host-context(.theme-light) .solid-button:hover {
-    background: #2a2a2d;
-}
+
+
 
 :host-context(.theme-light) .comparison-card .eyebrow {
     position: relative;
@@ -1222,3 +1185,7 @@ h2,
 @import "./home-page.desktop";
 
 @import "./home-page.carousel";
+
+// Theme changes affect colors; responsive compositions select the size.
+.outline-button { @include hg.button(secondary); }
+.solid-button { @include hg.button; }

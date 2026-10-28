@@ -1,17 +1,18 @@
+@use '../../../../styles/tokens' as hg;
 @use '../breadcrumb' as *;
 :host {
     display: block;
     min-height: 80vh;
     background: var(--faq-bg);
-    --faq-bg: #0f0f10;
-    --faq-title: #e0ded9;
-    --faq-muted: #a1a1a7;
+    --faq-bg: var(--hg-bg-primary);
+    --faq-title: var(--hg-text-secondary);
+    --faq-muted: var(--hg-text-muted);
 }
 
 :host-context(.theme-light) {
-    --faq-bg: #f7f7f5;
-    --faq-title: #242321;
-    --faq-muted: #6b6b70;
+    --faq-bg: var(--hg-bg-primary);
+    --faq-title: var(--hg-text-secondary);
+    --faq-muted: var(--hg-text-muted);
 }
 
 .faq {
@@ -28,6 +29,8 @@
 }
 
 .faq__back {
+    flex: none;
+    @include hg.focus-ring;
     display: flex;
     align-items: center;
     justify-content: center;

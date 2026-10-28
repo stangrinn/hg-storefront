@@ -1,3 +1,4 @@
+@use '../../../../styles/tokens' as hg;
 :host {
     display: block;
     flex: 1 1 0;
@@ -39,31 +40,13 @@
 }
 
 .ir__label {
-    font: 400 11px/1 Orbitron, sans-serif;
-    letter-spacing: 3.85px;
-    text-transform: uppercase;
+    @include hg.type(label);
     color: var(--pd-text);
 }
 
 .ir__input {
-    width: 100%;
+    @include hg.field;
     height: 48px;
-    padding: 12px 20px;
-    font: 400 18px/1.2 Montserrat, sans-serif;
-    color: var(--pd-text);
-    background: transparent;
-    border: 1px solid var(--pd-muted);
-    border-radius: 0;
-    outline: 0;
-    transition: border-color 0.2s ease;
-
-    &::placeholder {
-        color: var(--pd-muted);
-    }
-
-    &:focus {
-        border-color: var(--pd-text);
-    }
 
     &--area {
         height: 122px;
@@ -73,7 +56,7 @@
     }
 
     &--error {
-        border-color: #f44336;
+        border-color: var(--hg-error);
     }
 }
 
@@ -84,7 +67,7 @@
     font-size: 12px;
     line-height: 18px;
     letter-spacing: 0.24px;
-    color: #f44336;
+    color: var(--hg-error);
 }
 
 .ir__hint {
@@ -127,23 +110,18 @@
     flex: none;
     width: 2px;
     height: 24px;
-    background: #f44336;
+    background: var(--hg-error);
 }
 
 .ir__submit {
     height: 64px;
     padding: 0 40px;
-    font: 400 14px/1 Orbitron, sans-serif;
-    letter-spacing: 4px;
+    @include hg.button;
     color: var(--pd-btn-text);
     background: var(--pd-btn-bg);
     border: 0;
     cursor: pointer;
 
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
 }
 
 .ir__after {

@@ -46,6 +46,20 @@ export class ContactComponent {
         this.location.back();
     }
 
+    fieldError(field: 'name' | 'email' | 'message'): string {
+        const control = this.form.controls[field];
+
+        if (!control.touched) {
+            return '';
+        }
+
+        if (control.hasError('required')) {
+            return { name: 'Name is required.', email: 'Email is required.', message: 'Message is required.' }[field];
+        }
+
+        return control.hasError('email') ? 'Please enter a valid email address.' : '';
+    }
+
     submit(): void {
         if (this.form.invalid) {
             this.form.markAllAsTouched();

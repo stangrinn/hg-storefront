@@ -2,10 +2,7 @@
 <ng-container *ngIf="!isInterestFormOpen; else interestForm">
     <nav class="pd__breadcrumb" aria-label="Breadcrumb">
         <button class="pd__back" type="button" aria-label="Go back" (click)="closeProductDetails()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <img class="pd__icon pd__mobile-icon" src="assets/product/back.svg" alt="">
+            <img class="hg-icon" src="assets/icons/design-system/back.svg" alt="">
         </button>
         <a class="pd__crumb pd__crumb--home" [routerLink]="['/']">Home</a>
         <ng-container *ngIf="product?.collections[0] as collection">
@@ -76,12 +73,10 @@
             </div>
             <div class="pd__related-controls">
                 <button type="button" aria-label="Previous artworks" (click)="scrollRelated(-1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    <img class="pd__icon pd__mobile-icon" src="assets/product/previous.svg" alt="">
+                    <img class="pd__icon hg-icon" src="assets/product/previous.svg" alt="">
                 </button>
                 <button type="button" aria-label="Next artworks" (click)="scrollRelated(1)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                    <img class="pd__icon pd__mobile-icon" src="assets/product/next.svg" alt="">
+                    <img class="pd__icon hg-icon" src="assets/product/next.svg" alt="">
                 </button>
             </div>
         </header>
@@ -98,9 +93,7 @@
         <div class="ir__intro">
             <div class="ir__nav">
                 <button type="button" class="ir__back" (click)="closeInterestForm()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    <img class="hg-icon" src="assets/icons/design-system/back.svg" alt="">
                     BACK TO ARTWORK
                 </button>
                 <p class="ir__steps"><span>01&nbsp;&nbsp;THE ARTWORK</span><span class="ir__steps-current">02&nbsp;&nbsp;REVIEW &amp; SUBMIT</span></p>
@@ -132,10 +125,7 @@
                 </div>
 
                 <div class="ir__notice">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
-                        <path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                    </svg>
+                    <img class="hg-icon" src="assets/icons/design-system/info.svg" alt="">
                     <div>
                         <p class="ir__notice-title">No payment is taken.</p>
                         <p class="ir__notice-text">This is a non-binding expression of interest, not a purchase or reservation. Availability is not guaranteed.</p>

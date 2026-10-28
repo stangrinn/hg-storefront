@@ -10,9 +10,7 @@
             </div>
 
             <button type="button" class="drawer__close" aria-label="Close saved artworks" (click)="close()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M5 5L19 19M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
+                <img class="hg-icon" src="assets/icons/design-system/close.svg" alt="">
             </button>
         </header>
 
@@ -33,10 +31,7 @@
 
                     <button type="button" class="drawer__remove" aria-label="Remove from favourites"
                         (click)="favourites.remove(item.slug)">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M12 21L4 13C1.5 10.5 2 6 5.5 4C7.5 3 9.5 3.5 12 6C14.5 3.5 16.5 3 18.5 4C22 6 22.5 10.5 20 13L12 21Z"
-                                fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                        <img class="hg-icon" src="assets/collection/saved.svg" alt="">
                     </button>
                 </li>
             </ul>

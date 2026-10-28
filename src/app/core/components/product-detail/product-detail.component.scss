@@ -1,17 +1,18 @@
+@use '../../../../styles/tokens' as hg;
 @use '../breadcrumb' as *;
 @use '../interest-layout' as *;
 
 :host {
     display: block;
-    --pd-bg: #0f0f10;
-    --pd-surface: #252527;
-    --pd-circle: #1a1a1c;
-    --pd-text: #f7f7f5;
-    --pd-text-2: #e0ded9;
-    --pd-muted: #8a8a8f;
-    --pd-border: #4a4641;
-    --pd-btn-bg: #fff;
-    --pd-btn-text: #000;
+    --pd-bg: var(--hg-bg-primary);
+    --pd-surface: var(--hg-bg-surface);
+    --pd-circle: var(--hg-bg-secondary);
+    --pd-text: var(--hg-text-primary);
+    --pd-text-2: var(--hg-text-secondary);
+    --pd-muted: var(--hg-text-muted);
+    --pd-border: var(--hg-border-subtle);
+    --pd-btn-bg: var(--hg-button-bg);
+    --pd-btn-text: var(--hg-button-text);
 
     .pd {
         color: var(--pd-text-2);
@@ -31,6 +32,8 @@
     }
 
     .pd__back {
+        flex: none;
+        @include hg.focus-ring;
         display: flex;
         color: var(--pd-text-2);
     }
@@ -71,15 +74,13 @@
     }
 
     .pd__label {
-        font: 700 12px/1 Orbitron, sans-serif;
-        letter-spacing: 3px;
+        @include hg.type(caption);
         text-transform: uppercase;
         color: var(--pd-muted);
     }
 
     .pd__title {
-        font: 500 72px/64px 'Cormorant Garamond', serif;
-        letter-spacing: -2.88px;
+        @include hg.type(title-1);
         color: var(--pd-text);
     }
 
@@ -111,12 +112,7 @@
         height: 56px;
         background: var(--pd-btn-bg);
         color: var(--pd-btn-text);
-        font: 700 14px/1 Orbitron, sans-serif;
-        letter-spacing: 4px;
-
-        &:disabled {
-            opacity: 0.6;
-        }
+        @include hg.button;
     }
 
     .pd__note {
@@ -317,13 +313,13 @@
 }
 
 :host-context(.theme-light) {
-    --pd-bg: #f7f7f5;
-    --pd-surface: #f2efea;
-    --pd-circle: #fff;
-    --pd-text: #0f0f10;
-    --pd-text-2: #242321;
-    --pd-muted: #6b6b70;
-    --pd-border: #dddad3;
-    --pd-btn-bg: #0f0f10;
-    --pd-btn-text: #fff;
+    --pd-bg: var(--hg-bg-primary);
+    --pd-surface: var(--hg-bg-surface);
+    --pd-circle: var(--hg-bg-surface);
+    --pd-text: var(--hg-text-primary);
+    --pd-text-2: var(--hg-text-secondary);
+    --pd-muted: var(--hg-text-muted);
+    --pd-border: var(--hg-border-subtle);
+    --pd-btn-bg: var(--hg-button-bg);
+    --pd-btn-text: var(--hg-button-text);
 }

@@ -1,3 +1,4 @@
+@use 'tokens' as hg;
 @import "@angular/cdk/overlay-prebuilt";
 @tailwind base;
 @tailwind components;
@@ -49,3 +50,22 @@ body:has(hgart-layout.theme-light) {
         @apply block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm;
     }
 }
+
+// Semantic theme values inherit through the layout, including projected components.
+:root {
+    @include hg.theme(hg.$dark);
+    --hg-font-display: 'Cormorant Garamond', Georgia, serif;
+    --hg-font-body: 'Montserrat', sans-serif;
+    --hg-font-ui: 'Orbitron', sans-serif;
+    --hg-error: #f44336;
+    --hg-success: #4caf50;
+    --hg-warning: #ff9800;
+    --hg-shadow-primary: 0 4px 20px rgb(0 0 0 / 4%);
+    --hg-shadow-hover: -2px 0 30px 6px rgb(0 0 0 / 12%);
+    --hg-shadow-modal: 0 20px 60px rgb(0 0 0 / 20%);
+}
+
+.theme-light { @include hg.theme(hg.$light); }
+
+.hg-icon { display: block; flex: none; align-self: center; }
+.theme-light .hg-icon { filter: brightness(0) invert(.16); }

@@ -1,9 +1,7 @@
 <div class="contact">
     <nav class="contact__breadcrumb" aria-label="Breadcrumb">
         <button class="contact__back" type="button" aria-label="Go back" (click)="goBack()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+            <img class="hg-icon" src="assets/icons/design-system/back.svg" alt="">
         </button>
         <a class="contact__crumb" [routerLink]="['/']">Home</a>
         <span class="contact__slash" aria-hidden="true">/</span>
@@ -24,28 +22,31 @@
             </div>
 
             <div class="contact__fields">
-                <label class="contact__field">
-                    <span>Full name</span>
-                    <input type="text" formControlName="name" placeholder="Enter your name..." autocomplete="name"
-                           [class.contact__invalid]="form.controls.name.touched && form.controls.name.invalid">
-                </label>
+                <div class="contact__field">
+                    <label for="contact-name">Full name</label>
+                    <input id="contact-name" type="text" formControlName="name" placeholder="Enter your name..." autocomplete="name" required
+                        [attr.aria-invalid]="!!fieldError('name')" [attr.aria-describedby]="fieldError('name') ? 'contact-name-error' : null">
+                    <p *ngIf="fieldError('name') as error" class="contact__error" id="contact-name-error" role="alert">{{ error }}</p>
+                </div>
 
-                <label class="contact__field">
-                    <span>Email address</span>
-                    <input type="email" formControlName="email" placeholder="Enter your email..." autocomplete="email"
-                           [class.contact__invalid]="form.controls.email.touched && form.controls.email.invalid">
-                </label>
+                <div class="contact__field">
+                    <label for="contact-email">Email address</label>
+                    <input id="contact-email" type="email" formControlName="email" placeholder="Enter your email..." autocomplete="email" required
+                        [attr.aria-invalid]="!!fieldError('email')" [attr.aria-describedby]="fieldError('email') ? 'contact-email-error' : null">
+                    <p *ngIf="fieldError('email') as error" class="contact__error" id="contact-email-error" role="alert">{{ error }}</p>
+                </div>
 
-                <label class="contact__field">
-                    <span>Subject</span>
-                    <input type="text" formControlName="subject" placeholder="How can we help you?">
-                </label>
+                <div class="contact__field">
+                    <label for="contact-subject">Subject</label>
+                    <input id="contact-subject" type="text" formControlName="subject" placeholder="How can we help you?">
+                </div>
 
-                <label class="contact__field">
-                    <span>Your message</span>
-                    <textarea formControlName="message" placeholder="Describe your inquiry in detail..."
-                              [class.contact__invalid]="form.controls.message.touched && form.controls.message.invalid"></textarea>
-                </label>
+                <div class="contact__field">
+                    <label for="contact-message">Your message</label>
+                    <textarea id="contact-message" formControlName="message" placeholder="Describe your inquiry in detail..." required
+                        [attr.aria-invalid]="!!fieldError('message')" [attr.aria-describedby]="fieldError('message') ? 'contact-message-error' : null"></textarea>
+                    <p *ngIf="fieldError('message') as error" class="contact__error" id="contact-message-error" role="alert">{{ error }}</p>
+                </div>
             </div>
 
             <button class="contact__submit" type="submit">Submit message</button>

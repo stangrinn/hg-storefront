@@ -1,0 +1,125 @@
+// HG Art foundations. Page-specific artwork and responsive geometry stay local.
+$dark: (
+    bg-primary: #0f0f10, bg-secondary: #1a1a1c, bg-surface: #252527,
+    bg-glass: rgb(37 37 39 / 90%), bg-muted: #e0ded9,
+    text-primary: #f7f7f5, text-secondary: #e0ded9, text-muted: #a1a1a7,
+    text-subtle: #b5afa6, border-subtle: #4a4641, border-strong: #e0ded9,
+    button-bg: #fff, button-text: #000, button-secondary-text: #fff,
+);
+
+$light: (
+    bg-primary: #f7f7f5, bg-secondary: #f2efea, bg-surface: #fff,
+    bg-glass: rgb(255 255 255 / 90%), bg-muted: #e0ded9,
+    text-primary: #0f0f10, text-secondary: #2a2a2d, text-muted: #66666b,
+    text-subtle: #6f6a63, border-subtle: #dddad3, border-strong: #2a2a2d,
+    button-bg: #000, button-text: #fff, button-secondary-text: #000,
+);
+
+@mixin theme($mode) {
+    @each $name, $value in $mode { --hg-#{$name}: #{$value}; }
+}
+
+@mixin type($role) {
+    @if $role == button {
+        font: 400 14px/normal var(--hg-font-ui);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+    } @else if $role == caption {
+        font: 400 12px/normal var(--hg-font-ui);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+    } @else if $role == label {
+        font: 400 11px/normal var(--hg-font-ui);
+        letter-spacing: .35em;
+        text-transform: uppercase;
+    } @else if $role == title-1 {
+        font: 400 72px/64px var(--hg-font-display);
+        letter-spacing: -.04em;
+    } @else if $role == title-2 {
+        font: 400 48px/normal var(--hg-font-display);
+        letter-spacing: -.04em;
+    } @else if $role == hero {
+        font: 300 96px/88px var(--hg-font-display);
+        letter-spacing: -.04em;
+    } @else if $role == title-3 {
+        font: 400 32px/normal var(--hg-font-display);
+        letter-spacing: .04em;
+    } @else if $role == title-3-sentence {
+        font: 400 32px/normal var(--hg-font-display);
+        letter-spacing: -.02em;
+    } @else if $role == subtitle {
+        font: 700 20px/normal var(--hg-font-body);
+    } @else if $role == body {
+        font: 400 18px/normal var(--hg-font-body);
+    } @else if $role == body-2 {
+        font: 300 16px/26px var(--hg-font-body);
+    } @else if $role == body-3 {
+        font: 400 14px/22px var(--hg-font-body);
+    } @else if $role == helper {
+        font: 400 12px/18px var(--hg-font-body);
+        letter-spacing: .02em;
+    }
+}
+
+@mixin focus-ring {
+    &:focus-visible {
+        outline: 2px solid var(--hg-border-strong);
+        outline-offset: 4px;
+    }
+}
+
+@mixin button($variant: primary) {
+    @include type(button);
+    @include focus-ring;
+    cursor: pointer;
+    transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+
+    @if $variant == primary {
+        background: var(--hg-button-bg);
+        color: var(--hg-button-text);
+        border: 1px solid transparent;
+        &:hover:not(:disabled) { background: var(--hg-text-secondary); }
+        &:active:not(:disabled) { background: var(--hg-text-primary); }
+    } @else {
+        background: transparent;
+        color: var(--hg-button-secondary-text);
+        border: 1.5px solid var(--hg-button-bg);
+        &:hover:not(:disabled) { background: var(--hg-bg-surface); }
+        &:active:not(:disabled) { background: var(--hg-bg-muted); color: #0f0f10; }
+    }
+
+    &:disabled, &[aria-disabled='true'] {
+        background: var(--hg-bg-muted);
+        color: var(--hg-text-muted);
+        border-color: transparent;
+        opacity: 1;
+        cursor: not-allowed;
+    }
+}
+
+@mixin field {
+    width: 100%;
+    padding: 12px 20px;
+    font: 400 18px/24px var(--hg-font-body);
+    color: var(--hg-text-primary);
+    background: transparent;
+    border: 1px solid var(--hg-text-muted);
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+    transition: border-color .2s ease;
+
+    &::placeholder { color: var(--hg-text-muted); }
+    &:hover:not(:disabled) { border-color: var(--hg-text-secondary); }
+    &:focus { border-color: var(--hg-text-primary); box-shadow: none; }
+    &:disabled {
+        background: var(--hg-bg-secondary);
+        color: var(--hg-text-muted);
+        border-color: var(--hg-border-subtle);
+        cursor: not-allowed;
+    }
+    // Error must remain visible through hover and focus, including scoped Angular selectors.
+    &[aria-invalid='true'], &[aria-invalid='true']:hover, &[aria-invalid='true']:focus {
+        border-color: var(--hg-error);
+    }
+}
