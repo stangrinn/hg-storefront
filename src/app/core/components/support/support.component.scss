@@ -52,6 +52,9 @@
 }
 
 .faq__content {
+    width: 100%;
+    max-width: 1920px;
+    margin-inline: auto;
     display: flex;
     gap: 110px;
     align-items: flex-start;

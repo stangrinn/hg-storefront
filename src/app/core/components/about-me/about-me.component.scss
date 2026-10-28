@@ -17,6 +17,9 @@
 }
 
 .about {
+    width: 100%;
+    max-width: 1920px;
+    margin-inline: auto;
     color: var(--about-text);
 }
 
