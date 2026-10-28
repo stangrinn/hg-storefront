@@ -8,6 +8,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 })
 export class SavedToggleComponent {
     @Input() count: number | null = 0;
+    @Input() collectionStyle: boolean | null = false;
 
     @Output() opened = new EventEmitter<void>();
 }

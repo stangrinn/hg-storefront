@@ -1,5 +1,7 @@
 <button type="button" aria-label="Open collections menu" (click)="toggle()">
     <picture>
+        <source *ngIf="collectionStyle" media="(min-width: 721px)" srcset="assets/header/menu-desktop.svg">
+        <source media="(min-width: 1024px) and (max-width: 1919px)" srcset="assets/header/menu-desktop.svg">
         <source media="(max-width: 720px)" srcset="assets/header/menu-mobile.svg">
         <img alt="" src="assets/header/menu.svg">
     </picture>

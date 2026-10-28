@@ -104,16 +104,22 @@
 .site-header__ceiling {
     position: absolute;
     inset: 0;
-    display: flex;
-    justify-content: center;
-    gap: 167px;
+    display: block;
     pointer-events: none;
 }
 
 .site-header__ceiling span {
+    position: absolute;
+    top: 0;
+    height: 100%;
     width: 124px;
     background: linear-gradient(180deg, #232326, #171719);
 }
+
+.site-header__ceiling span:nth-child(1) { left: calc(50% - 644px); }
+.site-header__ceiling span:nth-child(2) { left: calc(50% - 353px); }
+.site-header__ceiling span:nth-child(3) { left: calc(50% + 229px); }
+.site-header__ceiling span:nth-child(4) { left: calc(50% + 520px); }
 
 :host ::ng-deep .theme-light .site-header__ceiling span {
     background: linear-gradient(180deg, #fff, #f2efea);
@@ -734,4 +740,128 @@ hgart-layout-footer footer a {
         .site-footer__slogan { max-width: none; }
         .site-footer__brand > div:first-child { width: 100%; }
     }
+}
+
+.layout--home .site-footer__divider .desktop-footer-divider { display: none; }
+
+@media (min-width: 1024px) and (max-width: 1919px) {
+    .layout--home {
+        .site-header__logo { gap: 10px; }
+        .site-header__logo img { transform: scaleX(-1); }
+        .site-header__menu { top: 32px; }
+        .site-footer { grid-template-columns: minmax(0, 1fr) 0 380px 0 400px; min-height: 360px; padding: 60px; }
+        .site-footer__brand { min-height: 240px; padding: 0; }
+        .site-footer__slogan { font-size: 30px; font-weight: 400; line-height: normal; }
+        .site-footer__identity { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .site-footer__bottom { padding-top: 16px; padding-right: 0; padding-bottom: 8px; align-items: center; }
+        .site-footer__social a { font-size: 20px !important; }
+        .site-footer__bottom > p { width: 340px; line-height: normal; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .site-footer__divider { position: relative; width: 0; height: 240px; min-height: 0; background: none; }
+        .site-footer__divider .desktop-footer-divider { display: block; position: absolute; left: 0; top: 240px; max-width: none; transform: rotate(-90deg); transform-origin: left top; }
+        .site-footer__links { height: 240px; gap: 20px; padding-bottom: 8px; }
+        .site-footer__links a, .site-footer h3 { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .site-footer h3 { font-size: 20px !important; line-height: normal; }
+        .site-footer__contact { gap: 8px; }
+        .site-footer__contact h3 { margin-bottom: 63px; }
+        .site-footer__contact p, .site-footer__contact a { font-size: 16px !important; line-height: 26px; }
+        .site-footer__contact p:first-of-type { margin-bottom: 8px; }
+        .site-footer__contact a { text-decoration: underline; }
+    }
+    :host ::ng-deep .theme-light.layout--home .site-footer__divider { background: none; }
+    :host ::ng-deep .theme-light.layout--home .desktop-footer-divider { filter: brightness(0) invert(.16); }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+    .layout--home {
+        .site-footer { grid-template-columns: minmax(0, 1fr) 0 300px 0 300px; padding: 40px; }
+        .site-footer__bottom { flex-direction: column; align-items: flex-start; }
+        .site-footer__bottom > p { width: auto; }
+    }
+}
+
+.layout--home .site-footer__divider .collection-footer-divider { display: none; }
+
+.layout--collection {
+    .site-header { --layout-header-background: #1a1a1c; background: #1a1a1c; border-bottom: 1px solid #e0ded9; }
+    .site-header__ceiling { display: none; }
+}
+
+:host ::ng-deep .theme-light.layout--collection .site-header {
+    --layout-header-background: #f2efea;
+    background: #f2efea;
+    border-color: #e0ded9;
+}
+
+@media (min-width: 721px) {
+    .layout--collection {
+        .site-header__logo { top: 19.5px; gap: 16px; }
+        .site-header__logo picture { display: block; position: relative; width: 252px; height: 27.512px; flex: none; }
+        .site-header__logo img { position: absolute; top: -1.487px; transform: scaleX(-1); }
+        .site-header__identity { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .site-header__menu { top: 30px; }
+    }
+}
+
+@media (min-width: 1024px) {
+    .layout--collection {
+        .site-footer { min-height: 354px; }
+        .site-footer__brand, .site-footer__links, .site-footer__contact { min-height: 234px; }
+        .site-footer__divider { position: relative; width: 1px; height: 234px; min-height: 0; background: none; }
+        .site-footer__divider .collection-footer-divider { display: block; position: absolute; left: 0; top: 234px; max-width: none; transform: rotate(-90deg); transform-origin: left top; }
+        .site-footer__social a { font-size: 20px !important; }
+        .site-footer h3 { font-size: 20px !important; }
+        .site-footer__contact a { font-size: 16px !important; text-decoration: underline; }
+    }
+    :host ::ng-deep .theme-light.layout--collection .site-footer__divider { background: none; }
+    :host ::ng-deep .theme-light.layout--collection .collection-footer-divider { filter: brightness(0) invert(.16); }
+}
+
+@media (max-width: 720px) {
+    .layout--collection .site-header { display: block; padding: 0; }
+    :host ::ng-deep .layout--collection .site-header .floating-container {
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr) 92px;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+    }
+}
+
+// Product detail uses the full identity and flat header from the mobile artwork frame.
+@media (max-width: 720px) {
+    .layout--product {
+        .site-header { --layout-header-height: 92px; --layout-header-background: #1a1a1c; display: block; height: 92px; padding: 0; background: #1a1a1c; border-bottom: 1px solid #e0ded9; }
+        .site-header__menu { position: absolute; left: 10px; top: 24px; }
+        .site-header__logo { position: absolute; top: 19.5px; left: 50%; width: 252px; height: 53px; gap: 16px; transform: translateX(-50%); }
+        .site-header__logo picture { display: block; position: relative; width: 252px; height: 27.512px; }
+        .site-header__logo img { position: absolute; top: -1.487px; width: auto; height: auto; transform: scaleX(-1); }
+        .site-header__logo span { font-size: 12px; letter-spacing: 4px; line-height: normal; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .site-header__utilities { position: absolute; right: 4px; top: 24px; }
+        .site-header__theme { display: none; }
+        .site-footer { display: flex; flex-direction: column; align-items: center; gap: 32px; min-height: 0; padding: 48px 20px; text-align: center; }
+        .site-footer__brand, .site-footer__bottom { display: contents; }
+        .site-footer__brand > div:first-child { order: 0; }
+        .site-footer__slogan { max-width: 380px; margin: 0; font-size: 24px; font-weight: 400; line-height: 28px; }
+        .site-footer__identity { margin-top: 24px; }
+        .site-footer__social { order: 1; margin-top: -8px; }
+        .site-footer__social a { font-size: 20px !important; }
+        .site-footer__identity, .site-footer h3, .site-footer__links a, .site-footer__social a, .site-footer__bottom > p { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .site-footer__divider { display: block; width: auto; min-height: 0; height: 5px; background: none; order: 2; }
+        .site-footer__divider img { display: block; }
+        .site-footer__links { order: 3; }
+        .site-footer__links + .site-footer__divider { order: 4; }
+        .site-footer__contact { order: 5; }
+        .site-footer__links, .site-footer__contact { align-items: center; gap: 24px; min-height: 0; padding: 0; }
+        .site-footer h3 { margin: 0; font-size: 20px !important; line-height: 24px; }
+        .site-footer__contact p, .site-footer__contact a { font-size: 16px !important; line-height: 26px; }
+        .site-footer__bottom > p { order: 6; max-width: 380px; padding-top: 16px; line-height: normal; }
+        .site-footer__bottom > p span { display: block; }
+        .site-footer__divider .desktop-footer-divider, .site-footer__divider .collection-footer-divider { display: none; }
+    }
+    :host ::ng-deep .theme-light.layout--product .site-header { --layout-header-background: #f2efea; background: #f2efea; }
+    :host ::ng-deep .theme-light.layout--product .site-footer__divider { background: none; }
+    :host ::ng-deep .theme-light.layout--product .site-footer__divider img { filter: brightness(0) invert(.16); }
+}
+@media (max-width: 380px) {
+    .layout--product .site-header__logo span { font-size: 9px; letter-spacing: 3px; }
 }

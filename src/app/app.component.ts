@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { ChildrenOutletContexts, Router, RouterEvent } from '@angular/router';
+import { ChildrenOutletContexts, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 import { GetCollectionsQuery, GetCollectionsQueryVariables } from './common/generated-types';
 import { GET_COLLECTIONS } from './common/graphql/documents.graphql';
@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
     favouritesCount$: Observable<number>;
     mobileNavVisible$: Observable<boolean>;
     isHomePage$: Observable<boolean>;
+    isCollectionPage$: Observable<boolean>;
+    isProductPage$: Observable<boolean>;
     topCollections$: Observable<GetCollectionsQuery['collections']['items']>;
 
     navigation = {
@@ -56,6 +58,16 @@ export class AppComponent implements OnInit {
         this.cartDrawerVisible$ = this.stateService.select(state => state.cartDrawerOpen);
         this.favouritesCount$ = this.favourites.count$;
         this.mobileNavVisible$ = this.stateService.select(state => state.mobileNavMenuIsOpen);
+        this.isProductPage$ = this.router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+            map(event => event.urlAfterRedirects.startsWith('/product/')),
+            startWith(this.router.url.startsWith('/product/')),
+        );
+        this.isCollectionPage$ = this.router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+            map(event => event.urlAfterRedirects.startsWith('/category/')),
+            startWith(this.router.url.startsWith('/category/')),
+        );
         this.isHomePage$ = this.router.events.pipe(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             filter<any>(event => event instanceof RouterEvent),

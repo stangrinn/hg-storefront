@@ -76,3 +76,12 @@
         }
     }
 }
+
+@media (min-width: 721px) {
+    :host-context(.layout--collection) {
+        width: 48px;
+        height: 40px;
+
+        .saved-toggle { width: 100%; height: 100%; margin: 0; padding-left: 8px; }
+    }
+}

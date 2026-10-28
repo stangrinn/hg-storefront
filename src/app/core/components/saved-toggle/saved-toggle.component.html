@@ -1,4 +1,4 @@
 <button class="saved-toggle" type="button" aria-label="Saved artworks" (click)="opened.emit()">
-    <img alt="" src="assets/header/saved-mobile.svg">
+    <picture><source *ngIf="collectionStyle" media="(min-width: 721px)" srcset="assets/header/saved-mobile.svg"><source media="(min-width: 1024px) and (max-width: 1919px)" srcset="assets/header/saved-desktop.svg"><img alt="" src="assets/header/saved-mobile.svg"></picture>
     <span class="saved-toggle__badge" *ngIf="count as savedCount">{{ savedCount }}</span>
 </button>

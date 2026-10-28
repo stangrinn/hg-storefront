@@ -1,10 +1,10 @@
-<hgart-layout [class.theme-light]="!isDarkTheme" [class.layout--home]="isHomePage$ | async">
+<hgart-layout [class.theme-light]="!isDarkTheme" [class.layout--home]="isHomePage$ | async" [class.layout--collection]="isCollectionPage$ | async" [class.layout--product]="isProductPage$ | async">
     <hgart-layout-header class="site-header">
         <div class="site-header__ceiling" aria-hidden="true">
             <span></span><span></span><span></span><span></span>
         </div>
 
-        <hgart-mobile-menu-toggle class="site-header__menu"></hgart-mobile-menu-toggle>
+        <hgart-mobile-menu-toggle class="site-header__menu" [collectionStyle]="isCollectionPage$ | async"></hgart-mobile-menu-toggle>
 
         <a [routerLink]="['/']" class="site-header__logo" aria-label="Helena Grinshpun Art home">
             <picture>
@@ -19,16 +19,18 @@
             <button (click)="toggleTheme()" class="site-header__theme" type="button"
                 [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'">
                 <picture>
+                    <source *ngIf="isCollectionPage$ | async" media="(min-width: 721px)" srcset="assets/collection/theme.svg">
+                    <source *ngIf="isHomePage$ | async" media="(min-width: 1024px) and (max-width: 1919px)" srcset="assets/header/theme-desktop.svg">
                     <source *ngIf="isHomePage$ | async" media="(min-width: 721px) and (max-width: 1023px)" srcset="assets/header/theme-tablet.svg">
                     <img alt="" [class.site-header__theme-icon--light]="!isDarkTheme" src="assets/header/theme-dark.svg">
                 </picture>
             </button>
 
-            <hgart-saved-toggle [count]="favouritesCount$ | async" (opened)="openCartDrawer()"></hgart-saved-toggle>
+            <hgart-saved-toggle [count]="favouritesCount$ | async" [collectionStyle]="isCollectionPage$ | async" (opened)="openCartDrawer()"></hgart-saved-toggle>
         </div>
     </hgart-layout-header>
 
-    <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" [showThemeControl]="isHomePage$ | async"
+    <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" [showThemeControl]="(isHomePage$ | async) || (isProductPage$ | async)"
         [isDarkTheme]="isDarkTheme" (themeChanged)="toggleTheme()" class="z-10"></hgart-collections-menu-mobile>
 
     <hgart-favourites-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-favourites-drawer>
@@ -58,7 +60,7 @@
                     <p><span>© 2026 Helena Grinshpun Art.</span> <span>All rights reserved.</span></p>
                 </div>
             </div>
-            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""></div>
+            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/collection/footer-divider.svg" alt=""></div>
             <nav class="site-footer__links" aria-label="Useful links">
                 <h3>Useful Links</h3>
                 <a [routerLink]="['/contact']">contact us</a>
@@ -66,7 +68,7 @@
                 <a [routerLink]="['/privacy-policy']">privacy policy</a>
                 <a [routerLink]="['/terms']">terms &amp; conditions</a>
             </nav>
-            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""></div>
+            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/collection/footer-divider.svg" alt=""></div>
             <div class="site-footer__contact">
                 <h3>Contact</h3>
                 <p>Open Daily 09:00-19:00</p>

@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="70" height="48" viewBox="0 0 70 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Light/Dark modes">
+<circle id="Moon crest" cx="35" cy="14" r="9" fill="#EBE6DB"/>
+<path id="Horizon" opacity="0.5" d="M3 24.25H67" stroke-width="1.5" stroke="#CCC7BF"/>
+<g id="Lower sky">
+</g>
+<circle id="Sun (inactive)" opacity="0.4" cx="11" cy="36" r="3" fill="#D9BF80" fill-opacity="0.6"/>
+<circle id="Moon glow" cx="35" cy="15" r="15" fill="url(#paint0_radial_0_546)"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_0_546" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(35 15) scale(30)">
+<stop stop-color="#B3C7E6" stop-opacity="0.3"/>
+<stop offset="1" stop-color="#B3C7E6" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>
