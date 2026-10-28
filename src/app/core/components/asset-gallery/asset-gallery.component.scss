@@ -152,3 +152,12 @@
         }
     }
 }
+// Mobile artwork presentation: the mount hugs a 260 x 347px frame.
+@media (max-width: 720px) {
+    .gallery { gap: 16px; }
+    .gallery__mount { flex: none; width: 100%; max-width: 324px; padding: 32px; }
+    .gallery__art { aspect-ratio: 260 / 347; padding: 6px; }
+    .gallery__thumbs { width: 100%; flex-wrap: wrap; justify-content: center; }
+    .gallery__thumb { width: 60px; height: 80px; flex: none; }
+    .gallery__skeleton { inset: 32px; }
+}

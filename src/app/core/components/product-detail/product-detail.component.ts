@@ -34,7 +34,7 @@ type ProductTab = 'description' | 'additionalInfo';
 @Component({
     selector: 'hgart-product-detail',
     templateUrl: './product-detail.component.html',
-    styleUrls: ['./product-detail.component.scss'],
+    styleUrls: ['./product-detail.component.scss', './product-detail.mobile.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {

@@ -5,10 +5,11 @@
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
+            <img class="pd__icon pd__mobile-icon" src="assets/product/back.svg" alt="">
         </button>
-        <a class="pd__crumb" [routerLink]="['/']">Home</a>
+        <a class="pd__crumb pd__crumb--home" [routerLink]="['/']">Home</a>
         <ng-container *ngIf="product?.collections[0] as collection">
-            <span class="pd__slash" aria-hidden="true">/</span>
+            <span class="pd__slash pd__slash--collection" aria-hidden="true">/</span>
             <a class="pd__crumb" [routerLink]="['/category', collection.slug]">{{ collectionName }}</a>
         </ng-container>
         <span class="pd__slash" aria-hidden="true">/</span>
@@ -25,7 +26,7 @@
             <div class="pd__info">
                 <p class="pd__label">{{ collectionName }}</p>
                 <h1 class="pd__title">{{ product?.name ?? ' ' }}</h1>
-                <hr class="pd__rule">
+                <hr class="pd__rule"><span class="pd__mobile-rule" aria-hidden="true"><img src="assets/product/rule.svg" alt=""></span>
 
                 <div class="variant-selector" *ngIf="product?.variants.length > 1">
                     <label htmlFor="option" class="variant-selector__label">Select option</label>
@@ -36,14 +37,14 @@
 
                 <div class="pd__actions">
                     <div class="pd__cta-row">
-                        <button class="pd__cta" (click)="openInterestForm()" [disabled]="!product">REGISTER YOUR INTEREST</button>
+                        <button class="pd__cta" (click)="openInterestForm()" [disabled]="!product"><span>REGISTER <span class="pd__cta-line">YOUR INTEREST</span></span></button>
                         <hgart-favourite-toggle [item]="favouriteItem" variant="inline"></hgart-favourite-toggle>
                     </div>
 
                     <p class="pd__note">Pricing is shared personally after you register interest. No payment is taken.</p>
                 </div>
 
-                <p class="pd__ar">AR EXPERIENCE INCLUDED · CERTIFICATE OF AUTHENTICITY</p>
+                <p class="pd__ar"><img class="pd__passport pd__icon" src="assets/product/passport.svg" alt=""><span>AR EXPERIENCE INCLUDED · CERTIFICATE OF AUTHENTICITY</span></p>
             </div>
         </div>
 
@@ -52,10 +53,12 @@
                 <button type="button" class="pd__tab" [class.pd__tab--active]="activeTab === 'description'"
                     (click)="setActiveTab('description')">
                     Description
+                    <img class="pd__tab-divider" [src]="activeTab === 'description' ? 'assets/product/tab-active.svg' : 'assets/product/tab-inactive.svg'" alt="">
                 </button>
                 <button *ngIf="hasAdditionalInfo()" type="button" class="pd__tab"
                     [class.pd__tab--active]="activeTab === 'additionalInfo'" (click)="setActiveTab('additionalInfo')">
                     Additional Information
+                    <img class="pd__tab-divider" [src]="activeTab === 'additionalInfo' ? 'assets/product/tab-active.svg' : 'assets/product/tab-inactive.svg'" alt="">
                 </button>
             </nav>
 
@@ -74,9 +77,11 @@
             <div class="pd__related-controls">
                 <button type="button" aria-label="Previous artworks" (click)="scrollRelated(-1)">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <img class="pd__icon pd__mobile-icon" src="assets/product/previous.svg" alt="">
                 </button>
                 <button type="button" aria-label="Next artworks" (click)="scrollRelated(1)">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <img class="pd__icon pd__mobile-icon" src="assets/product/next.svg" alt="">
                 </button>
             </div>
         </header>

@@ -1,0 +1,62 @@
+// Figma artwork detail, 420px: fixed artwork geometry, fluid surrounding content.
+:host {
+    .pd__passport, .pd__tab-divider, .pd__mobile-icon, .pd__mobile-rule { display: none; }
+}
+
+@media (max-width: 720px) {
+    :host {
+        .pd__breadcrumb {
+            height: 56px;
+            gap: 8px;
+            padding: 16px 20px;
+            border: 0;
+        }
+        .pd__back > svg, .pd__related-controls svg { display: none; }
+        .pd__mobile-icon { display: block; }
+        .pd__back { flex: none; padding: 0 8px; }
+        .pd__crumb { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; line-height: 24px; }
+        .pd__crumb--home, .pd__crumb--current, .pd__slash { display: none; }
+        .pd__detail { padding: 48px 20px; gap: 64px; }
+        .pd__top { width: 100%; gap: 48px; }
+        .pd__rule { display: none; }
+        .pd__mobile-rule { display: block; width: 100%; height: 1px; overflow: hidden; }
+        .pd__mobile-rule img { max-width: none; }
+        .pd__info { width: 100%; gap: 32px; }
+        .pd__label { font-weight: 400; letter-spacing: 4px; line-height: normal; }
+        .pd__info > .pd__label { margin-bottom: -16px; }
+        .pd__title { font-size: 72px; font-weight: 400; line-height: 1.12; overflow-wrap: anywhere; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .pd__cta { height: 72px; padding: 0 12px; font-weight: 400; line-height: normal; }
+        .pd__cta-line { display: block; }
+        .pd__cta-row ::ng-deep hgart-favourite-toggle[data-variant='inline'] .fav { width: 72px; height: 72px; }
+        .pd__note { font-size: 14px; line-height: 22px; color: var(--pd-text-2); }
+        .pd__ar { display: flex; align-items: center; gap: 12px; font-weight: 400; line-height: normal; letter-spacing: 4px; color: var(--pd-text-2); }
+        .pd__passport { display: block; flex: none; }
+        .pd__tabs { width: 100%; gap: 32px; }
+        .pd__tab-list { gap: 0; overflow-x: auto; scrollbar-width: none; }
+        .pd__tab { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; flex: none; padding: 0; border: 0; font-weight: 400; line-height: normal; white-space: nowrap; }
+        .pd__tab:first-child { width: 188px; }
+        .pd__tab:last-child:not(:first-child) { width: 307px; }
+        .pd__tab-divider { display: block; max-width: none; }
+        .pd__tab:not(.pd__tab--active) .pd__tab-divider { opacity: .45; }
+        .pd__panel { width: 100%; overflow-wrap: anywhere; }
+        .pd__panel ::ng-deep p { margin-bottom: 32px; }
+        .pd__panel ::ng-deep img { max-width: 100%; height: auto; }
+        .pd__panel ::ng-deep table { display: block; max-width: 100%; overflow-x: auto; }
+        .pd__related { background: var(--pd-circle); }
+        .pd__related-header { padding: 0 20px; gap: 0; }
+        .pd__related-header > div:first-child { min-width: 0; flex: 1; }
+        .pd__related-title { font-weight: 400; line-height: normal; }
+        .pd__related-controls { flex: none; }
+        .pd__related-controls button { background: transparent; }
+        .pd__related-row { padding: 0 max(20px, calc((100% - 334px) / 2)); scroll-snap-type: x mandatory; }
+        .pd__related-card { width: min(334px, calc(100vw - 40px)); scroll-snap-align: center; }
+        .pd__related-card ::ng-deep .card { gap: 16px; }
+        .pd__related-card ::ng-deep .card__mount { padding: 32px; }
+        .pd__related-card ::ng-deep .card__title { text-align: center; }
+        .pd__icon, .pd__tab-divider { filter: none; }
+    }
+    :host-context(.theme-light) {
+        --pd-circle: #f2efea;
+        .pd__icon, .pd__tab-divider { filter: brightness(0) invert(.16); }
+    }
+}
