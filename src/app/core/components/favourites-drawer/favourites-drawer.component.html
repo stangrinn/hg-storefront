@@ -22,7 +22,7 @@
             <ul class="drawer__list" *ngIf="items.length; else empty">
                 <li class="drawer__item" *ngFor="let item of items; trackBy: trackBySlug">
                     <a class="drawer__thumb" [routerLink]="['/product', item.slug]" (click)="close()">
-                        <img *ngIf="item.image" [src]="item.image + '?preset=tiny'" [alt]="item.name">
+                        <img *ngIf="item.image" [src]="{ preview: item.image, focalPoint: null } | assetPreview:216:288" [alt]="item.name">
                     </a>
 
                     <div class="drawer__info">

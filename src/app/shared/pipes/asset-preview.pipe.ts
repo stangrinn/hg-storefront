@@ -6,7 +6,7 @@ import { AssetFragment } from '../../common/generated-types';
     name: 'assetPreview',
 })
 export class AssetPreviewPipe implements PipeTransform {
-    transform(asset?: AssetFragment, ...args: Array<string | number>): string {
+    transform(asset?: Pick<AssetFragment, 'preview' | 'focalPoint'>, ...args: Array<string | number>): string {
         if (!asset) {
             return '';
         }
