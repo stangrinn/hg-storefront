@@ -19,7 +19,7 @@
             <button (click)="toggleTheme()" class="site-header__theme" type="button"
                 [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'">
                 <picture>
-                    <source *ngIf="isCollectionPage$ | async" media="(min-width: 721px)" srcset="assets/collection/theme.svg">
+                    <source *ngIf="isCollectionPage$ | async" media="(min-width: 721px)" srcset="assets/icons/collection/theme.svg">
                     <source *ngIf="isHomePage$ | async" media="(min-width: 1024px) and (max-width: 1919px)" srcset="assets/header/theme-desktop.svg">
                     <source *ngIf="isHomePage$ | async" media="(min-width: 721px) and (max-width: 1023px)" srcset="assets/header/theme-tablet.svg">
                     <img alt="" [class.site-header__theme-icon--light]="!isDarkTheme" src="assets/header/theme-dark.svg">
@@ -60,7 +60,7 @@
                     <p><span>© 2026 Helena Grinshpun Art.</span> <span>All rights reserved.</span></p>
                 </div>
             </div>
-            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/collection/footer-divider.svg" alt=""></div>
+            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/icons/collection/footer-divider.svg" alt=""></div>
             <nav class="site-footer__links" aria-label="Useful links">
                 <h3>Useful Links</h3>
                 <a [routerLink]="['/contact']">contact us</a>
@@ -68,7 +68,7 @@
                 <a [routerLink]="['/privacy-policy']">privacy policy</a>
                 <a [routerLink]="['/terms']">terms &amp; conditions</a>
             </nav>
-            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/collection/footer-divider.svg" alt=""></div>
+            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/icons/collection/footer-divider.svg" alt=""></div>
             <div class="site-footer__contact">
                 <h3>Contact</h3>
                 <p>Open Daily 09:00-19:00</p>

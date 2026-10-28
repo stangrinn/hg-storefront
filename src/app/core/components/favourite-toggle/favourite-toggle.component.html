@@ -3,7 +3,7 @@
         [attr.aria-pressed]="item && favourites.has(item.slug)"
         [attr.aria-label]="item && favourites.has(item.slug) ? 'Remove from favourites' : 'Save to favourites'"
         [disabled]="!item" (click)="toggle($event)">
-        <img *ngIf="variant === 'overlay'" [src]="item && favourites.has(item.slug) ? 'assets/collection/saved.svg' : 'assets/collection/save.svg'" alt="">
+        <img *ngIf="variant === 'overlay'" [src]="item && favourites.has(item.slug) ? 'assets/icons/collection/saved.svg' : 'assets/icons/collection/save.svg'" alt="">
         <img *ngIf="variant === 'inline'" [src]="item && favourites.has(item.slug) ? 'assets/icons/design-system/heart-saved.svg' : 'assets/icons/design-system/heart.svg'" alt="">
     </button>
 </ng-container>

@@ -23,7 +23,7 @@
             <div class="pd__info">
                 <p class="pd__label">{{ collectionName }}</p>
                 <h1 class="pd__title">{{ product?.name ?? ' ' }}</h1>
-                <hr class="pd__rule"><span class="pd__mobile-rule" aria-hidden="true"><img src="assets/product/rule.svg" alt=""></span>
+                <hr class="pd__rule"><span class="pd__mobile-rule" aria-hidden="true"><img src="assets/icons/product/rule.svg" alt=""></span>
 
                 <div class="variant-selector" *ngIf="product?.variants.length > 1">
                     <label htmlFor="option" class="variant-selector__label">Select option</label>
@@ -41,7 +41,7 @@
                     <p class="pd__note">Pricing is shared personally after you register interest. No payment is taken.</p>
                 </div>
 
-                <p class="pd__ar"><img class="pd__passport pd__icon" src="assets/product/passport.svg" alt=""><span>AR EXPERIENCE INCLUDED · CERTIFICATE OF AUTHENTICITY</span></p>
+                <p class="pd__ar"><img class="pd__passport pd__icon" src="assets/icons/product/passport.svg" alt=""><span>AR EXPERIENCE INCLUDED · CERTIFICATE OF AUTHENTICITY</span></p>
             </div>
         </div>
 
@@ -50,12 +50,12 @@
                 <button type="button" class="pd__tab" [class.pd__tab--active]="activeTab === 'description'"
                     (click)="setActiveTab('description')">
                     Description
-                    <img class="pd__tab-divider" [src]="activeTab === 'description' ? 'assets/product/tab-active.svg' : 'assets/product/tab-inactive.svg'" alt="">
+                    <img class="pd__tab-divider" [src]="activeTab === 'description' ? 'assets/icons/product/tab-active.svg' : 'assets/icons/product/tab-inactive.svg'" alt="">
                 </button>
                 <button *ngIf="hasAdditionalInfo()" type="button" class="pd__tab"
                     [class.pd__tab--active]="activeTab === 'additionalInfo'" (click)="setActiveTab('additionalInfo')">
                     Additional Information
-                    <img class="pd__tab-divider" [src]="activeTab === 'additionalInfo' ? 'assets/product/tab-active.svg' : 'assets/product/tab-inactive.svg'" alt="">
+                    <img class="pd__tab-divider" [src]="activeTab === 'additionalInfo' ? 'assets/icons/product/tab-active.svg' : 'assets/icons/product/tab-inactive.svg'" alt="">
                 </button>
             </nav>
 
@@ -73,10 +73,10 @@
             </div>
             <div class="pd__related-controls">
                 <button type="button" aria-label="Previous artworks" (click)="scrollRelated(-1)">
-                    <img class="pd__icon hg-icon" src="assets/product/previous.svg" alt="">
+                    <img class="pd__icon hg-icon" src="assets/icons/product/previous.svg" alt="">
                 </button>
                 <button type="button" aria-label="Next artworks" (click)="scrollRelated(1)">
-                    <img class="pd__icon hg-icon" src="assets/product/next.svg" alt="">
+                    <img class="pd__icon hg-icon" src="assets/icons/product/next.svg" alt="">
                 </button>
             </div>
         </header>
