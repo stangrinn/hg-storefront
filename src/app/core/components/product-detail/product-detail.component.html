@@ -153,19 +153,3 @@
     </section>
 </ng-template>
 </div>
-
-<ng-template #addedToCartTemplate let-variant="variant" let-quantity="quantity" let-close="closeFn">
-    <div class="cart-notification">
-        <div class="cart-notification__image-wrapper">
-            <img class="cart-notification__image"
-                [src]="(variant.featuredAsset?.preview || product?.featuredAsset?.preview) + '?preset=tiny'"
-                alt="product thumbnail" />
-        </div>
-        <div class="cart-notification__text">{{ quantity }} x {{ variant.name }}</div>
-    </div>
-    <div class="cart-notification__actions">
-        <button type="button" (click)="viewCartFromNotification(close)" class="cart-notification__view-cart-btn">
-            View cart
-        </button>
-    </div>
-</ng-template>

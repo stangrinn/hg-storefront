@@ -5,8 +5,6 @@ import { AccountAddressDetailComponent } from './components/account-address-deta
 import { AccountChangeCredentialsComponent } from './components/account-change-credentials/account-change-credentials.component';
 import { AccountCustomerDetailsComponent } from './components/account-customer-details/account-customer-details.component';
 import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
-import { AccountOrderDetailComponent } from './components/account-order-detail/account-order-detail.component';
-import { AccountOrderListComponent } from './components/account-order-list/account-order-list.component';
 import { AccountComponent } from './components/account/account.component';
 import { ChangeEmailAddressComponent } from './components/change-email-address/change-email-address.component';
 import { ForgottenPasswordComponent } from './components/forgotten-password/forgotten-password.component';
@@ -30,13 +28,13 @@ export const routes: Routes = [
             },
             {
                 path: 'orders',
-                canActivate: [AccountGuard],
-                component: AccountOrderListComponent,
+                pathMatch: 'full',
+                redirectTo: '',
             },
             {
                 path: 'orders/:code',
-                canActivate: [AccountGuard],
-                component: AccountOrderDetailComponent,
+                pathMatch: 'full',
+                redirectTo: '',
             },
             {
                 path: 'address-book',

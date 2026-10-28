@@ -69,11 +69,6 @@ export const routes: Route[] = [
         data: { animation: 'AccountPage' },
     },
     {
-        path: 'checkout',
-        loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule),
-        data: { animation: 'CheckoutPage' },
-    },
-    {
         path: '**',
         redirectTo: '',
         pathMatch: 'full',

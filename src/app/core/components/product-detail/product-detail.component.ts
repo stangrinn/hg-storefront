@@ -1,13 +1,11 @@
 
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { of, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import {
-    AddToCartMutation,
-    AddToCartMutationVariables,
     GetProductDetailQuery,
     GetProductDetailQueryVariables,
     SearchCollectionProductsQuery,
@@ -24,10 +22,9 @@ import { NotificationService } from '../../providers/notification/notification.s
 import { StateService } from '../../providers/state/state.service';
 
 import { SEARCH_PRODUCTS } from '../product-list/product-list.graphql';
-import { ADD_TO_CART, GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
+import { GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
 import { InterestFormValue } from '../interest-form/interest-form.component';
 import { REGISTER_PREORDER } from './preorder.graphql';
-import { ActiveService } from '../../providers/active/active.service';
 
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
@@ -44,11 +41,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     product: GetProductDetailQuery['product'];
     
-    qtyInCart: { [id: string]: number; } = {};
     selectedVariant: Variant;
-    qty = 1;
     breadcrumbs: Collection['breadcrumbs'] | null = null;
-    inFlight = false;
 
     /** Currently active tab */
     activeTab: ProductTab = 'description';
@@ -71,14 +65,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** Other artworks from the same collection */
     relatedProducts: SearchProductsQuery['search']['items'] = [];
 
-    @ViewChild('addedToCartTemplate', { static: true })
-    private addToCartTemplate: TemplateRef<unknown>;
     private sub: Subscription;
 
     constructor(private dataService: DataService,
         private stateService: StateService,
         private notificationService: NotificationService,
-        private activeService: ActiveService,
         private route: ActivatedRoute,
         private router: Router,
         private cDRef: ChangeDetectorRef,
@@ -151,14 +142,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.cDRef.markForCheck();
         }));
 
-        this.activeService.activeOrder$.subscribe(order => {
-            
-            this.qtyInCart = {};
-
-            for (const line of order?.lines ?? []) {
-                this.qtyInCart[line.productVariant.id] = line.quantity;
-            }
-        });
     }
 
     /** Item stored in the guest favourites for the current artwork. */
@@ -359,45 +342,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         return !!this.getAdditionalInfo();
     }
 
-    addToCart(variant: Variant, qty: number) {
-        this.inFlight = true;
-        this.dataService.mutate<AddToCartMutation, AddToCartMutationVariables>(ADD_TO_CART, {
-            variantId: variant.id,
-            qty,
-        }).subscribe(({ addItemToOrder }) => {
-            this.inFlight = false;
-            switch (addItemToOrder.__typename) {
-                case 'Order':
-                    this.stateService.setState('activeOrderId', addItemToOrder ? addItemToOrder.id : null);
-                    if (variant) {
-                        this.notificationService.notify({
-                            title: 'Added to cart',
-                            type: 'info',
-                            duration: 3000,
-                            templateRef: this.addToCartTemplate,
-                            templateContext: {
-                                variant,
-                                quantity: qty,
-                            },
-                        }).subscribe();
-                    }
-                    break;
-                case 'OrderModificationError':
-                case 'OrderLimitError':
-                case 'NegativeQuantityError':
-                case 'InsufficientStockError':
-                    this.notificationService.error(addItemToOrder.message).subscribe();
-                    break;
-            }
-
-        });
-    }
-
-    viewCartFromNotification(closeFn: () => void) {
-        this.stateService.setState('cartDrawerOpen', true);
-        closeFn();
-    }
-
     /**
      * Extracts video source URL from product's variant assets.
      * Looks for video files in variant's featuredAsset.
@@ -424,14 +368,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      * Checks if the source URL points to a video file.
      * @param source - Asset source URL
      * @returns True if the source is a video file
-
-                if (!result.registerPreOrder.success) {
-                    this.notificationService.error('Failed to register interest. Please try again.').subscribe();
-                    this.cDRef.markForCheck();
-
-                    return;
-                }
-
      */
     private isVideoFile(source: string): boolean {
         const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
@@ -488,6 +424,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }).subscribe({
             next: result => {
                 this.isSubmitting = false;
+
+                if (!result.registerPreOrder.success) {
+                    this.notificationService.error('Failed to register interest. Please try again.').subscribe();
+                    this.cDRef.markForCheck();
+
+                    return;
+                }
+
                 this.closeInterestForm();
 
                 this.notificationService.notify({
