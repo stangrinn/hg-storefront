@@ -6,6 +6,13 @@ import { map, shareReplay } from 'rxjs/operators';
 import { GetCollectionsQuery } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
 
+interface HomeMoment {
+    title: string;
+    subtitle: string;
+    description: string;
+    image: string;
+}
+
 interface HomeFaq {
     numeral: string;
     question: string;
@@ -27,6 +34,49 @@ interface ComparisonRow {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent implements OnInit {
+    readonly moments: HomeMoment[] = [
+        {
+            title: "Everyday Home Moments",
+            subtitle: "Art that just fits your day",
+            description: "You’re making coffee, scrolling your phone, moving from room to room—and the art quietly shifts with you. It’s not a “setup,” it’s just there, like music in the background, changing the feel of the space without asking for attention.",
+            image: "assets/home/carousel-space-1.png"
+        },
+        {
+            title: "Friends Hanging Out",
+            subtitle: "Something everyone notices, without trying too hard",
+            description: "Friends are over, talking, laughing, maybe someone points at the wall—“wait, did that just change?” It becomes part of the vibe, especially as it gets darker and the room starts to feel a bit more alive.",
+            image: "assets/home/carousel-space-2.png"
+        },
+        {
+            title: "Personal Creative Space",
+            subtitle: "A space that keeps your brain moving",
+            description: "Open spaces designed for creative minds, where bold art energizes your work. Transform your studio into a gallery.",
+            image: "assets/home/carousel-space-3.png"
+        },
+        {
+            title: "Clean, Minimal Space",
+            subtitle: "Museum quality at home",
+            description: "Sophisticated curation that transforms your space into a personal exhibition. Professional presentation in your own space.",
+            image: "assets/home/carousel-space-4.png"
+        },
+        {
+            title: "Romantic Evenings",
+            subtitle: "When everything slows down",
+            description: "Contemporary spaces where minimalist design creates the perfect canvas for living art. Watch as your walls transform throughout the day.",
+            image: "assets/home/carousel-space-5.png"
+        }
+    ];
+
+    activeMomentIndex = 0;
+
+    get activeMoment(): HomeMoment {
+        return this.moments[this.activeMomentIndex];
+    }
+
+    shiftMoment(direction: number): void {
+        this.activeMomentIndex = Math.max(0, Math.min(this.moments.length - 1, this.activeMomentIndex + direction));
+    }
+
     readonly comparisonRows: ComparisonRow[] = [
         { staticTitle: 'Static', aliveTitle: 'Alive', staticImage: 'assets/home/comparison-static-1.jpeg', aliveImage: 'assets/home/comparison-alive-1.png' },
         { staticTitle: 'One moment', aliveTitle: 'Ever-changing', mobileSubtitle: 'Infinite variations.', staticImage: 'assets/home/comparison-static-2.jpeg', aliveImage: 'assets/home/comparison-alive-2.png' },

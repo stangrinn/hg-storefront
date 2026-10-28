@@ -1,0 +1,114 @@
+// Carousel component set 125:2665, shared by all desktop widths.
+@media (min-width: 1024px) {
+    :host {
+        .section--experience {
+            padding: 96px 60px;
+        }
+        .experience-card--interactive {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: min(1099px, 100%);
+            height: 816px;
+            min-height: 0;
+        }
+        .experience-card__image img {
+            scale: none;
+            translate: none;
+            object-position: center;
+        }
+        .experience-card__copy {
+            min-width: 0;
+            padding: 64px;
+        }
+        .experience-card__copy h2 {
+            font-size: 32px;
+            max-width: 410px;
+            line-height: normal;
+            letter-spacing: 1.28px;
+        }
+        .experience-card__copy h3 {
+            font-weight: 700;
+            line-height: normal;
+        }
+        .experience-card__body > p {
+            margin-top: 24px;
+            color: var(--home-muted);
+            font: 400 18px/normal 'Montserrat', sans-serif;
+            line-height: normal;
+        }
+        .experience-card__body > .eyebrow {
+            display: block;
+            font-size: 12px;
+            letter-spacing: 4px;
+        }
+        .experience-card__body > .eyebrow:last-child {
+            font-size: 14px;
+        }
+        .progress-dots {
+            gap: 12px;
+        }
+        .progress-dots button {
+            position: relative;
+            width: 6px;
+            height: 6px;
+            padding: 0;
+            border: 0;
+            border-radius: 6px;
+            background: #e0ded9;
+            cursor: pointer;
+        }
+        .progress-dots button::before {
+            content: "";
+            position: absolute;
+            inset: -6px;
+        }
+        .progress-dots button.is-active {
+            width: 48px;
+            background: var(--home-ink);
+        }
+        .experience-card__previous,
+        .experience-card__next {
+            position: absolute;
+            top: calc(50% - 32px);
+            display: grid;
+            place-items: center;
+            width: 64px;
+            height: 64px;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            background: var(--home-panel);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgb(0 0 0 / 12%);
+        }
+        .experience-card__previous {
+            left: 24px;
+        }
+        .experience-card__next {
+            right: 24px;
+        }
+        .experience-card__previous:disabled,
+        .experience-card__next:disabled {
+            cursor: default;
+        }
+        .experience-card__body { width: 384px; max-width: 100%; }
+        .experience-card__body h2 { width: 410px; max-width: calc(100% + 26px); }
+        .experience-card__body > p { width: 397px; max-width: calc(100% + 13px); }
+        .experience-card__body h2, .experience-card__body h3, .experience-card__body > p, .experience-card__body > .eyebrow { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .experience-card--romantic h2 { letter-spacing: 3.52px; }
+        .experience-card__body h3 { padding-block: 6px; }
+    }
+    :host-context(.theme-light) {
+        .experience-card__body > p { color: #66666b; }
+        .experience-card__previous img, .experience-card__next img { filter: brightness(0) invert(.16); }
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+    :host {
+        .experience-card__copy { padding: 40px; }
+        .experience-card__body h2 { font-size: 28px; max-width: 100%; }
+        .experience-card__body > p { max-width: 100%; }
+    }
+}

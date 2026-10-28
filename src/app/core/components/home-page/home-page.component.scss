@@ -1214,6 +1214,11 @@ h2,
     -webkit-mask: url('/assets/home/brush-line.svg') left bottom / 120px 8px no-repeat;
 }
 
+// Layer responsive compositions from narrow to wide.
 @import "./home-page.mobile";
 
 @import "./home-page.tablet";
+
+@import "./home-page.desktop";
+
+@import "./home-page.carousel";
