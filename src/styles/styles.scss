@@ -32,7 +32,12 @@ html, body {
 
 /* Use Orbitron as the base display font; fall back to system sans */
 body {
+    background: #000;
     font-family: 'Orbitron', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+body:has(hgart-layout.theme-light) {
+    background: #f7f7f5;
 }
 
 @layer components {
