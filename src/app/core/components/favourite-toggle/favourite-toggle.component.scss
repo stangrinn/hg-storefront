@@ -47,6 +47,7 @@
     border: 1px solid #f7f7f5;
     border-radius: 50%;
     background: rgb(15 15 16 / 30%);
+    backdrop-filter: blur(6px);
 
     svg {
         width: 20px;
@@ -62,6 +63,8 @@
     color: #0f0f10;
     border-color: #2a2a2d;
     background: rgb(255 255 255 / 90%);
+
+    img { filter: brightness(0) invert(.16); }
 
     &.fav--active {
         border-color: #dddad3;
@@ -79,4 +82,14 @@
     :host([data-variant='overlay']) .fav--active {
         opacity: 1;
     }
+}
+
+.fav__artwork-icon { display: none; }
+
+@media (max-width: 720px) {
+    :host-context(.layout--product) .fav--inline:not(.fav--active) {
+        .fav__artwork-icon { display: block; }
+        svg { display: none; }
+    }
+    :host-context(.theme-light) .fav__artwork-icon { filter: brightness(0) invert(.16); }
 }

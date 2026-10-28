@@ -2,9 +2,7 @@
     <ng-container *ngIf="collection$ | async as collection">
         <nav class="collection__breadcrumb" aria-label="Breadcrumb">
             <button class="collection__back" type="button" aria-label="Go back" (click)="goBack()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M15 6L9 12L15 18M9 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
+                <img src="assets/collection/back.svg" alt="">
             </button>
             <a class="collection__crumb" [routerLink]="['/']">Home</a>
             <span class="collection__slash" aria-hidden="true">/</span>
@@ -15,10 +13,10 @@
             <p class="collection__eyebrow">
                 HG ART · DIGITAL EDITIONS 01—{{ pad(totalResults$ | async) }}
             </p>
-            <div class="collection__ornament" aria-hidden="true"><span></span><i></i><span></span></div>
-            <h1 class="collection__title">{{ collection.name }}</h1>
+            <img class="collection__ornament" src="assets/collection/ornament.svg" alt="">
+            <h1 class="collection__title">{{ collection.name }}<span *ngIf="!collection.name.toLowerCase().endsWith('collection')">Collection</span></h1>
             <div *ngIf="collection.description" class="collection__description" [innerHTML]="collection.description"></div>
-            <img class="collection__divider" src="assets/home/flourish.svg" alt="">
+            <img class="collection__divider" src="assets/collection/divider.svg" alt="">
         </header>
 
         <ng-container *ngIf="collection.children.length">

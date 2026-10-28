@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="229" height="5" viewBox="0 0 229 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Section ornament" clip-path="url(#clip0_0_167)">
+<path id="Rule" opacity="0.4" d="M0 2H96" stroke="#A1A1A7"/>
+<circle id="Mark" cx="114.5" cy="2.5" r="2.5" fill="#A1A1A7"/>
+<path id="Rule_2" opacity="0.4" d="M133 2H229" stroke="#A1A1A7"/>
+</g>
+<defs>
+<clipPath id="clip0_0_167">
+<rect width="229" height="5" fill="white"/>
+</clipPath>
+</defs>
+</svg>
