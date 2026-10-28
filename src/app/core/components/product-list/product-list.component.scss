@@ -1,3 +1,4 @@
+@use '../breadcrumb' as *;
 :host {
     --collection-bg: #0f0f10;
     --collection-title: #f7f7f5;
@@ -16,14 +17,12 @@
 }
 
 .collection__breadcrumb {
+    @include breadcrumb-typography;
     display: flex;
     align-items: center;
     gap: 12px;
     min-height: 56px;
     padding: 8px 52px;
-    font-family: Orbitron, sans-serif;
-    font-size: 9px;
-    letter-spacing: 4.86px;
 }
 
 .collection__back {
@@ -46,8 +45,6 @@
 }
 
 .collection__slash {
-    font-size: 10px;
-    letter-spacing: 3.5px;
     color: var(--collection-muted);
     opacity: 0.4;
 }

@@ -1,0 +1,11 @@
+@mixin breadcrumb-typography {
+    font: 400 11px/24px 'Orbitron', sans-serif;
+    letter-spacing: 4.4px;
+    text-transform: uppercase;
+
+    a, span {
+        font: inherit;
+        letter-spacing: inherit;
+        text-transform: inherit;
+    }
+}

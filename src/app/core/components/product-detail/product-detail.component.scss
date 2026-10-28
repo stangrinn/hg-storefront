@@ -1,3 +1,4 @@
+@use '../breadcrumb' as *;
 @use '../interest-layout' as *;
 
 :host {
@@ -19,15 +20,13 @@
     }
 
     .pd__breadcrumb {
+        @include breadcrumb-typography;
         display: flex;
         align-items: center;
         gap: 12px;
         height: 56px;
         padding: 0 60px;
         border-bottom: 1px solid var(--pd-border);
-        font: 700 12px/1 Orbitron, sans-serif;
-        letter-spacing: 2px;
-        text-transform: uppercase;
         color: var(--pd-muted);
     }
 

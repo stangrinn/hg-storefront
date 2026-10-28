@@ -1,0 +1,5 @@
+@use '../breadcrumb' as *;
+
+nav {
+    @include breadcrumb-typography;
+}

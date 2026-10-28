@@ -1,3 +1,4 @@
+@use '../breadcrumb' as *;
 :host {
     display: block;
     min-height: 80vh;
@@ -20,14 +21,12 @@
 }
 
 .policy__breadcrumb {
+    @include breadcrumb-typography;
     display: flex;
     align-items: center;
     gap: 12px;
     min-height: 56px;
     padding: 8px 52px;
-    font-family: Orbitron, sans-serif;
-    font-size: 9px;
-    letter-spacing: 4.86px;
 }
 
 .policy__back {
@@ -50,8 +49,6 @@
 }
 
 .policy__slash {
-    font-size: 10px;
-    letter-spacing: 3.5px;
     color: var(--policy-muted);
     opacity: 0.4;
 }

@@ -1,3 +1,4 @@
+@use '../breadcrumb' as *;
 :host {
     display: block;
     min-height: 80vh;
@@ -18,14 +19,12 @@
 }
 
 .faq__breadcrumb {
+    @include breadcrumb-typography;
     display: flex;
     align-items: center;
     gap: 12px;
     min-height: 56px;
     padding: 8px 52px;
-    font-family: Orbitron, sans-serif;
-    font-size: 9px;
-    letter-spacing: 4.86px;
 }
 
 .faq__back {
@@ -48,8 +47,6 @@
 }
 
 .faq__slash {
-    font-size: 10px;
-    letter-spacing: 3.5px;
     color: var(--faq-muted);
     opacity: 0.4;
 }
