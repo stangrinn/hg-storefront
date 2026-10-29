@@ -58,13 +58,13 @@
         padding-left: 8px;
     }
 
-    :host-context(.layout--home) {
+    :host-context(.layout--compact-header) {
         width: 48px;
     }
 }
 
 @media (min-width: 721px) and (max-width: 1023px) {
-    :host-context(.layout--home) {
+    :host-context(.layout--compact-header) {
         width: 48px;
         height: 44px;
 
@@ -77,7 +77,7 @@
     }
 }
 
-@media (min-width: 721px) {
+@media (min-width: 1024px) {
     :host-context(.layout--collection) {
         width: 48px;
         height: 40px;

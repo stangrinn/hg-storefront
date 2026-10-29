@@ -1,4 +1,4 @@
-<hgart-layout [class.theme-light]="!isDarkTheme" [class.layout--home]="isHomePage$ | async" [class.layout--collection]="isCollectionPage$ | async" [class.layout--product]="isProductPage$ | async">
+<hgart-layout [class.theme-light]="!isDarkTheme" [class.layout--home]="isHomePage$ | async" [class.layout--collection]="isCollectionPage$ | async" [class.layout--product]="isProductPage$ | async" [class.layout--compact-header]="!(isProductPage$ | async)">
     <hgart-layout-header class="site-header">
         <div class="site-header__ceiling" aria-hidden="true">
             <span></span><span></span><span></span><span></span>
@@ -8,7 +8,7 @@
 
         <a [routerLink]="['/']" class="site-header__logo" aria-label="Helena Grinshpun Art home">
             <picture>
-                <source *ngIf="isHomePage$ | async" media="(max-width: 1023px)" srcset="assets/header/logo-mobile.svg">
+                <source *ngIf="!(isProductPage$ | async)" media="(max-width: 1023px)" srcset="assets/header/logo-mobile.svg">
                 <img alt="" src="assets/header/logo-mark.svg">
             </picture>
             <span class="site-header__identity">HELENA GRINSHPUN ART</span>
@@ -19,9 +19,9 @@
             <button (click)="toggleTheme()" class="site-header__theme" type="button"
                 [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'">
                 <picture>
-                    <source *ngIf="isCollectionPage$ | async" media="(min-width: 721px)" srcset="assets/icons/collection/theme.svg">
+                    <source *ngIf="isCollectionPage$ | async" media="(min-width: 1024px)" srcset="assets/icons/collection/theme.svg">
                     <source *ngIf="isHomePage$ | async" media="(min-width: 1024px) and (max-width: 1919px)" srcset="assets/header/theme-desktop.svg">
-                    <source *ngIf="isHomePage$ | async" media="(min-width: 721px) and (max-width: 1023px)" srcset="assets/header/theme-tablet.svg">
+                    <source *ngIf="!(isProductPage$ | async)" media="(min-width: 721px) and (max-width: 1023px)" srcset="assets/header/theme-tablet.svg">
                     <img alt="" [class.site-header__theme-icon--light]="!isDarkTheme" src="assets/header/theme-dark.svg">
                 </picture>
             </button>
@@ -30,7 +30,7 @@
         </div>
     </hgart-layout-header>
 
-    <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" [showThemeControl]="(isHomePage$ | async) || (isProductPage$ | async)"
+    <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" [showThemeControl]="true"
         [isDarkTheme]="isDarkTheme" (themeChanged)="toggleTheme()" class="z-10"></hgart-collections-menu-mobile>
 
     <hgart-favourites-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-favourites-drawer>

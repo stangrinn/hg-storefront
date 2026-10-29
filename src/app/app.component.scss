@@ -693,7 +693,7 @@ hgart-layout-footer footer a {
 .site-footer__divider img { display: none; }
 
 @media (max-width: 1023px) {
-    .layout--home {
+    .layout--compact-header {
         .site-header { --layout-header-height: 92px; display: block; height: 92px; padding: 0; }
         .site-header__menu { position: absolute; left: 10px; top: 24px; }
         .site-header__logo { position: absolute; top: 19.5px; left: 50%; width: 73px; height: 53px; gap: 10px; transform: translateX(-50%); }
@@ -702,6 +702,9 @@ hgart-layout-footer footer a {
         .site-header__identity--compact { display: block; text-transform: uppercase; width: auto; font-size: 12px; line-height: 14px; letter-spacing: 4px; }
         .site-header__utilities { position: absolute; right: 4px; top: 24px; }
         .site-header__theme { display: none; }
+    }
+
+    .layout--home {
         .site-footer { display: flex; flex-direction: column; align-items: center; gap: 32px; min-height: 0; padding: 48px 20px; text-align: center; }
         .site-footer__brand, .site-footer__bottom { display: contents; }
         .site-footer__brand > div:first-child { order: 0; }
@@ -726,7 +729,7 @@ hgart-layout-footer footer a {
 }
 
 @media (min-width: 721px) and (max-width: 1023px) {
-    .layout--home {
+    .layout--compact-header {
         .site-header { box-shadow: inset 0 -4px 20px rgb(0 0 0 / 25%); }
         .site-header__menu { left: 22px; }
         .site-header__menu ::ng-deep button { display: grid; width: 44px; height: 44px; place-items: center; }
@@ -738,6 +741,9 @@ hgart-layout-footer footer a {
         .site-header__utilities { right: 0; top: 24px; gap: 32px; height: 44px; }
         .site-header__theme { display: block; width: 45px; height: 44px; }
         .site-header__theme img { display: block; width: auto; height: auto; }
+    }
+
+    .layout--home {
         .site-footer__slogan { max-width: none; }
         .site-footer__brand > div:first-child { width: 100%; }
     }
@@ -782,18 +788,20 @@ hgart-layout-footer footer a {
 
 .layout--home .site-footer__divider .collection-footer-divider { display: none; }
 
-.layout--collection {
-    .site-header { --layout-header-background: #1a1a1c; background: #1a1a1c; border-bottom: 1px solid #e0ded9; }
-    .site-header__ceiling { display: none; }
+@media (min-width: 1024px) {
+    .layout--collection {
+        .site-header { --layout-header-background: #1a1a1c; background: #1a1a1c; border-bottom: 1px solid #e0ded9; }
+        .site-header__ceiling { display: none; }
+    }
+
+    :host ::ng-deep .theme-light.layout--collection .site-header {
+        --layout-header-background: #f2efea;
+        background: #f2efea;
+        border-color: #e0ded9;
+    }
 }
 
-:host ::ng-deep .theme-light.layout--collection .site-header {
-    --layout-header-background: #f2efea;
-    background: #f2efea;
-    border-color: #e0ded9;
-}
-
-@media (min-width: 721px) {
+@media (min-width: 1024px) {
     .layout--collection {
         .site-header__logo { top: 19.5px; gap: 16px; }
         .site-header__logo picture { display: block; position: relative; width: 252px; height: 27.512px; flex: none; }
@@ -815,17 +823,6 @@ hgart-layout-footer footer a {
     }
     :host ::ng-deep .theme-light.layout--collection .site-footer__divider { background: none; }
     :host ::ng-deep .theme-light.layout--collection .collection-footer-divider { filter: brightness(0) invert(.16); }
-}
-
-@media (max-width: 720px) {
-    .layout--collection .site-header { display: block; padding: 0; }
-    :host ::ng-deep .layout--collection .site-header .floating-container {
-        display: grid;
-        grid-template-columns: 44px minmax(0, 1fr) 92px;
-        align-items: center;
-        gap: 8px;
-        padding: 0 12px;
-    }
 }
 
 // Product detail uses the full identity and flat header from the mobile artwork frame.
