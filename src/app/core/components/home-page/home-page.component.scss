@@ -22,7 +22,7 @@
 }
 
 .home {
-    overflow: hidden;
+    overflow: clip;
     background: #0f0f10;
 }
 
@@ -1148,6 +1148,8 @@ h2,
 @import "./home-page.desktop";
 
 @import "./home-page.carousel";
+
+@import "./home-page.evolution";
 
 // Theme changes affect colors; responsive compositions select the size.
 .outline-button { @include hg.button(secondary); }

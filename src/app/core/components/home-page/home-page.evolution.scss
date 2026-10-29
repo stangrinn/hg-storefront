@@ -1,0 +1,31 @@
+// Progressive enhancement: SSR, narrow layouts and short landscape screens retain the original flow.
+@media (min-width: 1024px) and (min-height: 600px) {
+    .evolution--animated {
+        .evolution-runway {
+            position: relative;
+            height: var(--evolution-runway-height);
+        }
+
+        .comparison-grid {
+            position: sticky;
+            top: 108px;
+            display: block;
+            height: var(--evolution-stage-height);
+        }
+
+        .comparison-row,
+        .comparison-row:first-child {
+            position: absolute;
+            inset-inline: 0;
+            top: 50%;
+            min-height: 0;
+            padding-top: 0;
+            transform: translateY(-50%) scale(var(--evolution-scale));
+            transform-origin: center;
+        }
+
+        .comparison-card {
+            will-change: transform;
+        }
+    }
+}

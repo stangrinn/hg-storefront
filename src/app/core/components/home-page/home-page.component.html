@@ -296,6 +296,7 @@
 
     <section
         class="section section--evolution"
+        hgartEvolutionScroll
         aria-labelledby="evolution-title"
     >
         <header class="section-heading section-heading--compact">
@@ -303,110 +304,112 @@
             <h2 id="evolution-title">From static to alive.</h2>
         </header>
 
-        <div class="comparison-grid">
-            <div
-                class="comparison-row"
-                *ngFor="let row of comparisonRows; let rowIndex = index"
-            >
-                <div class="comparison-row__cards">
-                    <article class="comparison-card comparison-card--static">
-                        <span class="eyebrow">Casual art</span>
-                        <img
-                            class="desktop1600-only comparison-card__static-brush"
-                            src="assets/home/desktop-static-brush.svg"
-                            alt=""
-                        />
-                        <h3>{{ row.staticTitle }}</h3>
-                        <picture class="comparison-card__static-image">
-                            <source
-                                media="(min-width: 1024px) and (max-width: 1919px)"
-                                [srcset]="
-                                    'assets/home/desktop-comparison-static-' +
-                                    (rowIndex === 3 ? 3 : rowIndex + 1) +
-                                    '.png'
-                                "
-                            />
+        <div class="evolution-runway">
+            <div class="comparison-grid">
+                <div
+                    class="comparison-row"
+                    *ngFor="let row of comparisonRows; let rowIndex = index"
+                >
+                    <div class="comparison-row__cards">
+                        <article class="comparison-card comparison-card--static">
+                            <span class="eyebrow">Casual art</span>
                             <img
-                                [src]="row.staticImage"
-                                [alt]="row.staticTitle + ' landscape artwork'"
-                            />
-                        </picture>
-                    </article>
-                    <article class="comparison-card comparison-card--alive">
-                        <div class="comparison-card__label">
-                            <span class="eyebrow">HG art</span>
-                            <img
-                                class="desktop1600-only comparison-card__desktop-brush"
-                                [src]="
-                                    rowIndex === 0
-                                        ? 'assets/home/desktop-alive-brush-first.svg'
-                                        : 'assets/home/desktop-alive-brush.svg'
-                                "
+                                class="desktop1600-only comparison-card__static-brush"
+                                src="assets/home/desktop-static-brush.svg"
                                 alt=""
                             />
-                            <img
-                                class="mobile-only comparison-card__brush"
-                                [src]="
-                                    rowIndex === 0
-                                        ? 'assets/home/mobile-card-brush-first.svg'
-                                        : 'assets/home/mobile-card-brush.svg'
-                                "
-                                alt=""
-                            />
-                            <img
-                                class="tablet-only comparison-card__brush"
-                                [src]="
-                                    rowIndex === 0
-                                        ? 'assets/home/tablet-card-brush-first.svg'
-                                        : 'assets/home/tablet-card-brush.svg'
-                                "
-                                alt=""
-                            />
-                        </div>
-                        <h3>{{ row.aliveTitle }}</h3>
-                        <p
-                            class="mobile-only comparison-card__subtitle"
-                            *ngIf="row.mobileSubtitle"
-                        >
-                            {{ row.mobileSubtitle }}
-                        </p>
-                        <img
-                            *ngIf="row.aliveImage; else ownership"
-                            [src]="row.aliveImage"
-                            [alt]="row.aliveTitle + ' artwork'"
-                        />
-                        <ng-template #ownership>
-                            <div class="comparison-card__ownership">
-                                <p class="desktop-only">
-                                    Exclusively owned<br />One authentic
-                                    passport<br />Backed by a verified NFT<br />NFC
-                                    activation.
-                                </p>
-                                <p class="mobile-only">
-                                    Exclusively owned / One authentic passport /
-                                    Backed by a verified NFT / NFC activation.
-                                </p>
-                                <img src="assets/home/flourish.svg" alt="" />
-                                <p class="desktop-only">
-                                    Each piece includes:<br />A dedicated
-                                    artwork profile<br />A private collector
-                                    cabinet<br />Secure registration and
-                                    provenance tracking.
-                                </p>
-                                <p class="mobile-only">
-                                    Each piece includes: / A dedicated artwork
-                                    profile / A private collector cabinet /
-                                    Secure registration and provenance tracking.
-                                </p>
+                            <h3>{{ row.staticTitle }}</h3>
+                            <picture class="comparison-card__static-image">
+                                <source
+                                    media="(min-width: 1024px) and (max-width: 1919px)"
+                                    [srcset]="
+                                        'assets/home/desktop-comparison-static-' +
+                                        (rowIndex === 3 ? 3 : rowIndex + 1) +
+                                        '.png'
+                                    "
+                                />
+                                <img
+                                    [src]="row.staticImage"
+                                    [alt]="row.staticTitle + ' landscape artwork'"
+                                />
+                            </picture>
+                        </article>
+                        <article class="comparison-card comparison-card--alive">
+                            <div class="comparison-card__label">
+                                <span class="eyebrow">HG art</span>
+                                <img
+                                    class="desktop1600-only comparison-card__desktop-brush"
+                                    [src]="
+                                        rowIndex === 0
+                                            ? 'assets/home/desktop-alive-brush-first.svg'
+                                            : 'assets/home/desktop-alive-brush.svg'
+                                    "
+                                    alt=""
+                                />
+                                <img
+                                    class="mobile-only comparison-card__brush"
+                                    [src]="
+                                        rowIndex === 0
+                                            ? 'assets/home/mobile-card-brush-first.svg'
+                                            : 'assets/home/mobile-card-brush.svg'
+                                    "
+                                    alt=""
+                                />
+                                <img
+                                    class="tablet-only comparison-card__brush"
+                                    [src]="
+                                        rowIndex === 0
+                                            ? 'assets/home/tablet-card-brush-first.svg'
+                                            : 'assets/home/tablet-card-brush.svg'
+                                    "
+                                    alt=""
+                                />
                             </div>
-                        </ng-template>
-                    </article>
-                </div>
-                <div class="comparison-row__dots" aria-hidden="true">
-                    <span
-                        *ngFor="let dot of comparisonRows; let dotIndex = index"
-                        [class.is-active]="dotIndex === rowIndex"
-                    ></span>
+                            <h3>{{ row.aliveTitle }}</h3>
+                            <p
+                                class="mobile-only comparison-card__subtitle"
+                                *ngIf="row.mobileSubtitle"
+                            >
+                                {{ row.mobileSubtitle }}
+                            </p>
+                            <img
+                                *ngIf="row.aliveImage; else ownership"
+                                [src]="row.aliveImage"
+                                [alt]="row.aliveTitle + ' artwork'"
+                            />
+                            <ng-template #ownership>
+                                <div class="comparison-card__ownership">
+                                    <p class="desktop-only">
+                                        Exclusively owned<br />One authentic
+                                        passport<br />Backed by a verified NFT<br />NFC
+                                        activation.
+                                    </p>
+                                    <p class="mobile-only">
+                                        Exclusively owned / One authentic passport /
+                                        Backed by a verified NFT / NFC activation.
+                                    </p>
+                                    <img src="assets/home/flourish.svg" alt="" />
+                                    <p class="desktop-only">
+                                        Each piece includes:<br />A dedicated
+                                        artwork profile<br />A private collector
+                                        cabinet<br />Secure registration and
+                                        provenance tracking.
+                                    </p>
+                                    <p class="mobile-only">
+                                        Each piece includes: / A dedicated artwork
+                                        profile / A private collector cabinet /
+                                        Secure registration and provenance tracking.
+                                    </p>
+                                </div>
+                            </ng-template>
+                        </article>
+                    </div>
+                    <div class="comparison-row__dots" aria-hidden="true">
+                        <span
+                            *ngFor="let dot of comparisonRows; let dotIndex = index"
+                            [class.is-active]="dotIndex === rowIndex"
+                        ></span>
+                    </div>
                 </div>
             </div>
         </div>
