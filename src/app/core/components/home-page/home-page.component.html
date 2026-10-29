@@ -439,13 +439,24 @@
     >
         <div
             class="experience-card experience-card--interactive"
-            [class.experience-card--romantic]="activeMomentIndex === 4"
             role="region"
             aria-roledescription="carousel"
             aria-label="Art in everyday spaces"
+            (keydown.arrowleft)="shiftMoment(-1); $event.preventDefault()"
+            (keydown.arrowright)="shiftMoment(1); $event.preventDefault()"
         >
-            <div class="experience-card__image">
-                <img [src]="activeMoment.image" [alt]="activeMoment.title" />
+            <div class="experience-card__image"
+                (pointerdown)="startMomentSwipe($event)"
+                (pointermove)="moveMomentSwipe($event)"
+                (pointerup)="endMomentSwipe($event)"
+                (pointercancel)="endMomentSwipe($event, true)"
+                (lostpointercapture)="endMomentSwipe($event, true)">
+                <div class="experience-card__track" [class.is-dragging]="momentDragging"
+                    [style.transform]="'translateX(calc(' + (-activeMomentIndex * 100) + '% + ' + momentDragOffset + 'px))'">
+                    <img *ngFor="let moment of moments; let index = index"
+                        [src]="moment.image" [alt]="moment.title" draggable="false"
+                        [attr.aria-hidden]="index !== activeMomentIndex" />
+                </div>
             </div>
             <div
                 class="experience-card__copy"
@@ -453,10 +464,17 @@
                 aria-atomic="true"
             >
                 <div class="experience-card__body">
-                <span class="eyebrow">Space 0{{ activeMomentIndex + 1 }}</span>
-                <h2>{{ activeMoment.title }}</h2>
-                <h3>{{ activeMoment.subtitle }}</h3>
-                <p>{{ activeMoment.description }}</p>
+                <div class="experience-card__moments">
+                    <div *ngFor="let moment of moments; let index = index" class="experience-card__moment"
+                        [class.is-active]="index === activeMomentIndex"
+                        [class.experience-card--romantic]="index === 4"
+                        [attr.aria-hidden]="index !== activeMomentIndex">
+                        <span class="eyebrow">Space 0{{ index + 1 }}</span>
+                        <h2>{{ moment.title }}</h2>
+                        <h3>{{ moment.subtitle }}</h3>
+                        <p>{{ moment.description }}</p>
+                    </div>
+                </div>
                 <div class="progress-dots" aria-label="Choose a space">
                     <button
                         *ngFor="let moment of moments; let index = index"
@@ -464,7 +482,7 @@
                         [class.is-active]="index === activeMomentIndex"
                         [attr.aria-label]="'Show ' + moment.title"
                         [attr.aria-pressed]="index === activeMomentIndex"
-                        (click)="activeMomentIndex = index"
+                        (click)="selectMoment(index)"
                     ></button>
                 </div>
                 <span class="eyebrow"

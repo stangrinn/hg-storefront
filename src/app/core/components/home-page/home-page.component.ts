@@ -69,12 +69,54 @@ export class HomePageComponent implements OnInit {
 
     activeMomentIndex = 0;
 
-    get activeMoment(): HomeMoment {
-        return this.moments[this.activeMomentIndex];
+    momentDragging = false;
+    momentDragOffset = 0;
+    private momentPointer: { id: number; x: number; y: number } | null = null;
+
+    selectMoment(index: number): void {
+        this.activeMomentIndex = Math.max(0, Math.min(this.moments.length - 1, index));
+        this.momentDragOffset = 0;
     }
 
     shiftMoment(direction: number): void {
-        this.activeMomentIndex = Math.max(0, Math.min(this.moments.length - 1, this.activeMomentIndex + direction));
+        this.selectMoment(this.activeMomentIndex + direction);
+    }
+
+    startMomentSwipe(event: PointerEvent): void {
+        if (event.pointerType === 'mouse' || !event.isPrimary) {
+            return;
+        }
+        this.momentPointer = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    }
+
+    moveMomentSwipe(event: PointerEvent): void {
+        if (!this.momentPointer || event.pointerId !== this.momentPointer.id) {
+            return;
+        }
+        const offset = event.clientX - this.momentPointer.x;
+        const verticalOffset = event.clientY - this.momentPointer.y;
+        if (!this.momentDragging && Math.abs(offset) > 8 && Math.abs(offset) > Math.abs(verticalOffset)) {
+            this.momentDragging = true;
+        }
+        if (this.momentDragging) {
+            const atEdge = (this.activeMomentIndex === 0 && offset > 0) ||
+                (this.activeMomentIndex === this.moments.length - 1 && offset < 0);
+            this.momentDragOffset = offset * (atEdge ? 0.25 : 1);
+        }
+    }
+
+    endMomentSwipe(event: PointerEvent, cancelled = false): void {
+        if (!this.momentPointer || event.pointerId !== this.momentPointer.id) {
+            return;
+        }
+        const offset = this.momentDragOffset;
+        this.momentPointer = null;
+        this.momentDragging = false;
+        this.momentDragOffset = 0;
+        if (!cancelled && Math.abs(offset) >= 48) {
+            this.shiftMoment(offset < 0 ? 1 : -1);
+        }
     }
 
     readonly comparisonRows: ComparisonRow[] = [

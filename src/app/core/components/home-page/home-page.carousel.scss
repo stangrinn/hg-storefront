@@ -31,12 +31,13 @@
             font-weight: 700;
             line-height: normal;
         }
-        .experience-card__body > p {
+        .experience-card__moment > p {
             margin-top: 24px;
             color: var(--home-muted);
             font: 400 18px/normal 'Montserrat', sans-serif;
             line-height: normal;
         }
+        .experience-card__moment > .eyebrow,
         .experience-card__body > .eyebrow {
             display: block;
             font-size: 12px;
@@ -97,13 +98,14 @@
         }
         .experience-card__body { width: 384px; max-width: 100%; }
         .experience-card__body h2 { width: 410px; max-width: calc(100% + 26px); }
-        .experience-card__body > p { width: 397px; max-width: calc(100% + 13px); }
-        .experience-card__body h2, .experience-card__body h3, .experience-card__body > p, .experience-card__body > .eyebrow { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
+        .experience-card__moment > p { width: 397px; max-width: calc(100% + 13px); }
+        .experience-card__body h2, .experience-card__body h3, .experience-card__moment > p, .experience-card__moment > .eyebrow,
+        .experience-card__body > .eyebrow { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
         .experience-card--romantic h2 { letter-spacing: 3.52px; }
         .experience-card__body h3 { padding-block: 6px; }
     }
     :host-context(.theme-light) {
-        .experience-card__body > p { color: #66666b; }
+        .experience-card__moment > p { color: #66666b; }
         .experience-card__previous img, .experience-card__next img { filter: brightness(0) invert(.16); }
     }
 }
@@ -112,6 +114,54 @@
     :host {
         .experience-card__copy { padding: 40px; }
         .experience-card__body h2 { font-size: 28px; max-width: 100%; }
-        .experience-card__body > p { max-width: 100%; }
+        .experience-card__moment > p { max-width: 100%; }
     }
+}
+
+.experience-card__image {
+    min-width: 0;
+    touch-action: pan-y pinch-zoom;
+}
+
+.experience-card__track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 560ms cubic-bezier(.22, .61, .36, 1);
+
+    &.is-dragging {
+        transition: none;
+    }
+
+    img {
+        display: block;
+        flex: 0 0 100%;
+        min-width: 0;
+        user-select: none;
+    }
+}
+
+// Overlapping text panels reserve the tallest slide's height so controls stay in place.
+.experience-card__moments {
+    display: grid;
+}
+
+.experience-card__moment {
+    grid-area: 1 / 1;
+    min-width: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px);
+    transition: opacity 160ms ease, transform 160ms ease, visibility 0s 160ms;
+
+    &.is-active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition: opacity 360ms ease 140ms, transform 420ms cubic-bezier(.22, .61, .36, 1) 140ms;
+    }
+}
+
+.progress-dots button {
+    transition: width 360ms cubic-bezier(.22, .61, .36, 1), background-color 200ms ease;
 }
