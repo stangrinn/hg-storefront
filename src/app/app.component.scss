@@ -63,6 +63,15 @@
     color: #2a2a2d;
 }
 
+.menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 29;
+    padding: 0;
+    border: 0;
+    background: rgb(0 0 0 / 35%);
+}
+
 .site-header {
     --layout-header-background: #0f0f10;
     --layout-header-height: 92px;

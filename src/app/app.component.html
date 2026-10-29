@@ -30,7 +30,10 @@
         </div>
     </hgart-layout-header>
 
-    <hgart-collections-menu-mobile [visible]="mobileNavVisible$ | async" [showThemeControl]="true"
+    <button *ngIf="mobileNavVisible$ | async" class="menu-backdrop" type="button"
+        aria-label="Close collections menu" (click)="collectionsMenu.close()"></button>
+
+    <hgart-collections-menu-mobile #collectionsMenu [visible]="mobileNavVisible$ | async" [showThemeControl]="true"
         [isDarkTheme]="isDarkTheme" (themeChanged)="toggleTheme()" class="z-10"></hgart-collections-menu-mobile>
 
     <hgart-favourites-drawer (drawerClosed)="closeCartDrawer()" [visible]="cartDrawerVisible$ | async"></hgart-favourites-drawer>
