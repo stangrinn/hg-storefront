@@ -50,29 +50,26 @@
     background: linear-gradient(90deg, var(--divider-primary) 0%, var(--divider-surface) 40%, var(--divider-surface) 60%, var(--divider-primary) 100%);
 }
 
-// Parallax hook: `--divider-parallax` (unitless, -1..1) is written on the host; each layer scales it by its own
-// `--layer-depth`. `translate` is used instead of `transform` so it composes with the rotations below.
 .layer {
     position: absolute;
     pointer-events: none;
-    translate: 0 calc(var(--divider-parallax, 0) * var(--layer-depth, 0px));
 }
 
 .layer--base {
-    --layer-depth: 0px;
+
 
     inset: 0;
 }
 
 .layer--band {
-    --layer-depth: 10px;
+
 }
 
 .layer--line,
 .layer--rule,
 .layer--ticks,
 .layer--tick-center {
-    --layer-depth: 16px;
+
 }
 
 .layer--diamond,
@@ -80,7 +77,7 @@
 .layer--dots-row,
 .layer--mark,
 .layer--label {
-    --layer-depth: 24px;
+
 }
 
 .layer--rule {
@@ -137,7 +134,7 @@
     }
 
     .layer--edge {
-        --layer-depth: 10px;
+
 
         top: 32px;
         width: min(480px, 25%);
@@ -162,7 +159,7 @@
         height: 1px;
         background: var(--divider-muted);
         opacity: 0.8;
-        translate: -50% calc(var(--divider-parallax, 0) * var(--layer-depth, 0px));
+        translate: -50% 0;
     }
 
     .layer--diamond {
@@ -174,7 +171,7 @@
 // overlap-3
 :host([data-variant='overlap']) {
     .layer--band-front {
-        --layer-depth: 14px;
+
 
         top: 11px;
         left: -102px;
@@ -185,7 +182,7 @@
     }
 
     .layer--band-back {
-        --layer-depth: 28px;
+
 
         top: 38px;
         left: 700px;
@@ -227,7 +224,7 @@
     }
 
     .layer--band {
-        --layer-depth: 14px;
+
 
         top: 20px;
         height: 72px;
@@ -270,7 +267,7 @@
         left: 50%;
         display: flex;
         gap: 3px;
-        translate: -50% calc(var(--divider-parallax, 0) * var(--layer-depth, 0px));
+        translate: -50% 0;
 
         i {
             width: 6px;

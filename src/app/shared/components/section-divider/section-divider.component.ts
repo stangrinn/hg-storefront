@@ -4,10 +4,6 @@ export type SectionDividerVariant = 'diagonal' | 'gradient' | 'overlap' | 'wave'
 
 /**
  * Decorative separator between page sections (Figma: Main 1920 → divider-*).
- *
- * Every variant is built from absolutely positioned layers (`.layer`). Each layer shifts vertically by
- * `--divider-parallax` (unitless, -1..1, set on the host by a future parallax directive) multiplied by its own
- * `--layer-depth` (px), so a parallax effect only has to write one variable per divider.
  */
 @Component({
     selector: 'hgart-section-divider',

@@ -962,44 +962,8 @@ h2,
     }
 }
 
-// Parallax: `--parallax` (-1..1) is published on each section by `hgartParallax`; every element below scales it by its own depth.
-// The variable is not set during SSR, so nothing moves there.
-.hero__art,
-.step-card,
-.ar-flow__art {
-    translate: 0 calc(var(--parallax, 0) * var(--parallax-depth, 0px));
-    will-change: translate;
-}
-
-.hero__art {
-    --parallax-depth: 28px;
-}
-
-.hero__art--large {
-    --parallax-depth: -12px;
-}
-
-.hero__art--medium {
-    --parallax-depth: -22px;
-}
-
-// Same depth for all cards so the row stays aligned like in the design.
-.step-card {
-    --parallax-depth: 20px;
-}
-
-.ar-flow__art {
-    --parallax-depth: -26px;
-}
-
 .experience-card__image {
     overflow: hidden;
-}
-
-.experience-card__image img {
-    scale: 1.18;
-    translate: 0 calc(var(--parallax, 0) * -40px);
-    will-change: translate;
 }
 
 /* Light theme: Figma node 791:33340 (surfaces, shadows and text colours) */
