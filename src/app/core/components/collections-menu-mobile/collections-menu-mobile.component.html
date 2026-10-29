@@ -3,7 +3,7 @@
         [ngClass]="visible ? 'visible opacity-100' : 'invisible opacity-0'"></div>
 
     <div class="fixed inset-0 overflow-hidden overlay-container" [ngClass]="visible ? 'visible' : 'invisible'">
-        <div class="absolute inset-0 overflow-hidden" (click)="close()" #overlay>
+        <div class="drawer-scroll" (click)="close()" #overlay>
             <div class="drawer-content">
                 <div class="pointer-events-auto w-screen transform transition ease-in-out duration-300" [ngClass]="{
                            '-translate-x-full': !visible,
