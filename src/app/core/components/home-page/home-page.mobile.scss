@@ -139,7 +139,7 @@
         .faq .section-heading small { margin-top: 40px; font-size: 18px; line-height: 29px; }
         .faq-grid { display: flex; flex-direction: column; gap: 32px; margin: 48px auto 0; max-width: 420px; }
         .faq-card { min-height: 283px; padding: 56px 24px; background: var(--home-panel); }
-        .faq-card:first-child { min-height: 341px; border-width: 0 0 4px 4px; }
+        .faq-card:first-child { min-height: 341px; }
         .faq-card > span { left: 40px; width: 48px; height: 48px; padding: 0; font-size: 32px; line-height: 48px; }
         .faq-card h3 { font-family: Montserrat, sans-serif; font-size: 20px; font-weight: 700; line-height: 26px; letter-spacing: 0; text-box-trim: none; }
         .faq-card p { margin-top: 16px; color: var(--home-muted); font-family: Montserrat, sans-serif; font-size: 18px; line-height: 29px; }

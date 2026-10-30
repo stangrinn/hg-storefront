@@ -725,6 +725,7 @@ h2,
 }
 
 :host-context(.theme-light) .faq-card {
+    --faq-hover-border: #0f0f10;
     background: #fff;
     color: #2a2a2d;
     box-shadow: 0 20px 30px rgb(0 0 0 / 20%);
@@ -738,18 +739,26 @@ h2,
     color: #8a8a8f;
 }
 
-:host-context(.theme-light) .faq-card:first-child {
-    border-color: #0f0f10;
-}
-
 :host-context(.theme-light) .faq-card > span {
     background: #0f0f10;
     color: #fff;
 }
 
-.faq-card:first-child {
-    border-bottom: 4px solid #f7f7f5;
-    border-left: 4px solid #f7f7f5;
+.faq-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-bottom: 4px solid var(--faq-hover-border, #f7f7f5);
+    border-left: 4px solid var(--faq-hover-border, #f7f7f5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .faq-card:hover::after {
+        opacity: 1;
+    }
 }
 
 .faq-card > span {
@@ -1116,11 +1125,6 @@ h2,
     border: 1px solid #8a8a8f;
     background: #fff;
     box-shadow: 0 20px 30px rgb(0 0 0 / 20%);
-}
-
-:host-context(.theme-light) .faq-card:first-child {
-    border-bottom: 4px solid #0f0f10;
-    border-left: 4px solid #0f0f10;
 }
 
 :host-context(.theme-light) .faq-card > span {
