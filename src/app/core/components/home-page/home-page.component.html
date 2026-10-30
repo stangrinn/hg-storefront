@@ -41,11 +41,10 @@
                     <p>FIVE characters. FIVE desires. ONE artist.</p>
                 </div>
                 <a
-                    *ngIf="primaryCollection$ | async as primaryCollection"
                     class="outline-button"
-                    [routerLink]="['/category', primaryCollection.slug]"
+                    [routerLink]="['/category', 'moon-women']"
                 >
-                    Explore the collection <span aria-hidden="true">→</span>
+                    Explore new collection <span aria-hidden="true">→</span>
                 </a>
             </div>
         </div>
