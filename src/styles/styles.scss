@@ -69,3 +69,10 @@ body:has(hgart-layout.theme-light) {
 
 .hg-icon { display: block; flex: none; align-self: center; }
 .theme-light .hg-icon { filter: brightness(0) invert(.16); }
+
+@media (any-hover: hover) and (any-pointer: fine) {
+    html.hgart-cursor-active,
+    html.hgart-cursor-active * {
+        cursor: none !important;
+    }
+}

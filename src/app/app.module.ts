@@ -8,6 +8,7 @@ import { filter } from 'rxjs/operators';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
+import { ArtCursorComponent } from './core/components/art-cursor/art-cursor.component';
 import { EvolutionScrollDirective } from './core/components/home-page/evolution-scroll.directive';
 import { HeroVideoDirective } from './core/components/home-page/hero-video.directive';
 import { HeroPromptTypingDirective } from './core/components/home-page/hero-prompt-typing.directive';
@@ -19,6 +20,7 @@ import { SharedModule } from './shared/shared.module';
 @NgModule({
     declarations: [
         AppComponent,
+        ArtCursorComponent,
         HomePageComponent,
         EvolutionScrollDirective,
         HeroPromptTypingDirective,

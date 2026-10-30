@@ -1,3 +1,5 @@
+<hgart-art-cursor></hgart-art-cursor>
+
 <hgart-layout [class.theme-light]="!isDarkTheme" [class.layout--home]="isHomePage$ | async" [class.layout--collection]="isCollectionPage$ | async" [class.layout--product]="isProductPage$ | async" [class.layout--compact-header]="!(isProductPage$ | async)">
     <hgart-layout-header class="site-header">
         <div class="site-header__ceiling" aria-hidden="true">
