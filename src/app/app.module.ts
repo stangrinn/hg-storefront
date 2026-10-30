@@ -9,6 +9,8 @@ import { filter } from 'rxjs/operators';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 import { EvolutionScrollDirective } from './core/components/home-page/evolution-scroll.directive';
+import { HeroVideoDirective } from './core/components/home-page/hero-video.directive';
+import { HeroPromptTypingDirective } from './core/components/home-page/hero-prompt-typing.directive';
 import { HomePageComponent } from './core/components/home-page/home-page.component';
 import { CoreModule } from './core/core.module';
 import { CustomRouteReuseStrategy } from './core/route-reuse-strategy';
@@ -19,6 +21,8 @@ import { SharedModule } from './shared/shared.module';
         AppComponent,
         HomePageComponent,
         EvolutionScrollDirective,
+        HeroPromptTypingDirective,
+        HeroVideoDirective,
     ],
     imports: [
         BrowserModule,

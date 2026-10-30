@@ -1,120 +1,29 @@
 <main class="home">
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title" hgartHeroPromptTyping>
         <div class="hero__wall" aria-hidden="true">
-            <div class="hero__art hero__art--small">
-                <img src="assets/home/hero-blue.png" alt="" />
-                <span class="hero__prompt"
-                    >A surreal art portrait of a mysterious woman between
-                    dreaming and awakening. Her hair expands around her in
-                    flowing waves, while the darkness dissolves into a landscape
-                    of clouds and distant light. Tiny luminous particles rise
-                    like fragments of a dream.</span
-                >
+            <div class="hero__art hero__art--small" hgartHeroVideo>
+                <video class="hero__video" src="assets/home/hero-call-loop.mp4"
+                    poster="assets/home/hero-call-poster.webp" preload="none" muted playsinline loop></video>
+                <span class="hero__prompt" data-typing-speed="7">{{ heroPrompts.fullness }}</span>
             </div>
-            <div class="hero__art hero__art--medium">
-                <img src="assets/home/hero-green.png" alt="" />
-                <span class="hero__prompt"
-                    >A surreal portrait of a woman emerging from darkness. Light
-                    travels through her delicate hair and transforms into
-                    brilliant filaments. A vast atmospheric landscape surrounds
-                    her as the world changes before she opens her eyes.</span
-                >
-                <span
-                    class="desktop1600-only hero__prompt hero__prompt--desktop"
-                    ><span
-                        >A surreal art painting photography portrait of a
-                        mysterious woman with, front view. She embodies the
-                        exact moment between dreaming and awakening, when
-                        consciousness begins to return and an entirely new world
-                        becomes visible. A luminous eclipse or partially
-                        revealed moon appears behind her head, with the first
-                        rays of dawn breaking through the darkness. Her hair
-                        begins as delicate dark strands near her head and
-                        gradually transforms outward into brilliant illuminated
-                        filaments, as though light is passing through it from
-                        within. Around her, darkness is dissolving into a vast
-                        atmospheric landscape of clouds, mist and distant golden
-                        light. Tiny luminous particles rise around her like
-                        fragments of a dream disappearing at sunrise. Her ivory
-                        garment is flowing and sculptural, with translucent
-                        layers catching the first warm rays of light. The color
-                        palette transitions dramatically from deep charcoal and
-                        midnight blue at the edges into silver, pearl, pale
-                        lavender, warm ivory, soft peach and radiant golden
-                        sunrise tones near the center. Her closed eyes remain
-                        the emotional focal point: she has not opened them yet,
-                        but everything around her suggests that she is about to.
-                        The atmosphere should feel transformative, hopeful,
-                        powerful and deeply cinematic — the world is changing
-                        before she opens her eyes. Surreal fine-art photography,
-                        ethereal realism, luminous atmosphere, sophisticated
-                        color transition, volumetric dawn light, exquisite
-                        textures, intricate flowing hair, sculptural fabric,
-                        museum-quality contemporary artwork.</span
-                    ></span
-                >
+            <div class="hero__art hero__art--medium" hgartHeroVideo>
+                <video class="hero__video" src="assets/home/hero-awakening-loop.mp4"
+                    poster="assets/home/hero-awakening-poster.webp" preload="none" muted playsinline loop></video>
+                <span class="hero__prompt hero__prompt--desktop" data-typing-speed="10">{{ heroPrompts.awakening }}</span>
             </div>
-            <div class="hero__art hero__art--large">
-                <img
-                    src="assets/home/hero-artwork.png"
-                    alt="Surreal portrait from the HG ARt collection"
-                />
+            <div class="hero__art hero__art--large" hgartHeroVideo>
+                <video class="hero__video" src="assets/home/hero-center-loop.mp4"
+                    poster="assets/home/hero-center-poster.webp" preload="none" muted playsinline loop></video>
             </div>
-            <div class="hero__art hero__art--medium">
-                <img src="assets/home/hero-rain.png" alt="" />
-                <span class="hero__prompt"
-                    >A mysterious woman stands motionless in a nocturnal
-                    landscape. Her hair drifts like threads of time,
-                    disappearing into darkness. Deep midnight blue, charcoal and
-                    muted ivory create a quiet feeling of stillness and
-                    anticipation.</span
-                >
-                <span class="tablet-only hero__prompt hero__prompt--tablet"
-                    ><span
-                        >A surreal art painting photography portrait of a
-                        mysterious woman, front view. She stands motionless in a
-                        vast nocturnal landscape, embodying the quiet tension of
-                        waiting. Her long silver hair drifts slowly through the
-                        air like fine threads of time, with delicate strands
-                        disappearing into darkness. She wears a long ivory
-                        garment with delicate translucent layers that barely
-                        move, suggesting stillness and anticipation. Deep
-                        midnight blue, charcoal, silver and muted ivory dominate
-                        the composition, with a faint cold glow surrounding her
-                        face. The atmosphere is silent, mysterious, suspended
-                        between night and dawn, cinematic and dreamlike.
-                        Fine-art surrealism, ethereal realism, sculptural
-                        textures, delicate skin, intricate hair, atmospheric
-                        depth, soft volumetric light, museum-quality
-                        contemporary art, sophisticated restrained color
-                        palette.A surreal art painting photography portrait of a
-                        mysterious woman, front view. She stands motionless in a
-                        vast nocturnal landscape, embodying the quiet tension of
-                        waiting. Her long silver hair drifts slowly through the
-                        air like fine threads of time, with delicate strands
-                        disappearing into darkness. She wears a long ivory
-                        garment with delicate translucent layers that barely
-                        move, suggesting stillness and anticipation. Deep
-                        midnight blue, charcoal, silver and muted ivory dominate
-                        the composition, with a faint cold glow surrounding her
-                        face. The atmosphere is silent, mysterious, suspended
-                        between night and dawn, cinematic and dreamlike.
-                        Fine-art surrealism, ethereal realism, sculptural
-                        textures, delicate skin, intricate hair, atmospheric
-                        depth, soft volumetric light, museum-quality
-                        contemporary art, sophisticated restrained color
-                        palette.</span
-                    ></span
-                >
+            <div class="hero__art hero__art--medium" hgartHeroVideo>
+                <video class="hero__video" src="assets/home/hero-waiting-loop.mp4"
+                    poster="assets/home/hero-waiting-poster.webp" preload="none" muted playsinline loop></video>
+                <span class="hero__prompt hero__prompt--tablet" data-typing-speed="8">{{ heroPrompts.waiting }}</span>
             </div>
-            <div class="hero__art hero__art--small">
-                <img src="assets/home/hero-gold.png" alt="" />
-                <span class="hero__prompt"
-                    >A luminous moon glows behind her head like a celestial
-                    halo. Silver-white hair expands into waves of flowers and
-                    delicate golden botanical forms. Layers of petals and light
-                    surround her without obscuring her face.</span
-                >
+            <div class="hero__art hero__art--small" hgartHeroVideo>
+                <video class="hero__video" src="assets/home/hero-fullness-loop.mp4"
+                    poster="assets/home/hero-fullness-poster.webp" preload="none" muted playsinline loop></video>
+                <span class="hero__prompt" data-typing-speed="6">{{ heroPrompts.fullness }}</span>
             </div>
         </div>
 

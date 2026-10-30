@@ -6,11 +6,8 @@
         .hero__wall { height: 582px; gap: 14px; overflow: hidden; }
         .hero__art--large { width: 366px; height: 488px; aspect-ratio: auto; margin-top: -1px; }
         .hero__art--large + .hero__art--medium { display: block; width: 330px; height: 440px; }
-        .hero__art--large + .hero__art--medium > img { transform: scaleX(-1); }
-        .hero__art--large + .hero__art--medium > .hero__prompt:not(.hero__prompt--tablet) { display: none; }
-        .hero__prompt--tablet > span { position: relative; display: block; top: -310px; }
-        .hero__prompt { padding: 8px 9px; backdrop-filter: blur(10px); }
-        .hero__prompt--tablet { padding: 3px 3px 3px 9px; color: var(--home-muted); font-weight: 400; line-height: normal; }
+        .hero__art--large + .hero__art--medium .hero__prompt:not(.hero__prompt--tablet) { display: none; }
+        .hero__prompt--tablet { padding: 3px 3px 3px 9px; font-weight: 400; line-height: normal; }
         .hero__caption { align-items: center; margin-top: 0; padding: 23px 24px 80px; }
         .hero__title-group h1 { max-width: 546px; }
         .hero__title-group h1 br { display: none; }

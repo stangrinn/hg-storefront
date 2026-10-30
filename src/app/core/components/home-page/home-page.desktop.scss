@@ -45,35 +45,21 @@
             width: 366px;
             height: 488px;
         }
-        .hero__art--large + .hero__art--medium > img {
-            transform: scaleX(-1);
-        }
         .hero__art--medium
-            > .hero__prompt:not(.hero__prompt--desktop):not(
+            .hero__prompt:not(.hero__prompt--desktop):not(
                 .hero__prompt--tablet
             ) {
             display: none;
         }
-        .hero__art > .hero__prompt--tablet,
-        .hero__art > .hero__prompt--desktop {
+        .hero__art .hero__prompt--tablet,
+        .hero__art .hero__prompt--desktop {
             display: block;
             inset: 6px 6px 6px 50%;
             padding: 3px 3px 3px 9px;
             font-size: 10px;
             font-weight: 400;
             line-height: normal;
-            color: #fff;
             backdrop-filter: blur(10px);
-        }
-        .hero__prompt--tablet > span {
-            position: relative;
-            display: block;
-            top: -310px;
-        }
-        .hero__prompt--desktop > span {
-            position: relative;
-            display: block;
-            top: -6px;
         }
         .hero__caption {
             height: 227px;

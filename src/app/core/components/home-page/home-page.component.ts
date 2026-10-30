@@ -5,6 +5,7 @@ import { map, shareReplay } from 'rxjs/operators';
 
 import { GetCollectionsQuery } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
+import { HERO_PROMPTS } from './hero-prompts';
 
 interface HomeMoment {
     title: string;
@@ -34,6 +35,9 @@ interface ComparisonRow {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent implements OnInit {
+    readonly heroPrompts = HERO_PROMPTS;
+
+
     readonly moments: HomeMoment[] = [
         {
             title: "Everyday Home Moments",

@@ -61,7 +61,7 @@
 
 :host-context(.theme-light) .hero__prompt {
     background: rgb(0 0 0 / 30%);
-    color: #fff;
+    color: rgb(255 255 255 / 60%);
 }
 
 
@@ -135,7 +135,7 @@ h2,
     box-shadow: 0 18px 30px rgb(0 0 0 / 72%);
 }
 
-.hero__art > img {
+.hero__art video {
     display: block;
     width: 100%;
     height: 100%;
@@ -159,20 +159,30 @@ h2,
 
 .hero__prompt {
     position: absolute;
+    z-index: 1;
     inset: 6px 6px 6px 50%;
     overflow: hidden;
-    padding: 8px;
+    padding: 3px 3px 3px 9px;
     background: rgb(0 0 0 / 30%);
-    color: #fff;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    overflow-anchor: none;
+    color: rgb(255 255 255 / 60%);
     font-family: 'Orbitron', sans-serif;
     font-size: 10px;
     letter-spacing: 3.5px;
-    line-height: 1.2;
+    font-weight: 400;
+    line-height: normal;
     word-break: break-word;
+}
+
+.hero__art--small .hero__prompt {
+    padding: 3px 4px;
 }
 
 .hero__art:first-child .hero__prompt {
     inset: 6px 50% 6px 6px;
+    padding-block: 4px 2px;
 }
 
 .hero__caption {
@@ -1154,3 +1164,26 @@ h2,
 // Theme changes affect colors; responsive compositions select the size.
 .outline-button { @include hg.button(secondary); }
 .solid-button { @include hg.button; }
+
+.hero--typing-initializing .hero__prompt {
+    visibility: hidden;
+}
+
+:host ::ng-deep .hero__prompt-stream {
+    white-space: pre-wrap;
+}
+
+:host ::ng-deep .hero__typing-cursor {
+    display: inline-block;
+    width: 1px;
+    height: 1em;
+    margin-left: 1px;
+    vertical-align: -0.1em;
+    background: currentColor;
+    pointer-events: none;
+    animation: hero-cursor-blink 700ms steps(1, end) infinite;
+}
+
+@keyframes hero-cursor-blink {
+    50% { opacity: 0; }
+}
