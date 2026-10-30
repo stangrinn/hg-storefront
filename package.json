@@ -1,6 +1,6 @@
 {
     "name": "hg-storefront",
-    "version": "0.3.13",
+    "version": "0.3.14",
     "scripts": {
         "ng": "ng",
         "dev": "ng serve --port 4201",
