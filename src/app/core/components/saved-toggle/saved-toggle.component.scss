@@ -78,7 +78,8 @@
 }
 
 @media (min-width: 1024px) {
-    :host-context(.layout--collection) {
+    :host-context(.layout--collection),
+    :host-context(.layout--product) {
         width: 48px;
         height: 40px;
 

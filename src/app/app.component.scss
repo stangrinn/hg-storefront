@@ -872,3 +872,70 @@ hgart-layout-footer footer a {
 @media (max-width: 380px) {
     .layout--product .site-header__logo span { font-size: 9px; letter-spacing: 3px; }
 }
+
+// Figma single-artwork header (830:74150 / 349:9420).
+@media (min-width: 1024px) {
+    .layout--product {
+        .site-header {
+            --layout-header-height: 92px;
+            --layout-header-background: var(--hg-bg-secondary);
+            height: 92px;
+            background: var(--hg-bg-secondary);
+            border-bottom: 1px solid var(--hg-bg-muted);
+        }
+
+        .site-header__ceiling {
+            display: none;
+        }
+
+        .site-header__menu {
+            top: 30px;
+            left: 60px;
+        }
+
+        .site-header__logo {
+            top: 50%;
+            left: 50%;
+            width: 252px;
+            height: 53px;
+            gap: 16px;
+            transform: translate(-50%, -50%);
+        }
+
+        .site-header__logo picture {
+            position: relative;
+            display: block;
+            flex: none;
+            width: 252px;
+            height: 27.512px;
+        }
+
+        .site-header__logo img {
+            position: absolute;
+            top: -1.487px;
+            transform: scaleX(-1);
+        }
+
+        .site-header__identity {
+            color: var(--hg-text-muted);
+            font-size: 12px;
+            line-height: normal;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-box-trim: trim-both;
+            text-box-edge: cap alphabetic;
+        }
+
+        .site-header__utilities {
+            top: 22px;
+            right: 60px;
+            gap: 48px;
+            height: 48px;
+        }
+    }
+
+    :host ::ng-deep .theme-light.layout--product .site-header {
+        --layout-header-background: var(--hg-bg-secondary);
+        background: var(--hg-bg-secondary);
+    }
+}

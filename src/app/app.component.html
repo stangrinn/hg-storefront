@@ -6,7 +6,7 @@
             <span></span><span></span><span></span><span></span>
         </div>
 
-        <hgart-mobile-menu-toggle class="site-header__menu" [collectionStyle]="isCollectionPage$ | async"></hgart-mobile-menu-toggle>
+        <hgart-mobile-menu-toggle class="site-header__menu" [collectionStyle]="(isCollectionPage$ | async) || (isProductPage$ | async)"></hgart-mobile-menu-toggle>
 
         <a [routerLink]="['/']" class="site-header__logo" aria-label="Helena Grinshpun Art home">
             <picture>
@@ -21,7 +21,7 @@
             <hgart-theme-toggle class="site-header__theme" [isDarkTheme]="isDarkTheme"
                 (themeChanged)="toggleTheme()"></hgart-theme-toggle>
 
-            <hgart-saved-toggle [count]="favouritesCount$ | async" [collectionStyle]="isCollectionPage$ | async" (opened)="openCartDrawer()"></hgart-saved-toggle>
+            <hgart-saved-toggle [count]="favouritesCount$ | async" [collectionStyle]="(isCollectionPage$ | async) || (isProductPage$ | async)" (opened)="openCartDrawer()"></hgart-saved-toggle>
         </div>
     </hgart-layout-header>
 
