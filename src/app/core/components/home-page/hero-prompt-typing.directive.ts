@@ -1,14 +1,23 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
 
+const KEYWORDS: Record<string, readonly string[]> = {
+    fullness: ['fullness', 'abundance', 'complete form', 'full moon', 'celestial halo', 'pearlescent light', 'silver-white hair', 'white flowers', 'golden botanical forms', 'champagne gold', 'radiant', 'fullness around her'],
+    awakening: ['dreaming and awakening', 'new world', 'eclipse', 'first rays of dawn', 'illuminated filaments', 'from within', 'fragments of a dream', 'closed eyes', 'she is about to'],
+    waiting: ['motionless', 'quiet tension of waiting', 'threads of time', 'disappearing into darkness', 'stillness and anticipation', 'midnight blue', 'cold glow', 'between night and dawn', 'dreamlike'],
+};
+
 interface PromptSource {
     host: HTMLElement;
     fullText: string;
     speed: number;
+    keywords: readonly string[];
 }
 
 interface TypingPrompt extends PromptSource {
     text: Text;
+    stream: HTMLElement;
+    cursor: HTMLElement;
     cycle: string;
     typed: number;
     wait: number;
@@ -42,8 +51,8 @@ export class HeroPromptTypingDirective implements AfterViewInit, OnDestroy {
             host,
             fullText: host.textContent?.trim() ?? '',
             speed: Number(host.dataset.typingSpeed) || 8,
+            keywords: KEYWORDS[host.dataset.prompt ?? ''] ?? [],
         }));
-        hero.classList.add('hero--typing-initializing');
         this.zone.runOutsideAngular(() => {
             document.fonts.ready.then(() => {
                 if (this.destroyed) {
@@ -51,7 +60,6 @@ export class HeroPromptTypingDirective implements AfterViewInit, OnDestroy {
                 }
                 window.addEventListener('resize', this.refresh);
                 this.refresh();
-                hero.classList.remove('hero--typing-initializing');
             });
         });
     }
@@ -85,14 +93,31 @@ export class HeroPromptTypingDirective implements AfterViewInit, OnDestroy {
             const cursor = document.createElement('i');
             cursor.className = 'hero__typing-cursor';
             cursor.setAttribute('aria-hidden', 'true');
-            stream.append(text, cursor);
+            stream.append(cursor);
             source.host.replaceChildren(stream);
             source.host.scrollTop = 0;
-            this.prompts.push({
-                ...source, text, cycle: source.fullText + '\n\n', typed: 0,
+            const cycle = source.fullText + '\n\n';
+            const seed = cycle.repeat(3);
+            let low = 0;
+            let high = seed.length;
+            // Prefill the visible panel from the start, then continue typing at its bottom.
+            while (low < high) {
+                const middle = Math.ceil((low + high) / 2);
+                stream.replaceChildren(document.createTextNode(seed.slice(0, middle)), cursor);
+                if (stream.offsetHeight <= source.host.clientHeight) {
+                    low = middle;
+                } else {
+                    high = middle - 1;
+                }
+            }
+            text.data = seed.slice(0, low);
+            const prompt: TypingPrompt = {
+                ...source, text, stream, cursor, cycle, typed: low,
                 wait: 200 + Math.random() * 450, phase: 'typing',
-                mistake: '', mistakeIndex: 0, erase: 0, nextTypo: 18 + Math.floor(Math.random() * 24),
-            });
+                mistake: '', mistakeIndex: 0, erase: 0, nextTypo: low + 18 + Math.floor(Math.random() * 24),
+            };
+            this.render(prompt);
+            this.prompts.push(prompt);
         }
         if (!this.frame && this.prompts.length) {
             this.lastTime = performance.now();
@@ -108,12 +133,14 @@ export class HeroPromptTypingDirective implements AfterViewInit, OnDestroy {
             prompt.wait -= elapsed;
             if (prompt.wait <= 0) {
                 prompt.wait += this.advance(prompt);
+                this.render(prompt);
+                this.trimHistory(prompt);
             }
             const bottom = Math.max(0, prompt.host.scrollHeight - prompt.host.clientHeight);
             const remaining = bottom - prompt.host.scrollTop;
-            prompt.host.scrollTop = Math.abs(remaining) < 1
-                ? bottom
-                : prompt.host.scrollTop + remaining * Math.min(1, elapsed / 45);
+            if (remaining > 0) {
+                prompt.host.scrollTop += remaining < 1 ? remaining : remaining * Math.min(1, elapsed / 45);
+            }
         }
         this.frame = this.prompts.length ? requestAnimationFrame(this.tick) : 0;
     };
@@ -156,7 +183,6 @@ export class HeroPromptTypingDirective implements AfterViewInit, OnDestroy {
         }
         prompt.text.appendData(character);
         prompt.typed++;
-        this.trimHistory(prompt);
         return this.keystrokeDelay(character, prompt.speed);
     }
 
@@ -174,21 +200,47 @@ export class HeroPromptTypingDirective implements AfterViewInit, OnDestroy {
         return base + (Math.random() < 0.025 ? 200 + Math.random() * 300 : 0);
     }
 
+    private render(prompt: TypingPrompt): void {
+        const document = prompt.host.ownerDocument;
+        const fragment = document.createDocumentFragment();
+        const pattern = new RegExp(prompt.keywords.slice().sort((a, b) => b.length - a.length)
+            .map(keyword => keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi');
+        const cycles = prompt.text.data.split('\n\n');
+        cycles.forEach((cycle, index) => {
+            const block = document.createElement('span');
+            block.className = 'hero__prompt-cycle';
+            let offset = 0;
+            let match: RegExpExecArray | null;
+            pattern.lastIndex = 0;
+            while ((match = pattern.exec(cycle)) !== null) {
+                const position = match.index ?? 0;
+                block.appendChild(document.createTextNode(cycle.slice(offset, position)));
+                const keyword = document.createElement('span');
+                keyword.className = 'hero__keyword';
+                keyword.textContent = match[0];
+                block.appendChild(keyword);
+                offset = position + match[0].length;
+            }
+            block.appendChild(document.createTextNode(cycle.slice(offset) + (index < cycles.length - 1 ? '\n\n' : '')));
+            fragment.appendChild(block);
+        });
+        fragment.appendChild(prompt.cursor);
+        prompt.stream.replaceChildren(fragment);
+    }
+
     private trimHistory(prompt: TypingPrompt): void {
         if (prompt.text.length <= prompt.cycle.length * 2) {
             return;
         }
-        // Each repeat starts on a new line, so removing a fully scrolled-out cycle preserves wrapping.
-        const range = prompt.host.ownerDocument.createRange();
-        range.setStart(prompt.text, 0);
-        range.setEnd(prompt.text, 1);
-        const firstTop = range.getBoundingClientRect().top;
-        range.setStart(prompt.text, prompt.cycle.length);
-        range.setEnd(prompt.text, prompt.cycle.length + 1);
-        const removedHeight = range.getBoundingClientRect().top - firstTop;
-        if (prompt.host.scrollTop >= removedHeight) {
+        const blocks = prompt.stream.querySelectorAll<HTMLElement>('.hero__prompt-cycle');
+        if (blocks.length < 2) {
+            return;
+        }
+        const removedHeight = blocks[1].getBoundingClientRect().top - blocks[0].getBoundingClientRect().top;
+        if (prompt.host.scrollTop >= removedHeight && removedHeight > 0) {
             const scrollTop = prompt.host.scrollTop;
             prompt.text.deleteData(0, prompt.cycle.length);
+            this.render(prompt);
             prompt.host.scrollTop = scrollTop - removedHeight;
         }
     }
