@@ -1,0 +1,14 @@
+<button class="theme-toggle" type="button" (click)="themeChanged.emit()"
+    [attr.aria-pressed]="isDarkTheme"
+    [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'">
+    <span class="theme-toggle__frame" aria-hidden="true">
+        <picture class="theme-toggle__base">
+            <source media="(max-width: 1023px)" [srcset]="asset + '-base-small.svg'" />
+            <img [src]="asset + '-base.svg'" alt="" />
+        </picture>
+        <picture class="theme-toggle__crest">
+            <source media="(max-width: 1023px)" [srcset]="asset + '-crest-small.svg'" />
+            <img [src]="asset + '-crest.svg'" alt="" />
+        </picture>
+    </span>
+</button>

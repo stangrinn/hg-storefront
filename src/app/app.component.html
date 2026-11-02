@@ -18,15 +18,8 @@
         </a>
 
         <div class="site-header__utilities">
-            <button (click)="toggleTheme()" class="site-header__theme" type="button"
-                [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'">
-                <picture>
-                    <source *ngIf="isCollectionPage$ | async" media="(min-width: 1024px)" srcset="assets/icons/collection/theme.svg">
-                    <source *ngIf="isHomePage$ | async" media="(min-width: 1024px) and (max-width: 1919px)" srcset="assets/header/theme-desktop.svg">
-                    <source *ngIf="!(isProductPage$ | async)" media="(min-width: 721px) and (max-width: 1023px)" srcset="assets/header/theme-tablet.svg">
-                    <img alt="" [class.site-header__theme-icon--light]="!isDarkTheme" src="assets/header/theme-dark.svg">
-                </picture>
-            </button>
+            <hgart-theme-toggle class="site-header__theme" [isDarkTheme]="isDarkTheme"
+                (themeChanged)="toggleTheme()"></hgart-theme-toggle>
 
             <hgart-saved-toggle [count]="favouritesCount$ | async" [collectionStyle]="isCollectionPage$ | async" (opened)="openCartDrawer()"></hgart-saved-toggle>
         </div>

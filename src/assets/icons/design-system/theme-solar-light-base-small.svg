@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" overflow="visible" style="display: block;" width="45" height="40" viewBox="0 0 45 40" fill="none">
+<g id="Light/Dark modes">
+<path id="Reflection" opacity="0.35" d="M18 32.2998H27" stroke="#D8AA62" />
+<path id="Reflection_2" opacity="0.55" d="M14.7998 26.7998H30.1998" stroke-width="2" stroke="#D8AA62" />
+<path id="Horizon" d="M1.90039 21.25H43.0004" stroke-width="1.5" stroke="#202022" />
+</g>
+<defs>
+<radialGradient id="paint0_radial_0_64" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.5496 13.7498) rotate(90) scale(10.95)">
+<stop stop-color="#E5B76E" stop-opacity="0.4" />
+<stop offset="1" stop-color="#E5B76E" stop-opacity="0" />
+</radialGradient>
+</defs>
+</svg>
