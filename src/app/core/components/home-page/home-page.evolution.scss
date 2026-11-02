@@ -1,3 +1,19 @@
+.comparison-card--alive {
+    position: relative;
+}
+
+.comparison-card__video {
+    position: absolute;
+    object-fit: cover;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 800ms ease;
+}
+
+.comparison-card__video.is-playing {
+    opacity: 1;
+}
+
 // Progressive enhancement: SSR, narrow layouts and short landscape screens retain the original flow.
 @media (min-width: 1024px) and (min-height: 600px) {
     .evolution--animated {
@@ -6,11 +22,17 @@
             height: var(--evolution-runway-height);
         }
 
-        .comparison-grid {
+        .evolution-stage {
             position: sticky;
             top: 108px;
+            display: flow-root;
+        }
+
+        .comparison-grid {
+            position: relative;
             display: block;
             height: var(--evolution-stage-height);
+            margin-top: 40px;
         }
 
         .comparison-row,
@@ -22,6 +44,7 @@
             padding-top: 0;
             transform: translateY(-50%) scale(var(--evolution-scale));
             transform-origin: center;
+            will-change: transform, opacity;
         }
 
         .comparison-card {

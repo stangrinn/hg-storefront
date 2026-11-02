@@ -25,6 +25,7 @@ interface ComparisonRow {
     aliveTitle: string;
     staticImage: string;
     aliveImage?: string;
+    aliveVideo?: string;
     mobileSubtitle?: string;
 }
 
@@ -124,9 +125,9 @@ export class HomePageComponent implements OnInit {
     }
 
     readonly comparisonRows: ComparisonRow[] = [
-        { staticTitle: 'Static', aliveTitle: 'Alive', staticImage: 'assets/home/comparison-static-1.jpeg', aliveImage: 'assets/home/comparison-alive-1.png' },
-        { staticTitle: 'One moment', aliveTitle: 'Ever-changing', mobileSubtitle: 'Infinite variations.', staticImage: 'assets/home/comparison-static-2.jpeg', aliveImage: 'assets/home/comparison-alive-2.png' },
-        { staticTitle: 'Observed', aliveTitle: 'Experienced', mobileSubtitle: 'Full immersion.', staticImage: 'assets/home/comparison-static-3.jpeg', aliveImage: 'assets/home/comparison-alive-3.png' },
+        { staticTitle: 'Static', aliveTitle: 'Alive', staticImage: 'assets/home/comparison-static-1.jpeg', aliveImage: 'assets/home/comparison-alive-1.png', aliveVideo: 'assets/home/evolution-alive.mp4' },
+        { staticTitle: 'One moment', aliveTitle: 'Ever-changing', mobileSubtitle: 'Infinite variations.', staticImage: 'assets/home/comparison-static-2.jpeg', aliveImage: 'assets/home/comparison-alive-2.png', aliveVideo: 'assets/home/evolution-ever.mp4' },
+        { staticTitle: 'Observed', aliveTitle: 'Experienced', mobileSubtitle: 'Full immersion.', staticImage: 'assets/home/comparison-static-3.jpeg', aliveImage: 'assets/home/comparison-alive-3.png', aliveVideo: 'assets/home/evolution-exp.mp4' },
         { staticTitle: 'Easily replicated', aliveTitle: 'Ownership system', staticImage: 'assets/home/comparison-static-3.jpeg' },
     ];
 
