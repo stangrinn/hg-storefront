@@ -1165,6 +1165,8 @@ h2,
 
 @import "./home-page.evolution";
 
+@import "./home-page.motion";
+
 // Theme changes affect colors; responsive compositions select the size.
 .outline-button { @include hg.button(secondary); }
 .solid-button { @include hg.button; }

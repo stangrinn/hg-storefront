@@ -1,0 +1,85 @@
+// Motion is scoped to the home page and preserves the existing document geometry.
+.ar-focus,
+.ar-flow__scan {
+    display: none;
+    pointer-events: none;
+}
+
+.home--motion {
+    .ar-flow__art::before,
+    .ar-flow__art::after,
+    .ar-flow__corner {
+        display: none;
+    }
+
+    .ar-focus {
+        position: absolute;
+        display: block;
+        width: 24px;
+        height: 24px;
+        border: 0 solid var(--home-muted);
+    }
+
+    .ar-focus--tl {
+        top: -24px;
+        left: -20px;
+        border-top-width: 2px;
+        border-left-width: 2px;
+    }
+
+    .ar-focus--tr {
+        top: -24px;
+        right: -20px;
+        border-top-width: 2px;
+        border-right-width: 2px;
+    }
+
+    .ar-focus--bl {
+        bottom: -18px;
+        left: -20px;
+        border-bottom-width: 2px;
+        border-left-width: 2px;
+    }
+
+    .ar-focus--br {
+        bottom: -18px;
+        right: -20px;
+        border-bottom-width: 2px;
+        border-right-width: 2px;
+    }
+
+    .ar-flow__scan {
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 32px;
+        right: 32px;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #7dffa0, transparent);
+        box-shadow: 0 0 18px #7dffa0;
+    }
+
+    .ar-badge {
+        background: #2a2a2c;
+        color: #999;
+        transition: background 400ms, color 400ms, box-shadow 400ms;
+    }
+
+    .ar-badge--live {
+        background: #3fae4f;
+        color: #fff;
+        box-shadow: 0 0 24px rgb(63 174 79 / 53%);
+    }
+}
+
+// These spans are created outside Angular's template renderer.
+:host ::ng-deep .home-motion__word {
+    display: inline-block;
+    white-space: nowrap;
+    perspective: 600px;
+}
+
+:host ::ng-deep .home-motion__char {
+    display: inline-block;
+    transform-origin: 50% 100%;
+}

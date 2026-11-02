@@ -13,6 +13,7 @@ import { EvolutionScrollDirective } from './core/components/home-page/evolution-
 import { FlowVideoDirective } from './core/components/home-page/flow-video.directive';
 import { HeroVideoDirective } from './core/components/home-page/hero-video.directive';
 import { HeroPromptTypingDirective } from './core/components/home-page/hero-prompt-typing.directive';
+import { HomeMotionDirective } from './core/components/home-page/home-motion.directive';
 import { HomePageComponent } from './core/components/home-page/home-page.component';
 import { CoreModule } from './core/core.module';
 import { CustomRouteReuseStrategy } from './core/route-reuse-strategy';
@@ -27,6 +28,7 @@ import { SharedModule } from './shared/shared.module';
         HeroPromptTypingDirective,
         HeroVideoDirective,
         FlowVideoDirective,
+        HomeMotionDirective,
     ],
     imports: [
         BrowserModule,
