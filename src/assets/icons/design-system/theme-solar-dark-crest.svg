@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" overflow="visible" style="display: block;" width="70" height="48" viewBox="0 0 70 48" fill="none">
 <g id="Light/Dark modes">
 <circle id="Moon crest" cx="35" cy="14" r="9" fill="#EBE6DB" />
-<circle id="Moon glow" cx="35" cy="15" r="15" fill="url(#paint0_radial_0_94)" />
+<circle id="Moon glow" cx="35" cy="15" r="15" fill="url(#paint0_radial_0_86)" />
 </g>
 <defs>
-<radialGradient id="paint0_radial_0_94" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(35 15) scale(30)">
+<radialGradient id="paint0_radial_0_86" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(35 15) scale(30)">
 <stop stop-color="#B3C7E6" stop-opacity="0.3" />
 <stop offset="1" stop-color="#B3C7E6" stop-opacity="0" />
 </radialGradient>

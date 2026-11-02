@@ -15,6 +15,12 @@
     background: transparent;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    --crest-hover-x: 0px;
+    --crest-hover-y: -3px;
+}
+
+.theme-toggle--moon {
+    --crest-hover-x: -1px;
 }
 
 .theme-toggle:focus-visible {
@@ -48,12 +54,12 @@ img {
 }
 
 .theme-toggle:focus-visible .theme-toggle__crest {
-    transform: translateY(-4px);
+    transform: translate(var(--crest-hover-x), var(--crest-hover-y));
 }
 
 @media (hover: hover) and (pointer: fine) {
     .theme-toggle:hover .theme-toggle__crest {
-        transform: translateY(-4px);
+        transform: translate(var(--crest-hover-x), var(--crest-hover-y));
     }
 }
 
@@ -62,6 +68,15 @@ img {
     .theme-toggle {
         width: 45px;
         height: 44px;
+    }
+
+    .theme-toggle {
+        --crest-hover-y: -3.7px;
+    }
+
+    .theme-toggle--moon {
+        --crest-hover-x: 0px;
+        --crest-hover-y: -3px;
     }
 
     .theme-toggle__frame {

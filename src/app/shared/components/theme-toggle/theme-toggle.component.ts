@@ -12,6 +12,6 @@ export class ThemeToggleComponent {
     @Output() themeChanged = new EventEmitter<void>();
 
     get asset(): string {
-        return `assets/icons/design-system/theme-solar-${this.isDarkTheme ? 'light' : 'dark'}`;
+        return `assets/icons/design-system/theme-solar-${this.isDarkTheme ? 'dark' : 'light'}`;
     }
 }

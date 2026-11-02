@@ -1,4 +1,4 @@
-<button class="theme-toggle" type="button" (click)="themeChanged.emit()"
+<button class="theme-toggle" [class.theme-toggle--moon]="isDarkTheme" type="button" (click)="themeChanged.emit()"
     [attr.aria-pressed]="isDarkTheme"
     [attr.aria-label]="isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'">
     <span class="theme-toggle__frame" aria-hidden="true">

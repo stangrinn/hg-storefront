@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" overflow="visible" style="display: block;" width="45" height="40" viewBox="0 0 45 40" fill="none">
 <g id="Light/Dark modes">
 <circle id="Sun crest" cx="22.5496" cy="20.1502" r="6.45" fill="#202022" />
-<circle id="Warm aura" cx="22.5496" cy="13.7498" r="10.95" fill="url(#paint0_radial_0_64)" />
+<circle id="Warm aura" cx="22.5496" cy="13.7498" r="10.95" fill="url(#paint0_radial_0_43)" />
 </g>
 <defs>
-<radialGradient id="paint0_radial_0_64" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.5496 13.7498) rotate(90) scale(10.95)">
+<radialGradient id="paint0_radial_0_43" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(22.5496 13.7498) rotate(90) scale(10.95)">
 <stop stop-color="#E5B76E" stop-opacity="0.4" />
 <stop offset="1" stop-color="#E5B76E" stop-opacity="0" />
 </radialGradient>
