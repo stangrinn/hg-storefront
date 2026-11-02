@@ -51,7 +51,7 @@
     </section>
 
     <section
-        class="section section--steps"
+        class="section section--steps" hgartFlowVideo
         aria-labelledby="flow-title"
     >
         <header class="section-heading">
@@ -143,22 +143,15 @@
                 <h3>Enter the world</h3>
                 <p>Experience art in an entirely new dimension.</p>
                 <div class="step-card__image step-card__image--phone">
-                    <img
-                        class="desktop-only"
-                        src="assets/home/step-phone.png"
-                        alt="Artwork viewed through a phone"
-                    />
+                    <video class="desktop-only" data-flow-video="assets/home/flow-phone-loop.mp4"
+                        poster="assets/home/step-phone.png" preload="none" muted loop playsinline
+                        aria-label="Artwork viewed through a phone"
+                    ></video>
                     <div class="mobile-only step-scene step-scene--phone">
-                        <img
-                            class="step-scene__background"
-                            src="assets/home/figma-experience.png"
-                            alt=""
-                        />
-                        <img
-                            class="step-scene__phone"
-                            src="assets/home/step-phone.png"
-                            alt="Artwork viewed through a phone"
-                        />
+                        <video class="step-scene__phone" data-flow-video="assets/home/flow-phone-loop.mp4"
+                            poster="assets/home/step-phone.png" preload="none" muted loop playsinline
+                            aria-label="Artwork viewed through a phone"
+                        ></video>
                     </div>
                 </div>
                 <footer>

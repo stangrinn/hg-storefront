@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 import { ArtCursorComponent } from './core/components/art-cursor/art-cursor.component';
 import { EvolutionScrollDirective } from './core/components/home-page/evolution-scroll.directive';
+import { FlowVideoDirective } from './core/components/home-page/flow-video.directive';
 import { HeroVideoDirective } from './core/components/home-page/hero-video.directive';
 import { HeroPromptTypingDirective } from './core/components/home-page/hero-prompt-typing.directive';
 import { HomePageComponent } from './core/components/home-page/home-page.component';
@@ -25,6 +26,7 @@ import { SharedModule } from './shared/shared.module';
         EvolutionScrollDirective,
         HeroPromptTypingDirective,
         HeroVideoDirective,
+        FlowVideoDirective,
     ],
     imports: [
         BrowserModule,
