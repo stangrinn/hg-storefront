@@ -1,0 +1,11 @@
+<section class="page-state" [attr.aria-busy]="state === 'loading'" aria-live="polite">
+    <p class="page-state__label" *ngIf="state === 'not-found'">404</p>
+    <h1>{{ title }}</h1>
+    <p *ngIf="state === 'not-found'">This {{ resource }} may have moved or is no longer available.</p>
+    <p *ngIf="state === 'error'">We couldn’t load this {{ resource }}. Please try again in a moment.</p>
+    <div class="page-state__actions" *ngIf="state !== 'loading'">
+        <button type="button" *ngIf="state === 'error'" (click)="retry.emit()">Try again</button>
+        <a [routerLink]="['/category', 'moon-women']">Explore collection</a>
+        <a [routerLink]="['/']">Back to home</a>
+    </div>
+</section>

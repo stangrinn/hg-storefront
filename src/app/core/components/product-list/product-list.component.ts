@@ -2,8 +2,8 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
-import { distinctUntilChanged, map, mapTo, scan, share, shareReplay, skip, switchMap, take, tap, } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, map, scan, shareReplay, startWith, switchMap, take, tap, } from 'rxjs/operators';
 
 import {
     GetCollectionQuery,
@@ -14,11 +14,17 @@ import {
 import { getRouteArrayParam } from '../../../common/utils/get-route-array-param';
 import { AssetPreviewPipe } from '../../../shared/pipes/asset-preview.pipe';
 import { DataService } from '../../providers/data/data.service';
+import { PageLoadState, PageResponseService } from '../../providers/page-response.service';
 import { StateService } from '../../providers/state/state.service';
 
 import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
 
 type SearchItem = SearchProductsQuery['search']['items'][number];
+
+type CollectionLoadResult = {
+    state: PageLoadState;
+    collection: GetCollectionQuery['collection'];
+};
 
 @Component({
     selector: 'hgart-product-list',
@@ -38,6 +44,8 @@ export class ProductListComponent implements OnInit {
     breadcrumbs$: Observable<Array<{id: string; name: string; }>>;
     mastheadBackground$: Observable<SafeStyle>;
     
+    pageState$: Observable<PageLoadState>;
+    private reload = new BehaviorSubject<void>(undefined);
     private currentPage = 0;
     private refresh = new BehaviorSubject<void>(undefined);
     readonly placeholderProducts = Array.from({ length: 12 }).map(() => null);
@@ -46,7 +54,8 @@ export class ProductListComponent implements OnInit {
                 private route: ActivatedRoute,
                 private stateService: StateService,
                 private sanitizer: DomSanitizer,
-                private location: Location) { }
+                private location: Location,
+                private pageResponse: PageResponseService) { }
 
     ngOnInit() {
         const perPage = 24;
@@ -70,24 +79,39 @@ export class ProductListComponent implements OnInit {
         this.searchTerm$ = this.route.queryParamMap.pipe(
             map(pm => pm.get('search') || ''),
             distinctUntilChanged(),
+            tap(() => {
+                this.currentPage = 0;
+            }),
             shareReplay(1),
         );
 
-        this.collection$ = collectionSlug$.pipe(
-            switchMap(slug => {
-                if (slug) {
-                    return this.dataService.query<GetCollectionQuery, GetCollectionQueryVariables>(GET_COLLECTION, {
-                        slug,
-                    }).pipe(
-                        // tap(data => console.log('Fetched collection:', data.collection)),
-                        map(data => data.collection),
-                    );
-                } else {
-                    return of(undefined);
+        const emptyResults: SearchProductsQuery = {
+            search: { items: [], totalItems: 0, facetValues: [] },
+        };
+        const collectionResult$ = combineLatest([collectionSlug$, this.reload]).pipe(
+            switchMap(([slug]) => {
+                if (!slug) {
+                    return of<CollectionLoadResult>({ state: 'ready', collection: undefined });
+                }
+                return this.dataService.query<GetCollectionQuery, GetCollectionQueryVariables>(GET_COLLECTION, {
+                    slug,
+                }).pipe(
+                    map((data): CollectionLoadResult => ({
+                        state: data.collection ? 'ready' : 'not-found',
+                        collection: data.collection,
+                    })),
+                    catchError(() => of<CollectionLoadResult>({ state: 'error', collection: undefined })),
+                    startWith<CollectionLoadResult>({ state: 'loading', collection: undefined }),
+                );
+            }),
+            tap(result => {
+                if (result.state === 'not-found' || result.state === 'error') {
+                    this.pageResponse.setStatus(result.state === 'not-found' ? 404 : 503);
                 }
             }),
             shareReplay(1),
         );
+        this.collection$ = collectionResult$.pipe(map(result => result.collection));
 
         const assetPreviewPipe = new AssetPreviewPipe();
 
@@ -112,12 +136,16 @@ export class ProductListComponent implements OnInit {
             }),
         );
 
-        const triggerFetch$ = combineLatest([this.collection$, this.activeFacetValueIds$, this.searchTerm$, this.refresh]);
+        const triggerFetch$ = combineLatest([collectionResult$, this.activeFacetValueIds$, this.searchTerm$, this.refresh]);
         
         const getInitialFacetValueIds = () => {
-            combineLatest([this.collection$, this.searchTerm$]).pipe(
+            combineLatest([collectionResult$, this.searchTerm$]).pipe(
                 take(1),
-                switchMap(([collection, term]) => {
+                switchMap(([result, term]) => {
+                    if (result.state !== 'ready') {
+                        return of(emptyResults);
+                    }
+                    const collection = result.collection;
                     return this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
                         input: {
                             term,
@@ -134,12 +162,12 @@ export class ProductListComponent implements OnInit {
                 });
         };
         
-        this.loading$ = merge(
-            triggerFetch$.pipe(mapTo(true)),
-        );
-        
-        const queryResult$ = triggerFetch$.pipe(
-            switchMap(([collection, facetValueIds, term]) => {
+        const searchResult$ = triggerFetch$.pipe(
+            switchMap(([result, facetValueIds, term]) => {
+                if (result.state !== 'ready') {
+                    return of({ state: result.state, data: emptyResults, loading: result.state === 'loading' });
+                }
+                const collection = result.collection;
                 return this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
                     input: {
                         term,
@@ -151,6 +179,7 @@ export class ProductListComponent implements OnInit {
                     },
                 }).pipe(
                     tap(data => {
+                        this.pageResponse.setStatus(200);
                         if (facetValueIds.length === 0) {
                             this.facetValues = data.search.facetValues;
                             this.unfilteredTotalItems = data.search.totalItems;
@@ -160,36 +189,38 @@ export class ProductListComponent implements OnInit {
                             this.facetValues = this.facetValues.map(fv => fv);
                         }
                     }),
+                    map(data => ({ state: 'ready' as PageLoadState, data, loading: false })),
+                    catchError(() => {
+                        this.pageResponse.setStatus(503);
+                        return of({ state: 'error' as PageLoadState, data: emptyResults, loading: false });
+                    }),
+                    startWith({
+                        state: (this.currentPage === 0 ? 'loading' : 'ready') as PageLoadState,
+                        data: emptyResults,
+                        loading: true,
+                    }),
                 );
             }),
             shareReplay(1),
         );
 
-        this.loading$ = merge(
-            triggerFetch$.pipe(mapTo(true)),
-            queryResult$.pipe(mapTo(false)),
+        this.pageState$ = searchResult$.pipe(map(result => result.state));
+        const queryResult$ = searchResult$.pipe(
+            filter(result => !result.loading),
+            map(result => result.data),
         );
+        this.loading$ = searchResult$.pipe(map(result => result.loading));
 
-        const RESET = 'RESET';
-        const items$ = this.products$ = queryResult$.pipe(map(data => data.search.items));
-        const reset$ = merge(collectionSlug$, this.activeFacetValueIds$, this.searchTerm$).pipe(
-            mapTo(RESET),
-            skip(1),
-            share(),
-        );
-        this.products$ = merge(items$, reset$).pipe(
-            scan<SearchItem[] | string, SearchItem[]>((acc, val) => {
-                if (typeof val === 'string') {
-                    return [];
-                } else {
-                    return acc.concat(val);
-                }
-            }, [] as SearchItem[]),
+        this.products$ = queryResult$.pipe(
+            map(data => data.search.items),
+            scan<SearchItem[], SearchItem[]>((products, page) =>
+                this.currentPage === 0 ? page : products.concat(page), []),
             tap(products => {
                 // Save product slugs for navigation between products
                 const slugs = products.map(p => p.slug);
                 this.stateService.setState('collectionProductSlugs', slugs);
             }),
+            shareReplay({ bufferSize: 1, refCount: true }),
         );
         this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
         this.displayLoadMore$ = combineLatest([this.products$, this.totalResults$]).pipe(
@@ -199,6 +230,11 @@ export class ProductListComponent implements OnInit {
         );
 
         // console.log('ProductListComponent initialized', this.collection$);
+    }
+
+    retryLoad(): void {
+        this.currentPage = 0;
+        this.reload.next();
     }
 
     pad(value: number | null): string {

@@ -1,0 +1,54 @@
+:host {
+    display: block;
+    color: var(--hg-text-primary);
+    background: var(--hg-bg-primary);
+}
+
+.page-state {
+    max-width: 960px;
+    min-height: 55vh;
+    margin-inline: auto;
+    padding: clamp(48px, 8vw, 120px) 24px;
+    text-align: center;
+
+    h1 {
+        margin: 0 0 24px;
+        font: 400 clamp(36px, 5vw, 64px)/1.1 var(--hg-font-display);
+    }
+
+    p {
+        color: var(--hg-text-secondary);
+        font: 400 16px/1.7 var(--hg-font-body);
+    }
+}
+
+.page-state__label {
+    letter-spacing: 0.2em;
+}
+
+.page-state__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+
+    a, button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 12px 20px;
+        border: 1px solid currentColor;
+        background: transparent;
+        color: var(--hg-text-primary);
+        font: 400 14px/1.5 var(--hg-font-body);
+        text-decoration: none;
+        cursor: pointer;
+
+        &:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 4px;
+        }
+    }
+}

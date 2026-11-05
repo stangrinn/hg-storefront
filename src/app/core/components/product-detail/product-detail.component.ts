@@ -2,8 +2,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { of, Subscription } from 'rxjs';
-import { filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, of, Subscription } from 'rxjs';
+import { catchError, filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
 import {
     GetProductDetailQuery,
@@ -19,6 +19,7 @@ import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined'
 import { FavouriteItem } from '../../providers/favourites/favourites.service';
 import { DataService } from '../../providers/data/data.service';
 import { NotificationService } from '../../providers/notification/notification.service';
+import { PageLoadState, PageResponseService } from '../../providers/page-response.service';
 import { StateService } from '../../providers/state/state.service';
 
 import { SEARCH_PRODUCTS } from '../product-list/product-list.graphql';
@@ -31,6 +32,10 @@ type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][n
 /** Available tabs for product detail page */
 type ProductTab = 'description' | 'additionalInfo';
 
+type ProductLoadResult =
+    | { state: 'ready'; product: NonNullable<GetProductDetailQuery['product']> }
+    | { state: 'not-found' | 'error' };
+
 @Component({
     selector: 'hgart-product-detail',
     templateUrl: './product-detail.component.html',
@@ -40,6 +45,8 @@ type ProductTab = 'description' | 'additionalInfo';
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
     product: GetProductDetailQuery['product'];
+    pageState: PageLoadState = 'loading';
+    private reload = new BehaviorSubject<void>(undefined);
     
     selectedVariant: Variant;
     breadcrumbs: Collection['breadcrumbs'] | null = null;
@@ -73,6 +80,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private cDRef: ChangeDetectorRef,
+        private pageResponse: PageResponseService,
         @Inject(PLATFORM_ID) private platformId: object) {
         // Track current URL before navigating away - save it as potential referrer
         this.router.events.pipe(
@@ -96,19 +104,34 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             filter(notNullOrUndefined),
         );
 
-        this.sub = productSlug$.pipe(
-            switchMap(slug => {
+        this.sub = combineLatest([productSlug$, this.reload]).pipe(
+            switchMap(([slug]) => {
+                this.pageState = 'loading';
+                this.product = undefined;
+                this.isInterestFormOpen = false;
+                this.relatedProducts = [];
+                this.cDRef.markForCheck();
+
                 return this.dataService.query<GetProductDetailQuery, GetProductDetailQueryVariables>(GET_PRODUCT_DETAIL, {
                     slug,
-                });
+                }).pipe(
+                    map((data): ProductLoadResult => data.product
+                        ? { state: 'ready', product: data.product }
+                        : { state: 'not-found' }),
+                    catchError(() => of<ProductLoadResult>({ state: 'error' })),
+                );
             }),
-            map(data => data.product),
-            filter(notNullOrUndefined),
             withLatestFrom(lastCollectionSlug$, this.stateService.select(state => state.productPageReferrer)),
-
-        ).subscribe(([product, lastCollectionSlug, savedReferrer]) => {
+        ).subscribe(([result, lastCollectionSlug, savedReferrer]) => {
+            this.pageState = result.state;
+            this.pageResponse.setStatus(result.state === 'not-found' ? 404 : result.state === 'error' ? 503 : 200);
+            if (result.state !== 'ready') {
+                this.cDRef.markForCheck();
+                return;
+            }
+            const product = result.product;
             this.product = product;
-            
+
             this.selectedVariant = product.variants[0];
 
             // Use saved referrer from Router tracking or fallback to collection
@@ -142,6 +165,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.cDRef.markForCheck();
         }));
 
+    }
+
+    retryLoad(): void {
+        this.reload.next();
     }
 
     /** Item stored in the guest favourites for the current artwork. */

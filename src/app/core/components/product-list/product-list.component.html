@@ -1,3 +1,6 @@
+<hgart-page-state *ngIf="(pageState$ | async) !== 'ready'" [state]="(pageState$ | async) || 'loading'"
+    resource="collection" (retry)="retryLoad()"></hgart-page-state>
+<div [hidden]="(pageState$ | async) !== 'ready'">
 <div class="collection">
     <ng-container *ngIf="collection$ | async as collection">
         <nav class="collection__breadcrumb" aria-label="Breadcrumb">
@@ -68,4 +71,6 @@
             <fa-icon icon="sad-cry" size="10x"></fa-icon>
         </div>
     </ng-template>
+</div>
+
 </div>

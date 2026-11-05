@@ -5,6 +5,7 @@ import { ContactComponent } from './core/components/contact/contact.component';
 import { InterestPageComponent } from './core/components/interest-page/interest-page.component';
 import { PrivacyPolicyComponent } from './core/components/privacy-policy/privacy-policy.component';
 import { ProductDetailComponent } from './core/components/product-detail/product-detail.component';
+import { PageStateComponent } from './core/components/page-state/page-state.component';
 import { ProductListComponent } from './core/components/product-list/product-list.component';
 import { TermsComponent } from './core/components/terms/terms.component';
 import { SupportComponent } from './core/components/support/support.component';
@@ -70,7 +71,7 @@ export const routes: Route[] = [
     },
     {
         path: '**',
-        redirectTo: '',
-        pathMatch: 'full',
+        component: PageStateComponent,
+        data: { animation: 'NotFoundPage' },
     },
 ];

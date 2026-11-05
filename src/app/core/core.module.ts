@@ -29,6 +29,7 @@ import { PrivacyPolicyComponent } from './components/privacy-policy/privacy-poli
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
+import { PageStateComponent } from './components/page-state/page-state.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
 import { ContactComponent } from './components/contact/contact.component';
@@ -40,6 +41,7 @@ import { DefaultInterceptor } from './providers/data/interceptor';
 
 const CORE_COMPONENTS = [
     ProductListComponent,
+    PageStateComponent,
     ProductDetailComponent,
     AboutMeComponent,
     SupportComponent,

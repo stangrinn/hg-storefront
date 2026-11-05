@@ -1,3 +1,5 @@
+<hgart-page-state *ngIf="pageState !== 'ready'" [state]="pageState" resource="artwork" (retry)="retryLoad()"></hgart-page-state>
+<ng-container *ngIf="pageState === 'ready'">
 <div class="pd">
 <ng-container *ngIf="!isInterestFormOpen; else interestForm">
     <nav class="pd__breadcrumb" aria-label="Breadcrumb">
@@ -148,3 +150,5 @@
     </section>
 </ng-template>
 </div>
+
+</ng-container>
