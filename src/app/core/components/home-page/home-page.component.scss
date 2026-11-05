@@ -1205,3 +1205,23 @@ h2,
 .step-scene video.step-scene__phone {
     aspect-ratio: 1080 / 1920;
 }
+
+// A direct user gesture remains available when the browser declines muted autoplay.
+:host ::ng-deep .home-video-play {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #e0ded9;
+    border-radius: 2px;
+    background: rgb(15 15 16 / 85%);
+    color: #f7f7f5;
+    font: 400 12px/1.5 var(--hg-font-body);
+    cursor: pointer;
+
+    &[hidden] { display: none; }
+    &:focus-visible { outline: 2px solid #e0ded9; outline-offset: 3px; }
+}

@@ -1,6 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Directive, ElementRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
 
+import { InlineVideoPlayback } from './inline-video-playback';
+
 const clamp = (value: number): number => Math.max(0, Math.min(1, value));
 
 const ease = (value: number): number => value < 0.5 ? 4 * value ** 3 : 1 - (-2 * value + 2) ** 3 / 2;
@@ -14,7 +16,8 @@ export class EvolutionScrollDirective implements AfterViewInit, OnDestroy {
     private videos: HTMLVideoElement[] = [];
     private observer?: ResizeObserver;
     private visibilityObserver?: IntersectionObserver;
-    private playing = new Set<HTMLVideoElement>();
+    private playback?: InlineVideoPlayback;
+    private currentRow = 0;
     private frame = 0;
     private step = 1;
     private scale = 1;
@@ -44,11 +47,10 @@ export class EvolutionScrollDirective implements AfterViewInit, OnDestroy {
             window.addEventListener('resize', this.measure, { passive: true });
             document.addEventListener('visibilitychange', this.schedule);
             this.visibilityObserver = new IntersectionObserver(this.schedule);
-            this.videos.forEach(video => {
-                video.muted = true;
-                video.addEventListener('playing', this.onPlaying);
-                this.visibilityObserver?.observe(video);
-            });
+            this.videos.forEach(video => this.visibilityObserver?.observe(video));
+            this.playback = new InlineVideoPlayback(this.videos,
+                video => !this.enabled || !!this.rows[this.currentRow]?.contains(video),
+                { restartOnEnter: true, topInset: this.stickyTop });
             this.observer = new ResizeObserver(this.measure);
             this.observer.observe(section);
             section.querySelectorAll('.comparison-card--alive > img').forEach(image => this.observer?.observe(image));
@@ -72,23 +74,8 @@ export class EvolutionScrollDirective implements AfterViewInit, OnDestroy {
         this.observer?.disconnect();
         this.visibilityObserver?.disconnect();
         cancelAnimationFrame(this.frame);
-        this.playing.clear();
-        this.videos.forEach(video => {
-            video.removeEventListener('playing', this.onPlaying);
-            video.pause();
-            video.removeAttribute('src');
-            video.load();
-        });
+        this.playback?.destroy();
     }
-
-    private readonly onPlaying = (event: Event): void => {
-        const video = event.currentTarget as HTMLVideoElement;
-        if (this.playing.has(video) && !this.destroyed) {
-            video.classList.add('is-playing');
-        } else {
-            video.pause();
-        }
-    };
 
     private readonly measure = (): void => {
         if (!this.runway || !this.grid || this.destroyed) {
@@ -178,35 +165,7 @@ export class EvolutionScrollDirective implements AfterViewInit, OnDestroy {
     }
 
     private updateVideos(current: number): void {
-        this.videos.forEach(video => {
-            const rect = video.getBoundingClientRect();
-            const front = !this.enabled || this.rows[current].contains(video);
-            const visible = !document.hidden && front && rect.width > 0 && rect.height > 0 &&
-                rect.bottom > this.stickyTop && rect.top < window.innerHeight && rect.right > 0 && rect.left < window.innerWidth;
-            if (!visible) {
-                this.playing.delete(video);
-                video.pause();
-                video.classList.remove('is-playing');
-                return;
-            }
-            if (this.playing.has(video)) {
-                return;
-            }
-            this.playing.add(video);
-            if (!video.hasAttribute('src') && video.dataset.src) {
-                video.src = video.dataset.src;
-            }
-            if (video.readyState > 0) {
-                video.currentTime = 0;
-            }
-            video.play().then(() => {
-                if (this.destroyed || !this.playing.has(video)) {
-                    video.pause();
-                }
-            }).catch(() => {
-                this.playing.delete(video);
-                video.classList.remove('is-playing');
-            });
-        });
+        this.currentRow = current;
+        this.playback?.refresh();
     }
 }

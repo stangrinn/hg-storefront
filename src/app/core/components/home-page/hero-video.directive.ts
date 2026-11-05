@@ -1,12 +1,15 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Directive, ElementRef, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
+
+import { InlineVideoPlayback } from './inline-video-playback';
 
 @Directive({ selector: '[hgartHeroVideo]' })
 export class HeroVideoDirective implements AfterViewInit, OnDestroy {
-    private video?: HTMLVideoElement;
+    private playback?: InlineVideoPlayback;
 
     constructor(
         private elementRef: ElementRef<HTMLElement>,
+        private zone: NgZone,
         @Inject(PLATFORM_ID) private platformId: object,
     ) {}
 
@@ -14,31 +17,15 @@ export class HeroVideoDirective implements AfterViewInit, OnDestroy {
         if (!isPlatformBrowser(this.platformId)) {
             return;
         }
-        this.video = this.elementRef.nativeElement.querySelector('video') ?? undefined;
-        if (!this.video) {
-            return;
+        const video = this.elementRef.nativeElement.querySelector('video');
+        if (video) {
+            this.zone.runOutsideAngular(() => {
+                this.playback = new InlineVideoPlayback([video], () => true);
+            });
         }
-        const video = this.video;
-        video.muted = true;
-        video.defaultMuted = true;
-        video.playsInline = true;
-        video.loop = true;
-        video.autoplay = true;
-        video.play().then(() => {
-            if (this.video !== video) {
-                video.pause();
-            }
-        }).catch(() => {
-            // Keep the poster visible if the browser blocks muted autoplay.
-        });
     }
 
     ngOnDestroy(): void {
-        if (this.video) {
-            this.video.pause();
-            this.video.removeAttribute('src');
-            this.video.load();
-            this.video = undefined;
-        }
+        this.playback?.destroy();
     }
 }
