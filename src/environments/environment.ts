@@ -7,6 +7,7 @@ export const environment = {
     apiHost: 'http://localhost',
     apiPort: 3000,
     shopApiPath: 'shop-api',
+    serverApiUrl: 'http://localhost:3000',
     baseHref: '/',
     tokenMethod: 'bearer',
 };

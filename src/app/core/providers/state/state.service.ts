@@ -31,8 +31,11 @@ export const initialState: AppState = {
     providedIn: 'root',
 })
 export class StateService {
-    private state: AppState = initialState;
-    private readonly stateSubject = new BehaviorSubject<AppState>(initialState);
+    private state: AppState = {
+        ...initialState,
+        collectionProductSlugs: [...initialState.collectionProductSlugs],
+    };
+    private readonly stateSubject = new BehaviorSubject<AppState>(this.state);
 
     constructor() {
         if (typeof window !== 'undefined') {
@@ -43,7 +46,7 @@ export class StateService {
     }
 
     setState<T extends keyof AppState>(key: T, value: AppState[T]) {
-        this.state[key] = value;
+        this.state = { ...this.state, [key]: value };
         this.stateSubject.next(this.state);
     }
 

@@ -10,9 +10,9 @@ import { Request } from 'express';
 
 import { environment } from '../../environments/environment';
 import possibleTypesResult from '../common/introspection-results';
+import { resolveShopApiUrl } from './shop-api-url';
 
 const STATE_KEY = makeStateKey<any>('apollo.state');
-let apolloCache: InMemoryCache;
 
 export const APOLLO_CLIENT_PROVIDER: FactoryProvider = {
     provide: APOLLO_OPTIONS,
@@ -45,7 +45,7 @@ export function apolloOptionsFactory(
     req?: Request,
 ): ApolloClientOptions<any> {
     const AUTH_TOKEN_KEY = 'auth_token';
-    apolloCache = new InMemoryCache({
+    const apolloCache = new InMemoryCache({
         possibleTypes: possibleTypesResult.possibleTypes,
         typePolicies: {
             Query: {
@@ -101,26 +101,10 @@ export function apolloOptionsFactory(
         },
     });
 
-    const {apiHost, apiPort, shopApiPath} = environment;
-    
-    // Determine if we're in SSR (server-side) or browser context
     const isServer = !isPlatformBrowser(platformId);
-    
-    // Build URI - use absolute URL for SSR, relative for browser
-    let uri: string;
-    if (isServer) {
-        // SSR: use environment variables or fallback to backend
-        const serverApiUrl = typeof process !== 'undefined' && process.env?.['API_URL'] 
-            ? process.env['API_URL']
-            : 'http://backend:3000';
-        uri = `${serverApiUrl}/${shopApiPath}`;
-    } else {
-        // Browser: use relative URL (proxied through nginx) or configured host
-        uri = apiHost 
-            ? `${apiHost}${apiPort && apiPort !== 80 && apiPort !== 443 ? ':' + apiPort : ''}/${shopApiPath}`
-            : `/${shopApiPath}`;
-    }
-    
+    const serverApiUrl = isServer && typeof process !== 'undefined' ? process.env?.['API_URL'] : undefined;
+    const uri = resolveShopApiUrl(environment, isServer, serverApiUrl);
+
     const options: Options = {
         uri,
         withCredentials: false,
@@ -151,22 +135,19 @@ export function apolloOptionsFactory(
         return forward(operation);
     });
 
-    const isBrowser = transferState.hasKey<any>(STATE_KEY);
-
-    if (isBrowser) {
-        const state = transferState.get<any>(STATE_KEY, null);
-        apolloCache.restore(state);
-    } else {
-        transferState.onSerialize(STATE_KEY, () => {
-            return apolloCache.extract();
-        });
-        // Reset apolloCache after extraction to avoid sharing between requests
-        apolloCache.reset();
+    if (isServer) {
+        transferState.onSerialize(STATE_KEY, () => apolloCache.extract());
+    } else if (transferState.hasKey(STATE_KEY)) {
+        const state = transferState.get(STATE_KEY, null);
+        if (state) {
+            apolloCache.restore(state);
+        }
+        transferState.remove(STATE_KEY);
     }
 
     return {
         cache: apolloCache,
-        ssrMode: true,
+        ssrMode: isServer,
         ssrForceFetchDelay: 500,
         link: ApolloLink.from([middleware, afterware, http]),
     };
