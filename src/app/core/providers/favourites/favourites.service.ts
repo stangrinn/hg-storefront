@@ -21,6 +21,9 @@ const STORAGE_KEY = 'hgart-favourites';
     providedIn: 'root',
 })
 export class FavouritesService {
+    private readonly persistenceErrorSubject = new BehaviorSubject(false);
+    readonly persistenceError$ = this.persistenceErrorSubject.asObservable();
+
     private readonly itemsSubject = new BehaviorSubject<FavouriteItem[]>([]);
 
     readonly items$: Observable<FavouriteItem[]> = this.itemsSubject.asObservable();
@@ -52,10 +55,11 @@ export class FavouritesService {
         }
 
         try {
-            const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
+            const parsed: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
 
-            return Array.isArray(parsed) ? parsed.filter(item => item && typeof item.slug === 'string' && typeof item.id === 'string') : [];
+            return Array.isArray(parsed) ? parsed.filter(isFavouriteItem) : [];
         } catch {
+            this.persistenceErrorSubject.next(true);
             return [];
         }
     }
@@ -64,7 +68,23 @@ export class FavouritesService {
         this.itemsSubject.next(items);
 
         if (isPlatformBrowser(this.platformId)) {
-            window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+            try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+                this.persistenceErrorSubject.next(false);
+            } catch {
+                this.persistenceErrorSubject.next(true);
+            }
         }
     }
+}
+
+function isFavouriteItem(value: unknown): value is FavouriteItem {
+    if (!value || typeof value !== 'object') {
+        return false;
+    }
+    return 'id' in value && typeof value.id === 'string' &&
+        'slug' in value && typeof value.slug === 'string' &&
+        'name' in value && typeof value.name === 'string' &&
+        'image' in value && (value.image === null || typeof value.image === 'string') &&
+        (!('collection' in value) || value.collection === null || typeof value.collection === 'string');
 }

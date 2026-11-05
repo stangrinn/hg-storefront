@@ -14,7 +14,12 @@
             </button>
         </header>
 
-        <p class="drawer__note">Saved on this device only. No account needed — clearing your browser data removes the list.</p>
+        <p class="drawer__note" role="status" *ngIf="favourites.persistenceError$ | async; else storageNote">
+            Your browser couldn’t save these artworks. They remain available in this tab until you leave or reload the page.
+        </p>
+        <ng-template #storageNote>
+            <p class="drawer__note">Saved on this device only. No account needed — clearing your browser data removes the list.</p>
+        </ng-template>
 
         <div class="drawer__body">
             <ul class="drawer__list" *ngIf="items.length; else empty">
