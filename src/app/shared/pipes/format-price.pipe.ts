@@ -10,11 +10,11 @@ import { GET_ACTIVE_CHANNEL } from './get-active-channel.graphql';
  * Cache the resolved promise so that the activeChannel only needs
  * to be fetched once on the first invocation of the pipe.
  */
-let channelDataPromise: Promise<any>;
+let channelDataPromise: Promise<GetActiveChannelQuery['activeChannel']>;
 
 /**
  * A pipe which formats a price (always given as an integer by Venure) according
- * to the currencyCode of the current Channel.
+ * to the defaultCurrencyCode of the current Channel.
  */
 @Pipe({
     name: 'formatPrice',
@@ -22,8 +22,8 @@ let channelDataPromise: Promise<any>;
 })
 export class FormatPricePipe implements PipeTransform {
 
-    private latestValue: any = null;
-    private latestReturnedValue: any = null;
+    private latestValue: number | null = null;
+    private latestReturnedValue: string | null = null;
 
     constructor(private changeDetector: ChangeDetectorRef, private dataService: DataService) {}
 
@@ -40,7 +40,7 @@ export class FormatPricePipe implements PipeTransform {
             .then(channel => {
                 const formatter = Intl.NumberFormat(channel.defaultLanguageCode, {
                     style: 'currency',
-                    currency: channel.currencyCode,
+                    currency: channel.defaultCurrencyCode,
                 });
                 this.latestReturnedValue = formatter.format(value / 100);
                 this.changeDetector.markForCheck();

@@ -6,7 +6,7 @@ export const GET_ACTIVE_CHANNEL = gql`
         activeChannel {
             id
             code
-            currencyCode
+            defaultCurrencyCode
             defaultLanguageCode
         }
     }
