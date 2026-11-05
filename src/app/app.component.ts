@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { ChildrenOutletContexts, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { ChildrenOutletContexts, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 
@@ -69,9 +69,8 @@ export class AppComponent implements OnInit {
             startWith(this.router.url.startsWith('/category/')),
         );
         this.isHomePage$ = this.router.events.pipe(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            filter<any>(event => event instanceof RouterEvent),
-            map((event: RouterEvent) => event.url === '/'),
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+            map((event: NavigationEnd) => event.url === '/'),
         );
         this.topCollections$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
             options: {take: 25, topLevelOnly: true}

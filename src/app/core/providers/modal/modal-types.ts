@@ -1,19 +1,19 @@
 import { InjectionToken, Type } from '@angular/core';
 
 export const DIALOG_COMPONENT = new InjectionToken<Type<Dialog>>('DIALOG_COMPONENT');
-export const MODAL_OPTIONS = new InjectionToken<ModalOptions<any>>('MODAL_OPTIONS');
+export const MODAL_OPTIONS = new InjectionToken<ModalOptions<object>>('MODAL_OPTIONS');
 
 /**
  * Any component intended to be used with the ModalService.fromComponent() method must implement
  * this interface.
  */
-export interface Dialog<R = any> {
+export interface Dialog<R = unknown> {
     /**
      * Function to be invoked in order to close the dialog when the action is complete.
      * The Observable returned from the .fromComponent() method will emit the value passed
      * to this method and then complete.
      */
-    resolveWith: (result?: R) => void;
+    resolveWith(result?: R): void;
 }
 
 export interface DialogButtonConfig<T> {

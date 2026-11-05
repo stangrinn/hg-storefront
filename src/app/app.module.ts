@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Inject, NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -56,7 +55,7 @@ export class AppModule {
     constructor(
         private router: Router,
         private urlSerializer: UrlSerializer,
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: object,
         @Inject(DOCUMENT) private document?: Document,
     ) {
         if (isPlatformBrowser(this.platformId)) {

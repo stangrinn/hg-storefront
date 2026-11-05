@@ -10,6 +10,6 @@ import { NotificationOptions, NOTIFICATION_OPTIONS } from '../../providers/notif
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationComponent {
-    close = new Subject();
+    close = new Subject<void>();
     constructor(@Inject(NOTIFICATION_OPTIONS) public options: NotificationOptions) { }
 }

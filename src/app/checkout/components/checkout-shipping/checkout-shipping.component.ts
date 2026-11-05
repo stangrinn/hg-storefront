@@ -186,8 +186,8 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
                 input: this.contactForm.value,
             }).pipe(
                 tap(({setCustomerForOrder}) => {
-                    if (setCustomerForOrder && setCustomerForOrder.__typename !== 'Order') {
-                        this.notificationService.error((setCustomerForOrder as any).message).subscribe();
+                    if (setCustomerForOrder && 'message' in setCustomerForOrder) {
+                        this.notificationService.error(setCustomerForOrder.message).subscribe();
                     }
                 })
             );
@@ -211,6 +211,6 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
     }
 
     private isFormValue(input: AddressFormValue | AddressFragment): input is AddressFormValue {
-        return typeof (input as any).countryCode === 'string';
+        return 'countryCode' in input && typeof input.countryCode === 'string';
     }
 }

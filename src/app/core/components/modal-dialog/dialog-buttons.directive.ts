@@ -7,7 +7,7 @@ import { ModalDialogComponent } from './modal-dialog.component';
  */
 @Directive({ selector: '[hgartDialogButtons]' })
 export class DialogButtonsDirective implements OnInit {
-    constructor(private modal: ModalDialogComponent<any>, private templateRef: TemplateRef<any>) {}
+    constructor(private modal: ModalDialogComponent, private templateRef: TemplateRef<unknown>) {}
 
     ngOnInit() {
         this.modal.registerButtonsTemplate(this.templateRef);

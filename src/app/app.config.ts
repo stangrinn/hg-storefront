@@ -3,7 +3,7 @@ export interface ServerConfig {
     apiPort: number;
     shopApiPath: string;
 }
-declare const global: any;
+
 export const GLOBAL_APP_CONFIG_KEY = '__storefront_app_config';
 let serverConfig: ServerConfig | undefined;
 
@@ -22,7 +22,7 @@ export function loadAppConfig(): Promise<void> {
  * Loads the app config from the server-side global object
  */
 export function loadAppConfigServer(): void {
-    serverConfig = global[GLOBAL_APP_CONFIG_KEY];
+    serverConfig = (globalThis as typeof globalThis & { __storefront_app_config?: ServerConfig })[GLOBAL_APP_CONFIG_KEY];
 }
 
 export function getAppConfig(): ServerConfig {

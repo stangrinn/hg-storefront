@@ -48,10 +48,10 @@ export class DropdownComponent {
     @Input() position: DropdownPosition[] = ['bottom'];
     @Input() minWidth = 0;
 
-    @ContentChild(DropdownTriggerDirective, { read: ElementRef }) trigger: ElementRef;
-    @ViewChild('contentTemplate', { read: TemplateRef }) contentTemplate: TemplateRef<any>;
-    @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef<any>;
-    private closeFn: (() => any) | null = null;
+    @ContentChild(DropdownTriggerDirective, { read: ElementRef }) trigger: ElementRef<HTMLElement>;
+    @ViewChild('contentTemplate', { read: TemplateRef }) contentTemplate: TemplateRef<unknown>;
+    @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef<HTMLElement>;
+    private closeFn: (() => void) | null = null;
     private clickSubscriber: Subscription;
     private mouseoverSubscriber: Subscription;
 
@@ -138,7 +138,7 @@ export class DropdownComponent {
                     const triggerEl = this.trigger.nativeElement;
                     // In a server context, the .contains method would not exist.
                     if (contentEl && typeof contentEl.contains === 'function') {
-                        return !(contentEl.contains(e.target) || triggerEl.contains(e.target));
+                        return !(e.target instanceof Node && (contentEl.contains(e.target) || triggerEl.contains(e.target)));
                     }
                     return true;
                 }),

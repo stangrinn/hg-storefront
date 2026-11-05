@@ -29,18 +29,18 @@ export class DefaultInterceptor implements HttpInterceptor {
                         this.notifyOnError(event);
                     }
                 },
-                err => {
+                (err: unknown) => {
                     if (err instanceof HttpErrorResponse) {
                         this.notifyOnError(err);
                     } else {
-                        this.displayErrorNotification(err.message);
+                        this.displayErrorNotification(err instanceof Error ? err.message : 'An unexpected request error occurred.');
                     }
                 },
             ),
         );
     }
 
-    private notifyOnError(response: HttpResponse<any> | HttpErrorResponse) {
+    private notifyOnError(response: HttpResponse<unknown> | HttpErrorResponse) {
         if (response instanceof HttpErrorResponse) {
             if (response.status === 0) {
                 this.displayErrorNotification('Could not connect to server!');
@@ -50,9 +50,11 @@ export class DefaultInterceptor implements HttpInterceptor {
         } else {
             // GraphQL errors still return 200 OK responses, but have the actual error message
             // inside the body of the response.
-            const graqhQLErrors = response.body.errors;
-            if (graqhQLErrors && Array.isArray(graqhQLErrors)) {
-                const firstCode: string = graqhQLErrors[0].extensions.code;
+            const body = response.body;
+            const errors = body && typeof body === 'object' && 'errors' in body ? body.errors : undefined;
+            const graqhQLErrors = Array.isArray(errors) ? errors.filter(isGraphQlError) : [];
+            if (graqhQLErrors.length) {
+                const firstCode = graqhQLErrors[0].extensions?.code;
                 if (firstCode === 'FORBIDDEN') {
                     // auto logout needed?
                 } else if (firstCode === 'CHANNEL_NOT_FOUND') {
@@ -75,4 +77,17 @@ export class DefaultInterceptor implements HttpInterceptor {
         const notificationService = this.injector.get<NotificationService>(NotificationService);
         notificationService.error(message).subscribe();
     }
+}
+
+interface GraphQlErrorBody {
+    message: string;
+    extensions?: { code?: unknown };
+}
+
+function isGraphQlError(value: unknown): value is GraphQlErrorBody {
+    if (!value || typeof value !== 'object' || !('message' in value) || typeof value.message !== 'string') {
+        return false;
+    }
+    return !('extensions' in value) || value.extensions === undefined ||
+        (value.extensions !== null && typeof value.extensions === 'object');
 }

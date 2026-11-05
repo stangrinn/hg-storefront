@@ -1,5 +1,5 @@
 import { Overlay, OverlayConfig } from '@angular/cdk/overlay';
-import { ComponentPortal, PortalInjector } from '@angular/cdk/portal';
+import { ComponentPortal } from '@angular/cdk/portal';
 import { Injectable, Injector } from '@angular/core';
 import { race, timer } from 'rxjs';
 import { finalize, mapTo, take } from 'rxjs/operators';
@@ -47,7 +47,7 @@ export class NotificationService {
         );
         const notificationRef = overlayRef.attach(portal);
 
-        return race<any>(notificationRef.instance.close, timer(options.duration)).pipe(
+        return race(notificationRef.instance.close, timer(options.duration)).pipe(
             take(1),
             finalize(() => closeFn()),
         );
@@ -80,12 +80,14 @@ export class NotificationService {
         });
     }
 
-    private createInjector(options: NotificationOptions, closeFn: () => void): PortalInjector {
+    private createInjector(options: NotificationOptions, closeFn: () => void): Injector {
         options.templateContext = {
             ...options.templateContext,
             closeFn,
         };
-        const weakMap = new WeakMap<any, any>([[NOTIFICATION_OPTIONS, options]]);
-        return new PortalInjector(this.injector, weakMap);
+        return Injector.create({
+            parent: this.injector,
+            providers: [{ provide: NOTIFICATION_OPTIONS, useValue: options }],
+        });
     }
 }

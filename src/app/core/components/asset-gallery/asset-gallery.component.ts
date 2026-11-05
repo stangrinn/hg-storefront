@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import { AssetFragment } from '../../../common/generated-types';
 import './types.d';
+import { AssetFragment } from '../../../common/generated-types';
 import { isPlatformBrowser } from '@angular/common';
 
 export type AssetWithDimensions = Pick<AssetFragment, 'id' | 'preview' | 'width' | 'height'>;
@@ -28,7 +27,7 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     videoPlayer: ElementRef<HTMLVideoElement>;
 
     selectedAsset?: AssetWithDimensions;
-    private gallery: any;
+    private gallery?: PhotoSwipeLightbox;
 
     /** Controls video visibility on hover */
     isVideoVisible = false;
@@ -40,7 +39,7 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     isMuted = true;
 
     constructor(
-        @Inject(PLATFORM_ID) private platformId: any,
+        @Inject(PLATFORM_ID) private platformId: object,
         private cdr: ChangeDetectorRef
     ) { }
 
@@ -106,7 +105,13 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
             return;
         }
         const index = this.assets.findIndex(a => a.id === assetId);
-        this.gallery.loadAndOpen(index);
+        const items = this.assets.map(asset => ({
+            src: asset.preview,
+            msrc: asset.preview + '?preset=medium',
+            width: asset.width || 1000,
+            height: asset.height || 1000,
+        }));
+        this.gallery?.loadAndOpen(index, items);
     }
 
     /**

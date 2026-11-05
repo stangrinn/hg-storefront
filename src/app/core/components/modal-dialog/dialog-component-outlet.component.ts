@@ -1,6 +1,5 @@
 import {
     Component,
-    ComponentFactoryResolver,
     EventEmitter,
     Input,
     OnInit,
@@ -16,18 +15,16 @@ import {
     selector: 'hgart-dialog-component-outlet',
     template: ``,
 })
-export class DialogComponentOutletComponent implements OnInit {
-    @Input() component: Type<any>;
-    @Output() create = new EventEmitter<any>();
+export class DialogComponentOutletComponent<T> implements OnInit {
+    @Input() component: Type<T>;
+    @Output() create = new EventEmitter<T>();
 
     constructor(
         private viewContainerRef: ViewContainerRef,
-        private componentFactoryResolver: ComponentFactoryResolver,
     ) {}
 
     ngOnInit() {
-        const factory = this.componentFactoryResolver.resolveComponentFactory(this.component);
-        const componentRef = this.viewContainerRef.createComponent(factory);
+        const componentRef = this.viewContainerRef.createComponent(this.component);
         this.create.emit(componentRef.instance);
     }
 }

@@ -1,8 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpHeaders } from '@angular/common/http';
-import { FactoryProvider, Optional, PLATFORM_ID } from '@angular/core';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
-import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
+import { FactoryProvider, Optional, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
+import { ApolloClientOptions, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink, Options } from 'apollo-angular/http';
@@ -12,7 +11,7 @@ import { environment } from '../../environments/environment';
 import possibleTypesResult from '../common/introspection-results';
 import { resolveShopApiUrl } from './shop-api-url';
 
-const STATE_KEY = makeStateKey<any>('apollo.state');
+const STATE_KEY = makeStateKey<NormalizedCacheObject | null>('apollo.state');
 
 export const APOLLO_CLIENT_PROVIDER: FactoryProvider = {
     provide: APOLLO_OPTIONS,
@@ -20,11 +19,11 @@ export const APOLLO_CLIENT_PROVIDER: FactoryProvider = {
     deps: [HttpLink, PLATFORM_ID, TransferState, [new Optional(), REQUEST]],
 };
 
-function mergeFields(existing: any, incoming: any) {
+function mergeFields(existing: Readonly<Record<string, unknown>> | undefined, incoming: Readonly<Record<string, unknown>>) {
     return {...existing, ...incoming};
 }
 
-function relaceFields(existing: any, incoming: any) {
+function relaceFields<T>(existing: T | undefined, incoming: T) {
     return incoming;
 }
 
@@ -35,7 +34,7 @@ function logInterceptorData(on: boolean) {
 }
 
 if (typeof window !== 'undefined') {
-    (window as any).logInterceptorData = logInterceptorData;
+    (window as Window & { logInterceptorData?: typeof logInterceptorData }).logInterceptorData = logInterceptorData;
 }
 
 export function apolloOptionsFactory(
@@ -43,7 +42,7 @@ export function apolloOptionsFactory(
     platformId: object,
     transferState: TransferState,
     req?: Request,
-): ApolloClientOptions<any> {
+): ApolloClientOptions<NormalizedCacheObject> {
     const AUTH_TOKEN_KEY = 'auth_token';
     const apolloCache = new InMemoryCache({
         possibleTypes: possibleTypesResult.possibleTypes,

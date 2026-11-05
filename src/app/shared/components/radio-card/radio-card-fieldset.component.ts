@@ -20,7 +20,7 @@ import { debounceTime, throttleTime } from 'rxjs/operators';
     template: `<fieldset><ng-content></ng-content></fieldset> `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioCardFieldsetComponent<T = any> implements OnInit, OnChanges, OnDestroy {
+export class RadioCardFieldsetComponent<T = unknown> implements OnInit, OnChanges, OnDestroy {
     @Input() selectedItemId: string;
     @Input() idFn: (item: T) => string;
     @Output() selectItem = new EventEmitter<T>();

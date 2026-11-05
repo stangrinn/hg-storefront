@@ -14,10 +14,10 @@ import { DialogButtonsDirective } from './dialog-buttons.directive';
     templateUrl: './modal-dialog.component.html',
     // styleUrls: ['./modal-dialog.component.scss'],
 })
-export class ModalDialogComponent<T extends Dialog<any>> {
-    closeModal: (result?: any) => void;
-    titleTemplateRef$ = new Subject<TemplateRef<any>>();
-    buttonsTemplateRef$ = new Subject<TemplateRef<any>>();
+export class ModalDialogComponent<T extends Dialog = Dialog> {
+    closeModal: (result?: unknown) => void;
+    titleTemplateRef$ = new Subject<TemplateRef<unknown>>();
+    buttonsTemplateRef$ = new Subject<TemplateRef<unknown>>();
 
     constructor(
         @Inject(DIALOG_COMPONENT) public childComponentType: Type<T>,
@@ -31,34 +31,32 @@ export class ModalDialogComponent<T extends Dialog<any>> {
      * locals which were specified in the config.
      */
     onCreate(componentInstance: T) {
-        componentInstance.resolveWith = (result?: any) => {
+        componentInstance.resolveWith = (result?: unknown) => {
             this.closeModal(result);
         };
         if (this.options && this.options.locals) {
-            for (const key in this.options.locals) {
-                componentInstance[key] = this.options.locals[key] as T[Extract<keyof T, string>];
-            }
+            Object.assign(componentInstance, this.options.locals);
         }
     }
 
     /**
      * This should be called by the {@link DialogTitleDirective} only
      */
-    registerTitleTemplate(titleTemplateRef: TemplateRef<any>) {
+    registerTitleTemplate(titleTemplateRef: TemplateRef<unknown>) {
         this.titleTemplateRef$.next(titleTemplateRef);
     }
 
     /**
      * This should be called by the {@link DialogButtonsDirective} only
      */
-    registerButtonsTemplate(buttonsTemplateRef: TemplateRef<any>) {
+    registerButtonsTemplate(buttonsTemplateRef: TemplateRef<unknown>) {
         this.buttonsTemplateRef$.next(buttonsTemplateRef);
     }
 
     /**
      * Called when the modal is closed by clicking the X or the mask.
      */
-    modalOpenChange(status: any) {
+    modalOpenChange(status: boolean) {
         if (status === false) {
             this.closeModal();
         }

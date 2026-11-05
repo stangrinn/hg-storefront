@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 import {
     AddressFragment,
+    CreateAddressInput,
     CountryFragment,
     CreateAddressMutation,
     CreateAddressMutationVariables,
@@ -22,7 +23,7 @@ import { CREATE_ADDRESS } from './address-modal.graphql';
     changeDetection: ChangeDetectionStrategy.Default,
 })
 export class AddressModalComponent implements Dialog<AddressFragment>, OnInit {
-    resolveWith: (result?: any) => void;
+    resolveWith: (result?: AddressFragment) => void;
     address: AddressFragment;
     title: string;
     availableCountries$: Observable<CountryFragment[]>;
@@ -34,7 +35,7 @@ export class AddressModalComponent implements Dialog<AddressFragment>, OnInit {
         );
     }
 
-    save(value: any) {
+    save(value: CreateAddressInput) {
         this.dataService.mutate<CreateAddressMutation, CreateAddressMutationVariables>(CREATE_ADDRESS, {
             input: value,
         }).subscribe(data => {

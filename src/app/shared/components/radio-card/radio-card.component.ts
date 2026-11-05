@@ -19,11 +19,11 @@ import { RadioCardFieldsetComponent } from './radio-card-fieldset.component';
     exportAs: 'KbRadioCard',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RadioCardComponent<T = any> implements OnInit, OnDestroy {
+export class RadioCardComponent<T = unknown> implements OnInit, OnDestroy {
     @Input() item: T;
     @ContentChild(TemplateRef) itemTemplate: TemplateRef<T>;
 
-    constructor(private fieldset: RadioCardFieldsetComponent, private changeDetector: ChangeDetectorRef) {}
+    constructor(private fieldset: RadioCardFieldsetComponent<T>, private changeDetector: ChangeDetectorRef) {}
 
     private idChange$ = new Subject<T>();
     private subscription: Subscription;

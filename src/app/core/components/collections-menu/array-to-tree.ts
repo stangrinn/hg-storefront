@@ -26,11 +26,7 @@ export function arrayToTree<T extends HasParent>(nodes: T[]): RootNode<T> {
             // If the element is not at the root level, add it to its parent array of children.
             const parentIsRoot = !mappedArr[parent.id];
             if (!parentIsRoot) {
-                if (mappedArr[parent.id]) {
-                    mappedArr[parent.id].children.push(mappedElem);
-                } else {
-                    mappedArr[parent.id] = {children: [mappedElem]} as any;
-                }
+                mappedArr[parent.id].children.push(mappedElem);
             } else {
                 topLevelNodes.push(mappedElem);
             }
