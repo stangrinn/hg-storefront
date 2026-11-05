@@ -1,7 +1,7 @@
 
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, of, Subscription } from 'rxjs';
 import { catchError, filter, map, switchMap, take, withLatestFrom } from 'rxjs/operators';
 
@@ -72,7 +72,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** Other artworks from the same collection */
     relatedProducts: SearchProductsQuery['search']['items'] = [];
 
-    private sub: Subscription;
+    private readonly sub = new Subscription();
 
     constructor(private dataService: DataService,
         private stateService: StateService,
@@ -82,18 +82,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private cDRef: ChangeDetectorRef,
         private pageResponse: PageResponseService,
         @Inject(PLATFORM_ID) private platformId: object) {
-        // Track current URL before navigating away - save it as potential referrer
-        this.router.events.pipe(
-            filter((event): event is NavigationEnd => event instanceof NavigationEnd)
-        ).subscribe((event) => {
-            const currentUrl = event.urlAfterRedirects;
-            
-            // If we're on a non-product page, save it as referrer
-            if (!currentUrl.startsWith('/product/')) {
-                this.stateService.setState('productPageReferrer', currentUrl);
-                console.log('Router: Saved non-product URL as referrer:', currentUrl);
-            }
-        });
     }
 
     ngOnInit() {
@@ -104,7 +92,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             filter(notNullOrUndefined),
         );
 
-        this.sub = combineLatest([productSlug$, this.reload]).pipe(
+        this.sub.add(combineLatest([productSlug$, this.reload]).pipe(
             switchMap(([slug]) => {
                 this.pageState = 'loading';
                 this.product = undefined;
@@ -156,7 +144,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.openInterestFromQuery();
 
             this.cDRef.markForCheck();
-        });
+        }));
 
         this.sub.add(this.route.queryParamMap.pipe(
             filter(params => params.has('interest') && !!this.product),
@@ -478,11 +466,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.sub) {
-            this.sub.unsubscribe();
-        // Note: We don't clear productPageReferrer here to preserve it for next/previous navigation
-            this.referrerUrl = null;
-        }
+        this.sub.unsubscribe();
+        // Preserve productPageReferrer in shared state for next/previous artwork navigation.
+        this.referrerUrl = null;
     }
 
 }

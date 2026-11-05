@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ChildrenOutletContexts, NavigationEnd, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 
 import { GetCollectionsQuery, GetCollectionsQueryVariables } from './common/generated-types';
@@ -17,8 +17,9 @@ import { StateService } from './core/providers/state/state.service';
     styleUrls: ['./app.component.scss'],
     animations: [fadeAnimation, routeAnimations, slideAnimation],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     isDarkTheme = true;
+    private readonly subscriptions = new Subscription();
     /** Drives the Saved (favourites) drawer; the key predates the cart being replaced by favourites. */
     cartDrawerVisible$: Observable<boolean>;
     favouritesCount$: Observable<number>;
@@ -52,6 +53,14 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // Track entry pages once in the shell, rather than in disposable artwork components.
+        this.subscriptions.add(this.router.events.pipe(
+            filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        ).subscribe(event => {
+            if (!event.urlAfterRedirects.startsWith('/product/')) {
+                this.stateService.setState('productPageReferrer', event.urlAfterRedirects);
+            }
+        }));
         if (isPlatformBrowser(this.platformId)) {
             this.isDarkTheme = window.localStorage.getItem('hgart-theme') !== 'light';
         }
@@ -77,6 +86,10 @@ export class AppComponent implements OnInit {
         }).pipe(
             map(({collections}) => collections.items)
         );
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     toggleTheme() {
