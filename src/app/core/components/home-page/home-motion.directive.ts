@@ -146,7 +146,8 @@ export class HomeMotionDirective implements AfterViewInit, OnDestroy {
                 this.scrub(scene, 'picture', [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0)' }]);
                 this.scrub(scene, 'span', [{ opacity: 0, letterSpacing: '14px' }, { opacity: 1, letterSpacing: '3.5px' }]);
             } else {
-                this.scrub(scene, 'img', [{ transform: 'translateX(-108px)' }, { transform: 'translateX(0)' }]);
+                // Animate the offset separately from the exported image's CSS centering transform.
+                this.scrub(scene, 'img', [{ translate: '-108px 0' }, { translate: '0px 0' }]);
                 this.scrub(scene, ':scope > span', [{ rotate: '0deg' }, { rotate: '-1.5deg' }]);
             }
         });
