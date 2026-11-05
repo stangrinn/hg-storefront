@@ -100,6 +100,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     openCartDrawer() {
+        this.stateService.setState('mobileNavMenuIsOpen', false);
         this.stateService.setState('cartDrawerOpen', true);
     }
 

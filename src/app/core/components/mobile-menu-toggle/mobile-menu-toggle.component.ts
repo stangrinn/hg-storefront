@@ -14,6 +14,7 @@ export class MobileMenuToggleComponent {
     constructor(private stateService: StateService) {}
 
     toggle() {
+        this.stateService.setState('cartDrawerOpen', false);
         this.stateService.setState('mobileNavMenuIsOpen', true);
     }
 }

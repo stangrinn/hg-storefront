@@ -1,15 +1,15 @@
-<div class="drawer" [class.drawer--visible]="visible" role="dialog" aria-modal="true" aria-labelledby="saved-title"
-    [attr.aria-hidden]="!visible">
+<div class="drawer" [class.drawer--visible]="visible" role="dialog" [attr.aria-modal]="visible ? true : null" aria-labelledby="saved-title"
+    [attr.aria-hidden]="!visible" [attr.inert]="visible ? null : ''">
     <div class="drawer__backdrop" (click)="close()"></div>
 
-    <aside class="drawer__panel" *ngIf="favourites.items$ | async as items">
+    <aside class="drawer__panel" [hgartDrawerFocus]="visible" (drawerDismiss)="close()" *ngIf="favourites.items$ | async as items">
         <header class="drawer__header">
             <div class="drawer__heading">
                 <p class="drawer__eyebrow">YOUR FAVOURITES · {{ items.length }}</p>
                 <h2 class="drawer__title" id="saved-title">Saved artworks</h2>
             </div>
 
-            <button type="button" class="drawer__close" aria-label="Close saved artworks" (click)="close()">
+            <button type="button" class="drawer__close" cdkFocusInitial aria-label="Close saved artworks" (click)="close()">
                 <img class="hg-icon" src="assets/icons/design-system/close.svg" alt="">
             </button>
         </header>

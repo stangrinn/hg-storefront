@@ -1,3 +1,4 @@
+import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -26,6 +27,7 @@ import { RadioCardComponent } from './components/radio-card/radio-card.component
 import { SectionDividerComponent } from './components/section-divider/section-divider.component';
 import { ThemeToggleComponent } from './components/theme-toggle/theme-toggle.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { DrawerFocusDirective } from './directives/drawer-focus.directive';
 import { AssetPreviewPipe } from './pipes/asset-preview.pipe';
 import { FormatPricePipe } from './pipes/format-price.pipe';
 import { ProductUrlPipe } from './pipes/product-url.pipe';
@@ -49,6 +51,7 @@ const SHARED_DECLARATIONS = [
     FormatPricePipe,
     ProductUrlPipe,
     AssetPreviewPipe,
+    DrawerFocusDirective,
     RadioCardComponent,
     RadioCardFieldsetComponent,
     CartTotalsComponent,
@@ -62,6 +65,7 @@ const IMPORTS = [
     FormsModule,
     ReactiveFormsModule,
     OverlayModule,
+    A11yModule,
     RouterModule,
 ];
 

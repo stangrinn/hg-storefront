@@ -46,28 +46,41 @@ export class CollectionsMenuMobileComponent implements OnInit {
         );
     }
 
-    onL0Click(event: TouchEvent, collection: TreeNode<CollectionItem>) {
+    onL0Click(event: MouseEvent, collection: TreeNode<CollectionItem>) {
         this.expandOrNavigate(0, event, collection);
     }
 
-    onL1Click(event: TouchEvent, collection: TreeNode<CollectionItem>) {
+    onL1Click(event: MouseEvent, collection: TreeNode<CollectionItem>) {
         this.expandOrNavigate(1, event, collection);
+    }
+
+    onL0Keydown(event: KeyboardEvent, collection: TreeNode<CollectionItem>): void {
+        if (event.key === 'Enter' || event.key === ' ') {
+            this.expandOrNavigate(0, event, collection);
+        }
+    }
+
+    onL1Keydown(event: KeyboardEvent, collection: TreeNode<CollectionItem>): void {
+        if (event.key === 'Enter' || event.key === ' ') {
+            this.expandOrNavigate(1, event, collection);
+        }
     }
 
     close() {
         this.stateService.setState('mobileNavMenuIsOpen', false);
     }
 
-    private expandOrNavigate(level: 0 | 1, event: TouchEvent, collection: TreeNode<CollectionItem>) {
-        if (collection.children.length && this.selected1 !== collection.id) {
+    private expandOrNavigate(level: 0 | 1, event: MouseEvent | KeyboardEvent, collection: TreeNode<CollectionItem>) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        const selected = level === 0 ? this.selected0 : this.selected1;
+        if (collection.children.length && selected !== collection.id) {
             if (level === 0) {
                 this.selected0 = collection.id;
                 this.selected1 = null;
             } else {
                 this.selected1 = collection.id;
             }
-            event.preventDefault();
-            event.stopImmediatePropagation();
         } else {
             this.router.navigate(['/category/', collection.slug]);
             this.close();
