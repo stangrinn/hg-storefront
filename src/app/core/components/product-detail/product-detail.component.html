@@ -61,9 +61,9 @@
                 </button>
             </nav>
 
-            <div class="pd__panel" *ngIf="activeTab === 'description'" [innerHTML]="product?.description | safeHtml"></div>
+            <div class="pd__panel" *ngIf="activeTab === 'description'" [innerHTML]="product?.description"></div>
             <div class="pd__panel" *ngIf="activeTab === 'additionalInfo' && hasAdditionalInfo()"
-                [innerHTML]="getAdditionalInfo() | safeHtml"></div>
+                [innerHTML]="getAdditionalInfo()"></div>
         </div>
     </section>
 
