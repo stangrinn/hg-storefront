@@ -114,6 +114,8 @@ jobs:
           ssh -i ~/.ssh/hgart_deploy \
             -p "${HETZNER_PORT}" \
             -o IdentitiesOnly=yes \
+            -o ServerAliveInterval=30 \
+            -o ServerAliveCountMax=10 \
             -o StrictHostKeyChecking=yes \
             "${HETZNER_USER}@${HETZNER_HOST}" \
             "sudo /usr/local/bin/hgart-deploy '${{ steps.stage.outputs.stage }}' '${GITHUB_REPOSITORY}' '${DEPLOY_SHA}'"

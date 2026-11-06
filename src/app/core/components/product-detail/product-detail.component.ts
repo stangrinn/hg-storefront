@@ -1,5 +1,5 @@
 
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, of, Subscription } from 'rxjs';
@@ -26,6 +26,7 @@ import { SEARCH_PRODUCTS } from '../product-list/product-list.graphql';
 import { GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
 import { InterestFormValue } from '../interest-form/interest-form.component';
 import { REGISTER_PREORDER } from './preorder.graphql';
+import { interestEmailTheme } from '../../interest-email-theme';
 
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
@@ -81,6 +82,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         private router: Router,
         private cDRef: ChangeDetectorRef,
         private pageResponse: PageResponseService,
+        @Inject(DOCUMENT) private document: Document,
         @Inject(PLATFORM_ID) private platformId: object) {
     }
 
@@ -436,6 +438,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             customerName: value.name,
             customerEmail: value.email,
             comment: value.details || undefined,
+            emailTheme: interestEmailTheme(this.document),
         }).subscribe({
             next: result => {
                 this.isSubmitting = false;

@@ -1371,6 +1371,11 @@ export type IntStructFieldConfig = StructField & {
   ui?: Maybe<Scalars['JSON']>;
 };
 
+export enum InterestEmailTheme {
+  DARK = 'DARK',
+  LIGHT = 'LIGHT'
+}
+
 /** Returned if the user authentication credentials are not valid */
 export type InvalidCredentialsError = ErrorResult & {
   __typename?: 'InvalidCredentialsError';
@@ -1933,6 +1938,7 @@ export type MutationRegisterPreOrderArgs = {
   comment?: InputMaybe<Scalars['String']>;
   customerEmail: Scalars['String'];
   customerName: Scalars['String'];
+  emailTheme?: InputMaybe<InterestEmailTheme>;
   productId: Scalars['ID'];
   purchaseReadiness?: InputMaybe<Scalars['String']>;
   variantId?: InputMaybe<Scalars['ID']>;
@@ -3956,6 +3962,7 @@ export type RegisterPreOrderMutationVariables = Exact<{
   whatsapp?: InputMaybe<Scalars['String']>;
   purchaseReadiness?: InputMaybe<Scalars['String']>;
   comment?: InputMaybe<Scalars['String']>;
+  emailTheme?: InputMaybe<InterestEmailTheme>;
 }>;
 
 

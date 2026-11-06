@@ -9,6 +9,7 @@ export const REGISTER_PREORDER = gql`
         $whatsapp: String
         $purchaseReadiness: String
         $comment: String
+        $emailTheme: InterestEmailTheme
     ) {
         registerPreOrder(
             productId: $productId
@@ -18,6 +19,7 @@ export const REGISTER_PREORDER = gql`
             whatsapp: $whatsapp
             purchaseReadiness: $purchaseReadiness
             comment: $comment
+            emailTheme: $emailTheme
         ) {
             success
         }

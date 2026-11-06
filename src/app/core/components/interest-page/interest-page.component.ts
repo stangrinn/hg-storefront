@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -9,6 +10,7 @@ import { FavouriteItem, FavouritesService } from '../../providers/favourites/fav
 import { NotificationService } from '../../providers/notification/notification.service';
 import { InterestFormValue } from '../interest-form/interest-form.component';
 import { REGISTER_PREORDER } from '../product-detail/preorder.graphql';
+import { interestEmailTheme } from '../../interest-email-theme';
 
 /** "Review Your Interest" page: one interest request for every saved artwork. */
 @Component({
@@ -26,7 +28,8 @@ export class InterestPageComponent {
                 private router: Router,
                 private dataService: DataService,
                 private notificationService: NotificationService,
-                private cDRef: ChangeDetectorRef) {}
+                private cDRef: ChangeDetectorRef,
+                @Inject(DOCUMENT) private document: Document) {}
 
     submit(items: FavouriteItem[], value: InterestFormValue): void {
         if (this.isSubmitting || !items.length) {
@@ -43,11 +46,14 @@ export class InterestPageComponent {
 
         this.isSubmitting = true;
 
+        const emailTheme = interestEmailTheme(this.document);
+
         forkJoin(pendingItems.map(item => this.dataService.mutate<RegisterPreOrderMutation, RegisterPreOrderMutationVariables>(REGISTER_PREORDER, {
             productId: item.id,
             customerName: value.name,
             customerEmail: value.email,
             comment: value.details || undefined,
+            emailTheme,
         }).pipe(
             map(result => ({ id: item.id, success: result.registerPreOrder.success })),
             tap(result => {
