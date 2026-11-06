@@ -15,41 +15,50 @@
     </header>
 
     <div class="contact__content">
-        <form class="contact__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <form class="contact__form" [formGroup]="form" (ngSubmit)="submit()" [attr.aria-busy]="isSubmitting" novalidate>
             <div class="contact__lead">
                 <p>Have a question about a particular artwork, our custom commissions, or the HG Art AR app compatibility?</p>
                 <p>Send us a message, and our studio team will respond within 24 hours.</p>
             </div>
 
-            <div class="contact__fields">
+            <fieldset class="contact__fields" [disabled]="isSubmitting">
+                <legend class="sr-only">Your contact details and message</legend>
+                <div hidden aria-hidden="true" inert>
+                    <label for="contact-website">Website</label>
+                    <input id="contact-website" type="text" formControlName="website" tabindex="-1" autocomplete="off">
+                </div>
                 <div class="contact__field">
                     <label for="contact-name">Full name</label>
-                    <input id="contact-name" type="text" formControlName="name" placeholder="Enter your name..." autocomplete="name" required
+                    <input id="contact-name" type="text" formControlName="name" placeholder="Enter your name..." autocomplete="name" required maxlength="120"
                         [attr.aria-invalid]="!!fieldError('name')" [attr.aria-describedby]="fieldError('name') ? 'contact-name-error' : null">
                     <p *ngIf="fieldError('name') as error" class="contact__error" id="contact-name-error" role="alert">{{ error }}</p>
                 </div>
 
                 <div class="contact__field">
                     <label for="contact-email">Email address</label>
-                    <input id="contact-email" type="email" formControlName="email" placeholder="Enter your email..." autocomplete="email" required
+                    <input id="contact-email" type="email" formControlName="email" placeholder="Enter your email..." autocomplete="email" required maxlength="254"
                         [attr.aria-invalid]="!!fieldError('email')" [attr.aria-describedby]="fieldError('email') ? 'contact-email-error' : null">
                     <p *ngIf="fieldError('email') as error" class="contact__error" id="contact-email-error" role="alert">{{ error }}</p>
                 </div>
 
                 <div class="contact__field">
                     <label for="contact-subject">Subject</label>
-                    <input id="contact-subject" type="text" formControlName="subject" placeholder="How can we help you?">
+                    <input id="contact-subject" type="text" formControlName="subject" placeholder="How can we help you?" maxlength="200"
+                        [attr.aria-invalid]="!!fieldError('subject')" [attr.aria-describedby]="fieldError('subject') ? 'contact-subject-error' : null">
+                    <p *ngIf="fieldError('subject') as error" class="contact__error" id="contact-subject-error" role="alert">{{ error }}</p>
                 </div>
 
                 <div class="contact__field">
                     <label for="contact-message">Your message</label>
-                    <textarea id="contact-message" formControlName="message" placeholder="Describe your inquiry in detail..." required
+                    <textarea id="contact-message" formControlName="message" placeholder="Describe your inquiry in detail..." required maxlength="5000"
                         [attr.aria-invalid]="!!fieldError('message')" [attr.aria-describedby]="fieldError('message') ? 'contact-message-error' : null"></textarea>
                     <p *ngIf="fieldError('message') as error" class="contact__error" id="contact-message-error" role="alert">{{ error }}</p>
                 </div>
-            </div>
+            </fieldset>
 
-            <button class="contact__submit" type="submit">Submit message</button>
+            <button class="contact__submit" type="submit" [disabled]="isSubmitting">{{ isSubmitting ? 'Sending…' : 'Submit message' }}</button>
+            <p *ngIf="feedback" class="contact__feedback" [class.contact__error]="hasError"
+                [attr.role]="hasError ? 'alert' : 'status'">{{ feedback }}</p>
         </form>
 
         <div class="contact__aside">

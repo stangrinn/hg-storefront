@@ -320,6 +320,20 @@ export type ConfigurableOperationInput = {
   code: Scalars['String'];
 };
 
+export enum ContactMessageErrorCode {
+  INVALID_INPUT = 'INVALID_INPUT',
+  RATE_LIMITED = 'RATE_LIMITED',
+  UNAVAILABLE = 'UNAVAILABLE'
+}
+
+export type ContactMessageInput = {
+  email: Scalars['String'];
+  message: Scalars['String'];
+  name: Scalars['String'];
+  subject?: InputMaybe<Scalars['String']>;
+  website?: InputMaybe<Scalars['String']>;
+};
+
 export type Coordinate = {
   __typename?: 'Coordinate';
   x: Scalars['Float'];
@@ -1810,6 +1824,7 @@ export type Mutation = {
   requestUpdateCustomerEmailAddress: RequestUpdateCustomerEmailAddressResult;
   /** Resets a Customer's password based on the provided token */
   resetPassword: ResetPasswordResult;
+  sendContactMessage: SendContactMessageResult;
   /** Set the Customer for the Order. Required only if the Customer is not currently logged in */
   setCustomerForOrder: SetCustomerForOrderResult;
   /** Sets the billing address for the active Order */
@@ -1947,6 +1962,11 @@ export type MutationRequestUpdateCustomerEmailAddressArgs = {
 export type MutationResetPasswordArgs = {
   password: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationSendContactMessageArgs = {
+  input: ContactMessageInput;
 };
 
 
@@ -3280,6 +3300,12 @@ export type Seller = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type SendContactMessageResult = {
+  __typename?: 'SendContactMessageResult';
+  errorCode?: Maybe<ContactMessageErrorCode>;
+  success: Scalars['Boolean'];
+};
+
 export type SetCustomerForOrderResult = AlreadyLoggedInError | EmailAddressConflictError | GuestCheckoutError | NoActiveOrderError | Order;
 
 export type SetOrderShippingMethodResult = IneligibleShippingMethodError | NoActiveOrderError | Order | OrderModificationError;
@@ -3899,19 +3925,26 @@ export type AdjustItemQuantityMutationVariables = Exact<{
 }>;
 
 
-export type AdjustItemQuantityMutation = { __typename?: 'Mutation', adjustOrderLine: { __typename?: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename?: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename?: 'Order', id: string, code: string, state: string, active: boolean, updatedAt: string, orderPlacedAt?: string, totalQuantity: number, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shipping: number, shippingWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPrice: number, unitPriceWithTax: number, quantity: number, linePriceWithTax: number, discountedLinePriceWithTax: number, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, productVariant: { __typename?: 'ProductVariant', id: string, name: string }, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> }>, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number, shippingMethod: { __typename?: 'ShippingMethod', id: string, code: string, name: string, description: string } }>, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> } | { __typename?: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+export type AdjustItemQuantityMutation = { __typename?: 'Mutation', adjustOrderLine: { __typename?: 'InsufficientStockError', errorCode: ErrorCode, message: string } | { __typename?: 'NegativeQuantityError', errorCode: ErrorCode, message: string } | { __typename?: 'Order', id: string, code: string, state: string, active: boolean, updatedAt: string, orderPlacedAt?: string, totalQuantity: number, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shipping: number, shippingWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPrice: number, unitPriceWithTax: number, quantity: number, linePriceWithTax: number, discountedLinePriceWithTax: number, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, productVariant: { __typename?: 'ProductVariant', id: string, name: string }, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> }>, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number, shippingMethod: { __typename?: 'ShippingMethod', id: string, code: string, name: string, description: string } }>, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> } | { __typename?: 'OrderInterceptorError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderLimitError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
 
 export type RemoveItemFromCartMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type RemoveItemFromCartMutation = { __typename?: 'Mutation', removeOrderLine: { __typename?: 'Order', id: string, code: string, state: string, active: boolean, updatedAt: string, orderPlacedAt?: string, totalQuantity: number, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shipping: number, shippingWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPrice: number, unitPriceWithTax: number, quantity: number, linePriceWithTax: number, discountedLinePriceWithTax: number, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, productVariant: { __typename?: 'ProductVariant', id: string, name: string }, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> }>, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number, shippingMethod: { __typename?: 'ShippingMethod', id: string, code: string, name: string, description: string } }>, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
+export type RemoveItemFromCartMutation = { __typename?: 'Mutation', removeOrderLine: { __typename?: 'Order', id: string, code: string, state: string, active: boolean, updatedAt: string, orderPlacedAt?: string, totalQuantity: number, subTotal: number, subTotalWithTax: number, total: number, totalWithTax: number, shipping: number, shippingWithTax: number, lines: Array<{ __typename?: 'OrderLine', id: string, unitPrice: number, unitPriceWithTax: number, quantity: number, linePriceWithTax: number, discountedLinePriceWithTax: number, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, productVariant: { __typename?: 'ProductVariant', id: string, name: string }, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> }>, shippingLines: Array<{ __typename?: 'ShippingLine', priceWithTax: number, shippingMethod: { __typename?: 'ShippingMethod', id: string, code: string, name: string, description: string } }>, discounts: Array<{ __typename?: 'Discount', amount: number, amountWithTax: number, description: string, adjustmentSource: string, type: AdjustmentType }> } | { __typename?: 'OrderInterceptorError', errorCode: ErrorCode, message: string } | { __typename?: 'OrderModificationError', errorCode: ErrorCode, message: string } };
 
 export type GetCartTotalsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCartTotalsQuery = { __typename?: 'Query', activeOrder?: { __typename?: 'Order', id: string, active: boolean, totalQuantity: number, totalWithTax: number } };
+
+export type SendContactMessageMutationVariables = Exact<{
+  input: ContactMessageInput;
+}>;
+
+
+export type SendContactMessageMutation = { __typename?: 'Mutation', sendContactMessage: { __typename?: 'SendContactMessageResult', success: boolean, errorCode?: ContactMessageErrorCode } };
 
 export type RegisterPreOrderMutationVariables = Exact<{
   productId: Scalars['ID'];

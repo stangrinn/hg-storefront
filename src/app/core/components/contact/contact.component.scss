@@ -123,9 +123,18 @@
 }
 
 .contact__fields {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
     display: flex;
     flex-direction: column;
     gap: 24px;
+}
+
+.contact__feedback,
+.contact__error {
+    @include hg.type(helper);
 }
 
 .contact__field {
@@ -157,7 +166,6 @@
 }
 
 .contact__error {
-    @include hg.type(helper);
     color: var(--hg-error);
 }
 
@@ -168,6 +176,7 @@
     color: var(--contact-button-text);
     background: var(--contact-button-bg);
     cursor: pointer;
+
 }
 
 .contact__aside {

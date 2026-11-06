@@ -1,25 +1,37 @@
-import { isPlatformBrowser, Location } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Location } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { SendContactMessageMutation, SendContactMessageMutationVariables } from '../../../common/generated-types';
+import { DataService } from '../../providers/data/data.service';
+import { SEND_CONTACT_MESSAGE } from './contact.graphql';
 
 interface PreorderFaq {
     question: string;
     answer: string;
 }
 
-const CONTACT_EMAIL = 'hello@helenagrinshpun.art';
-
 @Component({
     selector: 'hgart-contact',
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent {
+export class ContactComponent implements OnDestroy {
+    isSubmitting = false;
+
+    feedback = '';
+
+    hasError = false;
+
+    private readonly subscriptions = new Subscription();
+
     readonly form = this.fb.nonNullable.group({
-        name: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
-        subject: [''],
-        message: ['', Validators.required],
+        name: ['', [Validators.required, Validators.maxLength(120), Validators.pattern(/.*\S.*/)]],
+        email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
+        subject: ['', Validators.maxLength(200)],
+        message: ['', [Validators.required, Validators.maxLength(5000), Validators.pattern(/[\s\S]*\S[\s\S]*/)]],
+        website: [''],
     });
 
     readonly faq: PreorderFaq[] = [
@@ -39,39 +51,80 @@ export class ContactComponent {
 
     constructor(private fb: FormBuilder,
                 private location: Location,
-                @Inject(PLATFORM_ID) private platformId: object) {
+                private dataService: DataService,
+                private changeDetector: ChangeDetectorRef) {
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     goBack(): void {
         this.location.back();
     }
 
-    fieldError(field: 'name' | 'email' | 'message'): string {
+    fieldError(field: 'name' | 'email' | 'subject' | 'message'): string {
         const control = this.form.controls[field];
 
         if (!control.touched) {
             return '';
         }
 
-        if (control.hasError('required')) {
-            return { name: 'Name is required.', email: 'Email is required.', message: 'Message is required.' }[field];
+        if (control.hasError('required') || control.hasError('pattern')) {
+            return 'Please fill in this field.';
+        }
+
+        if (control.hasError('maxlength')) {
+            return 'This field is too long.';
         }
 
         return control.hasError('email') ? 'Please enter a valid email address.' : '';
     }
 
     submit(): void {
+        if (this.isSubmitting) {
+            return;
+        }
+
+        this.feedback = '';
+        this.hasError = false;
+
         if (this.form.invalid) {
             this.form.markAllAsTouched();
 
             return;
         }
 
-        const { name, email, subject, message } = this.form.getRawValue();
-        const body = `${message}\n\n${name} <${email}>`;
+        this.isSubmitting = true;
 
-        if (isPlatformBrowser(this.platformId)) {
-            window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject || 'Inquiry from the website')}&body=${encodeURIComponent(body)}`;
-        }
+        this.subscriptions.add(this.dataService.mutate<SendContactMessageMutation, SendContactMessageMutationVariables>(
+            SEND_CONTACT_MESSAGE,
+            { input: this.form.getRawValue() },
+        ).subscribe({
+            next: result => {
+                this.isSubmitting = false;
+                const response = result?.sendContactMessage;
+
+                if (response?.success) {
+                    this.feedback = 'Your message has been sent. Thank you for getting in touch.';
+                    this.form.reset();
+                } else {
+                    this.hasError = true;
+                    this.feedback = response?.errorCode === 'RATE_LIMITED'
+                        ? 'Too many messages. Please try again later.'
+                        : response?.errorCode === 'INVALID_INPUT'
+                            ? 'Please check your details and try again.'
+                            : 'We could not confirm that your message was sent. Please try again later.';
+                }
+
+                this.changeDetector.markForCheck();
+            },
+            error: () => {
+                this.isSubmitting = false;
+                this.hasError = true;
+                this.feedback = 'We could not confirm that your message was sent. Please try again later.';
+                this.changeDetector.markForCheck();
+            },
+        }));
     }
 }
