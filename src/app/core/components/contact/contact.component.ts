@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SendContactMessageMutation, SendContactMessageMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
+import { SiteTheme, siteTheme } from '../../site-theme';
 import { SEND_CONTACT_MESSAGE } from './contact.graphql';
 import { environment } from '../../../../environments/environment';
 
@@ -12,6 +13,7 @@ interface TurnstileApi {
         sitekey: string;
         action: string;
         size: string;
+        theme: SiteTheme;
         callback: (token: string) => void;
         'expired-callback': () => void;
         'error-callback': () => void;
@@ -47,6 +49,10 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
     private widgetId?: string;
 
     private captchaTimer?: ReturnType<typeof setInterval>;
+
+    private themeObserver?: MutationObserver;
+
+    private renderedTheme?: SiteTheme;
 
     private destroyed = false;
 
@@ -107,13 +113,6 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
             this.document.head.appendChild(script);
         }
 
-        const update = (token: string, error = '') => this.zone.run(() => {
-            if (!this.destroyed) {
-                this.captchaToken = token;
-                this.captchaError = error;
-                this.changeDetector.markForCheck();
-            }
-        });
         const deadline = Date.now() + 15000;
 
         this.zone.runOutsideAngular(() => {
@@ -123,27 +122,68 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
                 if (!api) {
                     if (Date.now() >= deadline) {
                         this.stopCaptchaTimer();
-                        update('', 'Verification could not load. Please reload the page to try again.');
+                        this.updateCaptcha('', 'Verification could not load. Please reload the page to try again.');
                     }
 
                     return;
                 }
 
                 this.stopCaptchaTimer();
-
-                try {
-                    this.widgetId = api.render(this.captcha.nativeElement, {
-                        sitekey: environment.turnstileSiteKey,
-                        action: 'contact',
-                        size: 'flexible',
-                        callback: token => update(token),
-                        'expired-callback': () => update('', 'Verification expired. Please complete it again.'),
-                        'error-callback': () => update('', 'Verification failed. Please try again or reload the page.'),
-                    });
-                } catch {
-                    update('', 'Verification could not load. Please reload the page to try again.');
-                }
+                this.renderCaptcha(api);
+                this.observeThemeChanges(api);
             }, 100);
+        });
+    }
+
+    /** Renders the widget in the theme the site currently uses; any previously rendered instance is replaced. */
+    private renderCaptcha(api: TurnstileApi): void {
+        if (this.widgetId !== undefined) {
+            api.remove(this.widgetId);
+            this.widgetId = undefined;
+            this.updateCaptcha('');
+        }
+
+        const theme = siteTheme(this.document);
+
+        try {
+            this.widgetId = api.render(this.captcha.nativeElement, {
+                sitekey: environment.turnstileSiteKey,
+                action: 'contact',
+                size: 'flexible',
+                theme,
+                callback: token => this.updateCaptcha(token),
+                'expired-callback': () => this.updateCaptcha('', 'Verification expired. Please complete it again.'),
+                'error-callback': () => this.updateCaptcha('', 'Verification failed. Please try again or reload the page.'),
+            });
+            this.renderedTheme = theme;
+        } catch {
+            this.updateCaptcha('', 'Verification could not load. Please reload the page to try again.');
+        }
+    }
+
+    /** Turnstile fixes its theme at render time, so a site theme switch needs a re-render (the solved token is discarded). */
+    private observeThemeChanges(api: TurnstileApi): void {
+        const layout = this.document.querySelector('hgart-layout');
+
+        if (!layout || typeof MutationObserver === 'undefined') {
+            return;
+        }
+
+        this.themeObserver = new MutationObserver(() => {
+            if (!this.destroyed && siteTheme(this.document) !== this.renderedTheme) {
+                this.renderCaptcha(api);
+            }
+        });
+        this.themeObserver.observe(layout, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    private updateCaptcha(token: string, error = ''): void {
+        this.zone.run(() => {
+            if (!this.destroyed) {
+                this.captchaToken = token;
+                this.captchaError = error;
+                this.changeDetector.markForCheck();
+            }
         });
     }
 
@@ -151,6 +191,7 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
         this.destroyed = true;
         this.closeResult();
         this.stopCaptchaTimer();
+        this.themeObserver?.disconnect();
 
         if (this.widgetId !== undefined) {
             this.turnstile?.remove(this.widgetId);
