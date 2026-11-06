@@ -10,8 +10,8 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBind
 export class ArtCursorComponent implements AfterViewInit, OnDestroy {
     @HostBinding('attr.aria-hidden') readonly ariaHidden = 'true';
 
-    @ViewChild('dot', { static: true }) private dot: ElementRef<HTMLElement>;
-    @ViewChild('ring', { static: true }) private ring: ElementRef<HTMLElement>;
+    @ViewChild('point', { static: true }) private point: ElementRef<HTMLElement>;
+    @ViewChild('reticle', { static: true }) private reticle: ElementRef<HTMLElement>;
 
     private media?: MediaQueryList;
     private visible = false;
@@ -76,12 +76,12 @@ export class ArtCursorComponent implements AfterViewInit, OnDestroy {
         if (!this.visible) {
             this.ringX = this.x;
             this.ringY = this.y;
-            this.position(this.ring.nativeElement, this.ringX, this.ringY);
+            this.position(this.reticle.nativeElement, this.ringX, this.ringY);
         }
         this.visible = true;
         this.host.nativeElement.classList.add('is-visible');
         document.documentElement.classList.add('hgart-cursor-active');
-        this.position(this.dot.nativeElement, this.x, this.y);
+        this.position(this.point.nativeElement, this.x, this.y);
         if (!this.frame) {
             this.lastFrame = performance.now();
             this.frame = requestAnimationFrame(this.follow);
@@ -109,7 +109,7 @@ export class ArtCursorComponent implements AfterViewInit, OnDestroy {
             this.ringX = this.x;
             this.ringY = this.y;
         }
-        this.position(this.ring.nativeElement, this.ringX, this.ringY);
+        this.position(this.reticle.nativeElement, this.ringX, this.ringY);
         this.frame = settled ? 0 : requestAnimationFrame(this.follow);
     };
 

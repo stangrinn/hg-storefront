@@ -10,31 +10,46 @@
     &.is-visible { visibility: visible; }
 }
 
-.art-cursor__dot,
-.art-cursor__ring {
+.art-cursor__point,
+.art-cursor__reticle {
     position: fixed;
     top: 0;
     left: 0;
-    border-radius: 50%;
     pointer-events: none;
     will-change: transform;
 }
 
-.art-cursor__dot {
+.art-cursor__point {
     width: 5px;
     height: 5px;
+    border-radius: 50%;
     background: #fff;
     transition: opacity 160ms ease;
 }
 
-.art-cursor__ring {
+.art-cursor__reticle {
+    --corner-size: 3.5px;
+
     display: grid;
     place-items: center;
     width: 32px;
     height: 32px;
-    border: 1px solid rgb(255 255 255 / 65%);
     color: #fff;
     transition: width 180ms ease, height 180ms ease, background-color 180ms ease;
+}
+
+.art-cursor__corner {
+    position: absolute;
+    width: var(--corner-size);
+    height: var(--corner-size);
+    border: 0 solid currentColor;
+    opacity: 0.65;
+    transition: width 180ms ease, height 180ms ease;
+
+    &--tl { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+    &--tr { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+    &--bl { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+    &--br { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
 }
 
 .art-cursor__play {
@@ -44,9 +59,9 @@
     transition: opacity 140ms ease;
 }
 
-:host(.is-link) .art-cursor__ring { width: 22px; height: 22px; }
-:host(.is-play) .art-cursor__ring { width: 72px; height: 72px; background: rgb(255 255 255 / 5%); }
+:host(.is-link) .art-cursor__reticle { width: 22px; height: 22px; --corner-size: 3px; }
+:host(.is-play) .art-cursor__reticle { width: 72px; height: 72px; --corner-size: 6px; }
 :host(.is-play) .art-cursor__play { opacity: 1; }
-:host(.is-play) .art-cursor__dot { opacity: 0; }
-:host(.is-pressed) .art-cursor__ring { width: 16px; height: 16px; }
-:host(.is-play.is-pressed) .art-cursor__ring { width: 64px; height: 64px; }
+:host(.is-play) .art-cursor__point { opacity: 0; }
+:host(.is-pressed) .art-cursor__reticle { width: 16px; height: 16px; --corner-size: 2.5px; }
+:host(.is-play.is-pressed) .art-cursor__reticle { width: 64px; height: 64px; --corner-size: 6px; }
