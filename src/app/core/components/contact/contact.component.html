@@ -56,7 +56,9 @@
                 </div>
             </fieldset>
 
-            <button class="contact__submit" type="submit" [disabled]="isSubmitting">{{ isSubmitting ? 'Sending…' : 'Submit message' }}</button>
+            <div #captcha aria-label="Anti-bot verification"></div>
+            <p *ngIf="captchaError" class="contact__error" role="alert">{{ captchaError }}</p>
+            <button class="contact__submit" type="submit" [disabled]="isSubmitting || !captchaToken">{{ isSubmitting ? 'Sending…' : 'Submit message' }}</button>
             <p *ngIf="feedback" class="contact__feedback" [class.contact__error]="hasError"
                 [attr.role]="hasError ? 'alert' : 'status'">{{ feedback }}</p>
         </form>

@@ -1,10 +1,24 @@
-import { Location } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser, Location } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, NgZone, OnDestroy, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SendContactMessageMutation, SendContactMessageMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
 import { SEND_CONTACT_MESSAGE } from './contact.graphql';
+import { environment } from '../../../../environments/environment';
+
+interface TurnstileApi {
+    render(container: HTMLElement, options: {
+        sitekey: string;
+        action: string;
+        size: string;
+        callback: (token: string) => void;
+        'expired-callback': () => void;
+        'error-callback': () => void;
+    }): string;
+    reset(id: string): void;
+    remove(id: string): void;
+}
 
 interface PreorderFaq {
     question: string;
@@ -17,7 +31,23 @@ interface PreorderFaq {
     styleUrls: ['./contact.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent implements OnDestroy {
+export class ContactComponent implements AfterViewInit, OnDestroy {
+    @ViewChild('captcha', { static: true }) private captcha: ElementRef<HTMLElement>;
+
+    captchaToken = '';
+
+    captchaError = '';
+
+    private widgetId?: string;
+
+    private captchaTimer?: ReturnType<typeof setInterval>;
+
+    private destroyed = false;
+
+    private get turnstile(): TurnstileApi | undefined {
+        return (this.document.defaultView as (Window & { turnstile?: TurnstileApi }) | null)?.turnstile;
+    }
+
     isSubmitting = false;
 
     feedback = '';
@@ -52,11 +82,89 @@ export class ContactComponent implements OnDestroy {
     constructor(private fb: FormBuilder,
                 private location: Location,
                 private dataService: DataService,
-                private changeDetector: ChangeDetectorRef) {
+                private changeDetector: ChangeDetectorRef,
+                private zone: NgZone,
+                @Inject(DOCUMENT) private document: Document,
+                @Inject(PLATFORM_ID) private platformId: object) {
+    }
+
+    ngAfterViewInit(): void {
+        if (!isPlatformBrowser(this.platformId)) {
+            return;
+        }
+
+        if (!this.document.getElementById('contact-turnstile-script')) {
+            const script = this.document.createElement('script');
+            script.id = 'contact-turnstile-script';
+            script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+            script.async = true;
+            this.document.head.appendChild(script);
+        }
+
+        const update = (token: string, error = '') => this.zone.run(() => {
+            if (!this.destroyed) {
+                this.captchaToken = token;
+                this.captchaError = error;
+                this.changeDetector.markForCheck();
+            }
+        });
+        const deadline = Date.now() + 15000;
+
+        this.zone.runOutsideAngular(() => {
+            this.captchaTimer = setInterval(() => {
+                const api = this.turnstile;
+
+                if (!api) {
+                    if (Date.now() >= deadline) {
+                        this.stopCaptchaTimer();
+                        update('', 'Verification could not load. Please reload the page to try again.');
+                    }
+
+                    return;
+                }
+
+                this.stopCaptchaTimer();
+
+                try {
+                    this.widgetId = api.render(this.captcha.nativeElement, {
+                        sitekey: environment.turnstileSiteKey,
+                        action: 'contact',
+                        size: 'flexible',
+                        callback: token => update(token),
+                        'expired-callback': () => update('', 'Verification expired. Please complete it again.'),
+                        'error-callback': () => update('', 'Verification failed. Please try again or reload the page.'),
+                    });
+                } catch {
+                    update('', 'Verification could not load. Please reload the page to try again.');
+                }
+            }, 100);
+        });
     }
 
     ngOnDestroy(): void {
+        this.destroyed = true;
+        this.stopCaptchaTimer();
+
+        if (this.widgetId !== undefined) {
+            this.turnstile?.remove(this.widgetId);
+        }
+
         this.subscriptions.unsubscribe();
+    }
+
+    private stopCaptchaTimer(): void {
+        if (this.captchaTimer !== undefined) {
+            clearInterval(this.captchaTimer);
+            this.captchaTimer = undefined;
+        }
+    }
+
+    private resetCaptcha(): void {
+        this.captchaToken = '';
+
+        if (this.widgetId !== undefined) {
+            this.turnstile?.reset(this.widgetId);
+        }
     }
 
     goBack(): void {
@@ -95,14 +203,21 @@ export class ContactComponent implements OnDestroy {
             return;
         }
 
+        if (!this.captchaToken) {
+            this.captchaError = 'Please complete the verification before sending.';
+
+            return;
+        }
+
         this.isSubmitting = true;
 
         this.subscriptions.add(this.dataService.mutate<SendContactMessageMutation, SendContactMessageMutationVariables>(
             SEND_CONTACT_MESSAGE,
-            { input: this.form.getRawValue() },
+            { input: { ...this.form.getRawValue(), captchaToken: this.captchaToken } },
         ).subscribe({
             next: result => {
                 this.isSubmitting = false;
+                this.resetCaptcha();
                 const response = result?.sendContactMessage;
 
                 if (response?.success) {
@@ -112,6 +227,8 @@ export class ContactComponent implements OnDestroy {
                     this.hasError = true;
                     this.feedback = response?.errorCode === 'RATE_LIMITED'
                         ? 'Too many messages. Please try again later.'
+                        : response?.errorCode === 'CAPTCHA_FAILED'
+                            ? 'Verification failed or expired. Please complete it again and retry.'
                         : response?.errorCode === 'INVALID_INPUT'
                             ? 'Please check your details and try again.'
                             : 'We could not confirm that your message was sent. Please try again later.';
@@ -121,6 +238,7 @@ export class ContactComponent implements OnDestroy {
             },
             error: () => {
                 this.isSubmitting = false;
+                this.resetCaptcha();
                 this.hasError = true;
                 this.feedback = 'We could not confirm that your message was sent. Please try again later.';
                 this.changeDetector.markForCheck();

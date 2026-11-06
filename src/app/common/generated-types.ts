@@ -321,12 +321,14 @@ export type ConfigurableOperationInput = {
 };
 
 export enum ContactMessageErrorCode {
+  CAPTCHA_FAILED = 'CAPTCHA_FAILED',
   INVALID_INPUT = 'INVALID_INPUT',
   RATE_LIMITED = 'RATE_LIMITED',
   UNAVAILABLE = 'UNAVAILABLE'
 }
 
 export type ContactMessageInput = {
+  captchaToken?: InputMaybe<Scalars['String']>;
   email: Scalars['String'];
   message: Scalars['String'];
   name: Scalars['String'];

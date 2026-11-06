@@ -4,6 +4,7 @@
 
 export const environment = {
     production: false,
+    turnstileSiteKey: '1x00000000000000000000AA', // Cloudflare public localhost test key, not production protection.
     apiHost: 'http://localhost',
     apiPort: 3000,
     shopApiPath: 'shop-api',
