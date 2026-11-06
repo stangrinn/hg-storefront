@@ -71,8 +71,13 @@ body:has(hgart-layout.theme-light) {
 .theme-light .hg-icon { filter: brightness(0) invert(.16); }
 
 @media (any-hover: hover) and (any-pointer: fine) {
-    html.hgart-cursor-active,
-    html.hgart-cursor-active * {
+    html.hgart-cursor-active:not(:has(dialog[open])),
+    html.hgart-cursor-active:not(:has(dialog[open])) * {
         cursor: none !important;
+    }
+
+    // Native modal dialogs live above document overlays, including the decorative cursor.
+    html:has(dialog[open]) hgart-art-cursor {
+        visibility: hidden !important;
     }
 }

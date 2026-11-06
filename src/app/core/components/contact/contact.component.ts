@@ -34,6 +34,12 @@ interface PreorderFaq {
 export class ContactComponent implements AfterViewInit, OnDestroy {
     @ViewChild('captcha', { static: true }) private captcha: ElementRef<HTMLElement>;
 
+    @ViewChild('resultDialog', { static: true }) private resultDialog: ElementRef<HTMLDialogElement>;
+
+    readonly successMessage = 'Thank you for your message. We’ll respond as soon as possible.';
+
+    readonly failureMessage = 'Unfortunately, your message could not be sent. Please try again later.';
+
     captchaToken = '';
 
     captchaError = '';
@@ -143,6 +149,7 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.destroyed = true;
+        this.closeResult();
         this.stopCaptchaTimer();
 
         if (this.widgetId !== undefined) {
@@ -169,6 +176,29 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
 
     goBack(): void {
         this.location.back();
+    }
+
+    closeResult(): void {
+        if (isPlatformBrowser(this.platformId)) {
+            this.resultDialog.nativeElement.close();
+        }
+    }
+
+    closeResultOnBackdrop(event: MouseEvent): void {
+        const dialog = this.resultDialog.nativeElement;
+        const bounds = dialog.getBoundingClientRect();
+
+        if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right ||
+            event.clientY < bounds.top || event.clientY > bounds.bottom)) {
+            this.closeResult();
+        }
+    }
+
+    private showResult(): void {
+        if (!this.destroyed && isPlatformBrowser(this.platformId)) {
+            this.changeDetector.detectChanges();
+            this.resultDialog.nativeElement.showModal();
+        }
     }
 
     fieldError(field: 'name' | 'email' | 'subject' | 'message'): string {
@@ -221,7 +251,7 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
                 const response = result?.sendContactMessage;
 
                 if (response?.success) {
-                    this.feedback = 'Your message has been sent. Thank you for getting in touch.';
+                    this.feedback = this.successMessage;
                     this.form.reset();
                 } else {
                     this.hasError = true;
@@ -231,17 +261,17 @@ export class ContactComponent implements AfterViewInit, OnDestroy {
                             ? 'Verification failed or expired. Please complete it again and retry.'
                         : response?.errorCode === 'INVALID_INPUT'
                             ? 'Please check your details and try again.'
-                            : 'We could not confirm that your message was sent. Please try again later.';
+                            : this.failureMessage;
                 }
 
-                this.changeDetector.markForCheck();
+                this.showResult();
             },
             error: () => {
                 this.isSubmitting = false;
                 this.resetCaptcha();
                 this.hasError = true;
-                this.feedback = 'We could not confirm that your message was sent. Please try again later.';
-                this.changeDetector.markForCheck();
+                this.feedback = this.failureMessage;
+                this.showResult();
             },
         }));
     }

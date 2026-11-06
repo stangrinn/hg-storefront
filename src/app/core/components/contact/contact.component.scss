@@ -31,6 +31,46 @@
     color: var(--contact-text);
 }
 
+.contact__result {
+    position: fixed;
+    inset: 0;
+    width: min(480px, calc(100vw - 32px));
+    max-height: calc(100dvh - 48px);
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--contact-border);
+    background: var(--contact-bg);
+    color: var(--contact-title);
+    box-shadow: 0 20px 80px var(--contact-shadow);
+
+    &::backdrop {
+        background: rgba(0, 0, 0, 0.65);
+        cursor: auto;
+    }
+}
+
+.contact__result-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: clamp(24px, 5vw, 40px);
+
+    h2 {
+        font: 400 40px/1.1 'Cormorant Garamond', serif;
+    }
+
+    p {
+        font: 400 15px/1.7 Montserrat, sans-serif;
+        color: var(--contact-text);
+    }
+
+    .contact__submit {
+        width: 100%;
+        margin-top: 8px;
+    }
+}
+
 .contact__breadcrumb {
     @include breadcrumb-typography;
     display: flex;
