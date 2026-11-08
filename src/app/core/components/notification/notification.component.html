@@ -1,16 +1,20 @@
 <div class="toast" [ngClass]="'toast--' + options.type" [attr.role]="options.type === 'error' ? 'alert' : 'status'">
-    <div class="toast__header">
+    <span class="toast__bar" aria-hidden="true"></span>
+    <div class="toast__text">
         <p class="toast__title">{{ options.title }}</p>
-        <button type="button" class="toast__close" aria-label="Close" (click)="close.next()">
-            <img class="hg-icon" src="assets/icons/design-system/close.svg" alt="">
-        </button>
+        <div class="toast__message">
+            <ng-container *ngIf="options.message">
+                {{ options.message }}
+            </ng-container>
+            <ng-container *ngIf="options.templateRef">
+                <ng-container *ngTemplateOutlet="options.templateRef; context: options.templateContext"></ng-container>
+            </ng-container>
+        </div>
     </div>
-    <div class="toast__message">
-        <ng-container *ngIf="options.message">
-            {{ options.message }}
-        </ng-container>
-        <ng-container *ngIf="options.templateRef">
-            <ng-container *ngTemplateOutlet="options.templateRef; context: options.templateContext"></ng-container>
-        </ng-container>
-    </div>
+    <button type="button" class="toast__action" *ngIf="options.actionLabel" (click)="options.onAction?.(); close.next()">
+        {{ options.actionLabel }}
+    </button>
+    <button type="button" class="toast__close" aria-label="Close" (click)="close.next()">
+        <img class="hg-icon" src="assets/icons/design-system/close.svg" alt="">
+    </button>
 </div>

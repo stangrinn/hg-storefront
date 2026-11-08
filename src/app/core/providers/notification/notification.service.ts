@@ -67,7 +67,7 @@ export class NotificationService {
             title: 'Success',
             message,
             duration: 5000,
-            type: 'error',
+            type: 'success',
         });
     }
 

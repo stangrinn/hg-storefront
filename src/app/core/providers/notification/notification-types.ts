@@ -10,6 +10,9 @@ export interface NotificationOptions {
      * A simple string message for the notification.
      */
     message?: string;
+    /** Optional action button (e.g. "Try again"); the toast closes after it is clicked. */
+    actionLabel?: string;
+    onAction?: () => void;
     /**
      * A TemplateRef to embed in the notification. Useful
      * when the notification needs to display something more

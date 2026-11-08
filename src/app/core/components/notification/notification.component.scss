@@ -3,41 +3,58 @@
 .toast {
     box-sizing: border-box;
     display: flex;
-    flex-direction: column;
     gap: 12px;
-    width: 360px;
+    align-items: center;
+    width: 520px;
     max-width: calc(100vw - 32px);
-    padding: 20px 24px;
+    padding: 14px 12px 14px 16px;
     pointer-events: auto;
     color: var(--hg-text-primary);
-    background: var(--hg-bg-glass);
-    backdrop-filter: blur(12px);
+    background: var(--hg-bg-surface);
     border: 1px solid var(--hg-border-subtle);
-    border-left: 3px solid var(--hg-text-muted);
-    box-shadow: var(--hg-shadow-modal);
+    box-shadow: var(--hg-shadow-primary);
+}
 
-    &--error {
-        border-left-color: var(--hg-error);
+.toast__bar {
+    flex: none;
+    align-self: stretch;
+    width: 2px;
+    background: var(--hg-text-muted);
+
+    .toast--error & {
+        background: var(--hg-error);
+    }
+
+    .toast--success & {
+        background: var(--hg-success);
     }
 }
 
-.toast__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.toast__text {
+    flex: 1;
+    min-width: 0;
+    font-family: Montserrat, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    overflow-wrap: anywhere;
 }
 
 .toast__title {
     margin: 0;
-    font-family: Orbitron, sans-serif;
-    font-size: 11px;
-    letter-spacing: 3.85px;
-    color: var(--hg-text-muted);
-    text-transform: uppercase;
+    color: var(--hg-text-primary);
 }
 
+.toast__message {
+    color: var(--hg-text-muted);
+}
+
+.toast__action,
 .toast__close {
     flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
     padding: 0;
     color: inherit;
     cursor: pointer;
@@ -46,20 +63,26 @@
 
     &:focus-visible {
         outline: 2px solid var(--hg-border-strong);
-        outline-offset: 4px;
-    }
-
-    .hg-icon {
-        width: 20px;
-        height: 20px;
+        outline-offset: 2px;
     }
 }
 
-.toast__message {
-    font-family: Montserrat, sans-serif;
-    font-size: 14px;
-    line-height: 22px;
-    color: var(--hg-text-secondary);
+.toast__action {
+    padding: 0 8px;
+    font-family: Orbitron, sans-serif;
+    font-size: 11px;
+    letter-spacing: 4.4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.toast__close {
+    width: 40px;
+
+    .hg-icon {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 :host {
