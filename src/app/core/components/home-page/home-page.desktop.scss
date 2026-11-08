@@ -685,3 +685,53 @@
         .ar-flow__corner--bottom-left { left: -19.5px; bottom: -17.37px; border-left-width: 2px; border-bottom-width: 2px; }
     }
 }
+
+// Below 1216px the three hero artworks no longer fit at their Figma size, so the whole wall scales with the viewport.
+// Every measure is min(Figma px, share of 1216px as vw), keeping the proportions identical to the 1600 composition.
+@media (min-width: 1024px) and (max-width: 1215px) {
+    :host {
+        .hero__wall {
+            height: min(582px, 47.86vw);
+            padding: 0 2.74vw;
+            gap: min(62px, 5.1vw);
+            justify-content: center;
+        }
+        .hero__art--medium {
+            width: min(330px, 27.14vw);
+            height: auto;
+            aspect-ratio: 3 / 4;
+        }
+        .hero__art--large {
+            width: min(366px, 30.1vw);
+            height: auto;
+            aspect-ratio: 3 / 4;
+        }
+    }
+}
+
+// Figma lays the AR flow out at 1190px wide (cards 336 / art 474 / cards 336) with the art taller than the cards, which
+// keeps the right-hand focus corners clear of the "I" badge. Below 1310px the same composition is zoomed down as a unit
+// rather than reflowed, so the corners never collide with the cards.
+@media (min-width: 1024px) and (max-width: 1309px) {
+    :host .ar-flow {
+        zoom: 0.95;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1259px) {
+    :host .ar-flow {
+        zoom: 0.89;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1179px) {
+    :host .ar-flow {
+        zoom: 0.82;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1099px) {
+    :host .ar-flow {
+        zoom: 0.75;
+    }
+}

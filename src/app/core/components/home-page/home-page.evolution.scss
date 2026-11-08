@@ -24,7 +24,7 @@
 
         .evolution-stage {
             position: sticky;
-            top: 108px;
+            top: var(--evolution-sticky-top, 108px);
             display: flow-root;
         }
 

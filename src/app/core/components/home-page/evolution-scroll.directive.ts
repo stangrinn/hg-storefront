@@ -5,6 +5,11 @@ import { InlineVideoPlayback } from './inline-video-playback';
 
 const clamp = (value: number): number => Math.max(0, Math.min(1, value));
 
+// The fixed header is 92px tall; the pinned scene never sits closer than 108px to the top.
+const HEADER_HEIGHT = 92;
+
+const MIN_STICKY_TOP = 108;
+
 const ease = (value: number): number => value < 0.5 ? 4 * value ** 3 : 1 - (-2 * value + 2) ** 3 / 2;
 
 @Directive({ selector: '[hgartEvolutionScroll]' })
@@ -24,7 +29,7 @@ export class EvolutionScrollDirective implements AfterViewInit, OnDestroy {
     private stageHeight = 1;
     private enabled = false;
     private destroyed = false;
-    private readonly stickyTop = 108;
+    private stickyTop = MIN_STICKY_TOP;
 
     constructor(
         private elementRef: ElementRef<HTMLElement>,
@@ -50,7 +55,7 @@ export class EvolutionScrollDirective implements AfterViewInit, OnDestroy {
             this.videos.forEach(video => this.visibilityObserver?.observe(video));
             this.playback = new InlineVideoPlayback(this.videos,
                 video => !this.enabled || !!this.rows[this.currentRow]?.contains(video),
-                { restartOnEnter: true, topInset: this.stickyTop });
+                { restartOnEnter: true, topInset: MIN_STICKY_TOP });
             this.observer = new ResizeObserver(this.measure);
             this.observer.observe(section);
             section.querySelectorAll('.comparison-card--alive > img').forEach(image => this.observer?.observe(image));
@@ -109,10 +114,14 @@ export class EvolutionScrollDirective implements AfterViewInit, OnDestroy {
         const rowHeight = Math.max(...this.rows.map(row => row.offsetHeight));
         const headingHeight = this.elementRef.nativeElement.querySelector<HTMLElement>('.section-heading')?.offsetHeight ?? 0;
         const headingSpace = headingHeight + 40;
-        const availableHeight = Math.max(120, window.innerHeight - this.stickyTop - headingSpace - 24);
+        const availableHeight = Math.max(120, window.innerHeight - MIN_STICKY_TOP - headingSpace - 24);
         this.scale = Math.min(1, (availableHeight - 24) / rowHeight);
         this.stageHeight = Math.min(availableHeight, rowHeight * this.scale + 24);
+        // On tall viewports centre the pinned scene in the space below the header instead of leaving it empty underneath.
+        const sceneHeight = headingSpace + this.stageHeight;
+        this.stickyTop = Math.max(MIN_STICKY_TOP, Math.round(HEADER_HEIGHT + (window.innerHeight - HEADER_HEIGHT - sceneHeight) / 2));
         this.step = Math.max(650, window.innerHeight * 0.95);
+        this.runway.style.setProperty('--evolution-sticky-top', `${this.stickyTop}px`);
         this.runway.style.setProperty('--evolution-stage-height', `${this.stageHeight}px`);
         const sequenceLength = Math.max(0, this.rows.length - 1) + 0.4;
         this.runway.style.setProperty('--evolution-runway-height', `${headingSpace + this.stageHeight + this.step * sequenceLength}px`);
