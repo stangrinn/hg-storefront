@@ -1,5 +1,67 @@
 @import "variables";
 
+.toast {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    padding: 20px 24px;
+    pointer-events: auto;
+    color: var(--hg-text-primary);
+    background: var(--hg-bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--hg-border-subtle);
+    border-left: 3px solid var(--hg-text-muted);
+    box-shadow: var(--hg-shadow-modal);
+
+    &--error {
+        border-left-color: var(--hg-error);
+    }
+}
+
+.toast__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toast__title {
+    margin: 0;
+    font-family: Orbitron, sans-serif;
+    font-size: 11px;
+    letter-spacing: 3.85px;
+    color: var(--hg-text-muted);
+    text-transform: uppercase;
+}
+
+.toast__close {
+    flex: none;
+    padding: 0;
+    color: inherit;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+
+    &:focus-visible {
+        outline: 2px solid var(--hg-border-strong);
+        outline-offset: 4px;
+    }
+
+    .hg-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.toast__message {
+    font-family: Montserrat, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--hg-text-secondary);
+}
+
 :host {
     animation: fadeIn 0.3s ease-out forwards;
     &.remove {

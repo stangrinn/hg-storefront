@@ -1,20 +1,16 @@
-<div
-    class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-    <div class="p-4">
-        <div class="flex justify-between items-center" [ngClass]="options.type">
-            <div class="font-bold text-gray-600">{{ options.title }}</div>
-            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close"
-                    (click)="close.next()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="mt-2">
-            <ng-container *ngIf="options.message">
-                {{ options.message }}
-            </ng-container>
-            <ng-container *ngIf="options.templateRef">
-                <ng-container *ngTemplateOutlet="options.templateRef; context: options.templateContext"></ng-container>
-            </ng-container>
-        </div>
+<div class="toast" [ngClass]="'toast--' + options.type" [attr.role]="options.type === 'error' ? 'alert' : 'status'">
+    <div class="toast__header">
+        <p class="toast__title">{{ options.title }}</p>
+        <button type="button" class="toast__close" aria-label="Close" (click)="close.next()">
+            <img class="hg-icon" src="assets/icons/design-system/close.svg" alt="">
+        </button>
+    </div>
+    <div class="toast__message">
+        <ng-container *ngIf="options.message">
+            {{ options.message }}
+        </ng-container>
+        <ng-container *ngIf="options.templateRef">
+            <ng-container *ngTemplateOutlet="options.templateRef; context: options.templateContext"></ng-container>
+        </ng-container>
     </div>
 </div>
