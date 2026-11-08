@@ -38,15 +38,18 @@
                 [attr.poster]="selectedAsset?.preview">
             </video>
 
-            <!-- Volume control button -->
+            <!-- Sound toggle: label appears on hover/focus -->
             <button
                 *ngIf="isVideoVisible && isFirstAssetSelected()"
                 class="volume-button"
-                (mouseenter)="onVolumeButtonEnter()"
-                (mouseleave)="onVolumeButtonLeave()"
-                [attr.aria-label]="isMuted ? 'Unmute video' : 'Mute video'"
+                (click)="toggleMute()"
+                [attr.aria-label]="isMuted ? 'Turn sound on' : 'Turn sound off'"
+                [attr.aria-pressed]="!isMuted"
                 type="button">
-                <fa-icon [icon]="isMuted ? 'volume-mute' : 'volume-up'"></fa-icon>
+                <span class="volume-button__label" aria-hidden="true">{{ isMuted ? 'Sound off' : 'Sound on' }}</span>
+                <img class="hg-icon volume-button__icon"
+                     [src]="isMuted ? 'assets/icons/design-system/sound-off.svg' : 'assets/icons/design-system/sound-on.svg'"
+                     alt="">
             </button>
         </div>
 

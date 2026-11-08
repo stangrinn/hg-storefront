@@ -120,39 +120,76 @@
         }
     }
 
-    // Volume control button
+    // Sound toggle (Figma 987:229): 64px circle, expands to a labelled pill on hover/focus
     .volume-button {
-        @apply absolute bottom-4 right-4;
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
         z-index: 10;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background-color: rgba(0, 0, 0, 0.1);
-        // border: 1px solid rgba(255, 255, 255, 0.3);
         display: flex;
+        gap: 12px;
         align-items: center;
         justify-content: center;
+        height: 64px;
+        min-width: 64px;
+        padding: 0;
+        color: var(--hg-text-primary);
         cursor: pointer;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(4px);
+        background: var(--hg-bg-glass);
+        border: 1px solid var(--hg-border-subtle);
+        border-radius: 100px;
+        box-shadow: 0 2px 12px rgb(0 0 0 / 30%);
+        backdrop-filter: blur(12px);
+        transition: border-color 0.2s ease;
 
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 255, 255, 0.6);
-            transform: scale(1.1);
+        &:hover,
+        &:focus-visible {
+            padding: 0 18px 0 24px;
         }
 
-        &:active {
-            transform: scale(0.95);
+        &:focus-visible {
+            outline: 0;
+            border: 3px solid var(--hg-border-strong);
         }
 
-        fa-icon {
-            color: white;
-            font-size: 10px;
+        &__label {
+            display: none;
+            font: 500 13px/normal Orbitron, sans-serif;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        &:hover .volume-button__label,
+        &:focus-visible .volume-button__label {
+            display: block;
+        }
+
+        &__icon {
+            width: 28px;
+            height: 28px;
         }
     }
 }
 // Mobile artwork presentation: the mount hugs a 260 x 347px frame.
+@media (max-width: 1440px) {
+    .gallery-main-image .volume-button {
+        height: 56px;
+        min-width: 56px;
+    }
+}
+
+@media (max-width: 720px) {
+    .gallery-main-image .volume-button {
+        height: 48px;
+        min-width: 48px;
+    }
+
+    .gallery-main-image .volume-button__icon {
+        width: 24px;
+        height: 24px;
+    }
+}
 @media (max-width: 720px) {
     .gallery { gap: 16px; }
     .gallery__mount { flex: none; width: 100%; max-width: 324px; padding: 32px; }

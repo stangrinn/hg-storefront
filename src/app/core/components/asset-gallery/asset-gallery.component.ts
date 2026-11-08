@@ -203,7 +203,7 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
             // Use requestAnimationFrame for smoother transition
             requestAnimationFrame(() => {
                 video.currentTime = 0;
-                video.muted = true;
+                video.muted = this.isMuted;
                 video.play().catch(() => { /* Silently fail */ });
                 this.cdr.markForCheck();
             });
@@ -217,34 +217,21 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
         if (!this.videoSource) return;
         
         this.isVideoVisible = false;
-        this.isMuted = true;
         this.cdr.markForCheck();
 
         if (this.videoPlayer?.nativeElement) {
             const video = this.videoPlayer.nativeElement;
-            video.muted = true;
             video.pause();
         }
     }
 
     /**
-     * Unmutes video when hovering over volume button.
+     * Toggles the video sound; the choice persists while the page is open.
      */
-    onVolumeButtonEnter(): void {
+    toggleMute(): void {
         if (this.videoPlayer?.nativeElement) {
-            this.videoPlayer.nativeElement.muted = false;
-            this.isMuted = false;
-            this.cdr.markForCheck();
-        }
-    }
-
-    /**
-     * Mutes video when leaving volume button.
-     */
-    onVolumeButtonLeave(): void {
-        if (this.videoPlayer?.nativeElement) {
-            this.videoPlayer.nativeElement.muted = true;
-            this.isMuted = true;
+            this.isMuted = !this.isMuted;
+            this.videoPlayer.nativeElement.muted = this.isMuted;
             this.cdr.markForCheck();
         }
     }
