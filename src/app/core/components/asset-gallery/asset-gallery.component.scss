@@ -137,7 +137,7 @@
         cursor: pointer;
         background: var(--hg-bg-glass);
         border: 1px solid var(--hg-border-subtle);
-        border-radius: 100px;
+        border-radius: 0;
         box-shadow: 0 2px 12px rgb(0 0 0 / 30%);
         backdrop-filter: blur(12px);
         transition: border-color 0.2s ease;
