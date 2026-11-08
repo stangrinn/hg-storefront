@@ -19,9 +19,7 @@
             <div *ngFor="let item of items; let i = index" class="faq__item" [class.faq__item--open]="isOpen(i)">
                 <button type="button" class="faq__question" [attr.aria-expanded]="isOpen(i)" (click)="toggleQuestion(i)">
                     <span>{{ item.question }}</span>
-                    <svg class="faq__chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
+                    <img class="faq__chevron hg-icon" src="assets/icons/design-system/disclosure.svg" width="24" height="24" alt="">
                 </button>
                 <div class="faq__answer">
                     <p *ngFor="let line of item.answer">{{ line }}</p>
