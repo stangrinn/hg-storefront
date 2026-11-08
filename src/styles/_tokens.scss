@@ -31,7 +31,7 @@ $light: (
     } @else if $role == label {
         font: 400 11px/normal var(--hg-font-ui);
         letter-spacing: .35em;
-        text-transform: uppercase;
+        text-transform: none;
     } @else if $role == title-1 {
         font: 400 72px/64px var(--hg-font-display);
         letter-spacing: -.04em;
