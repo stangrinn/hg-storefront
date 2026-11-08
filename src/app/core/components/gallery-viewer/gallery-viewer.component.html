@@ -1,0 +1,107 @@
+<div class="viewer"
+     role="dialog"
+     aria-modal="true"
+     [attr.aria-label]="title ? title + ' — fullscreen viewer' : 'Fullscreen artwork viewer'"
+     [hgartDrawerFocus]="true"
+     (drawerDismiss)="onEscape()"
+     [class.viewer--idle]="idle"
+     [class.viewer--closing]="closing"
+     [class.viewer--magnify]="magnify"
+     (click)="onWallClick($event)">
+    <div class="viewer__floor" aria-hidden="true"></div>
+    <div class="viewer__vignette" aria-hidden="true"></div>
+    <img class="viewer__spotlight" src="assets/gallery-spotlight.svg" alt="">
+
+    <button type="button" class="viewer__close hg-glass" aria-label="Close viewer" (click)="close()">
+        <img class="hg-icon" src="assets/icons/design-system/close.svg" alt="">
+    </button>
+    <span class="viewer__esc" aria-hidden="true">ESC TO CLOSE</span>
+
+    <div class="viewer__piece" #piece [style.--ratio]="ratio">
+        <div class="viewer__frame"></div>
+        <div class="viewer__art"
+             #art
+             [class.viewer__art--magnify]="magnify"
+             (pointermove)="onArtMove($event)"
+             (pointerleave)="onArtLeave()"
+             (click)="onArtClick($event)"
+             (wheel)="onWheel($event)">
+            <img *ngFor="let item of items; let i = index"
+                 class="viewer__image"
+                 [class.viewer__image--active]="i === index"
+                 [src]="item.src"
+                 [alt]="i === index ? title : ''"
+                 [attr.aria-hidden]="i === index ? null : 'true'"
+                 draggable="false">
+            <video *ngIf="hasVideo"
+                   #video
+                   class="viewer__video"
+                   [src]="videoSource"
+                   [muted]="muted"
+                   autoplay
+                   loop
+                   playsinline
+                   aria-hidden="true"></video>
+        </div>
+    </div>
+
+    <aside class="viewer__label viewer__fade">
+        <p class="viewer__label-author">{{ author }}</p>
+        <p class="viewer__label-title">{{ title }}</p>
+        <p class="viewer__label-meta" *ngIf="meta">{{ meta }}</p>
+        <p class="viewer__label-ar" *ngIf="videoSource">AR EXPERIENCE INCLUDED</p>
+    </aside>
+
+    <ng-container *ngIf="magnify && lens.visible && current">
+        <div class="viewer__loupe"
+             aria-hidden="true"
+             [style.left.px]="lens.clientX - loupeSize / 2"
+             [style.top.px]="lens.clientY - loupeSize / 2"
+             [style.backgroundImage]="'url(&quot;' + current.src + '&quot;)'"
+             [style.backgroundPosition]="loupePosition"
+             [style.backgroundSize]="loupeBackgroundSize">
+            <img class="viewer__loupe-dot" src="assets/icons/design-system/ic-loupe-dot.svg" alt="">
+        </div>
+        <div class="viewer__hint"
+             aria-hidden="true"
+             [style.left.px]="lens.clientX - loupeSize / 2"
+             [style.top.px]="lens.clientY + loupeSize / 2 + 20">{{ hint }}</div>
+    </ng-container>
+
+    <div class="viewer__dock viewer__fade hg-glass" role="toolbar" aria-label="Viewer controls">
+        <ng-container *ngIf="items.length > 1">
+            <button type="button" class="viewer__btn hg-glass" aria-label="Previous artwork image" (click)="step(-1)">
+                <img class="hg-icon" src="assets/icons/design-system/ic-previous.svg" alt="">
+            </button>
+            <span class="viewer__counter" aria-live="polite">{{ index + 1 }} / {{ items.length }}</span>
+            <button type="button" class="viewer__btn hg-glass" aria-label="Next artwork image" (click)="step(1)">
+                <img class="hg-icon" src="assets/icons/design-system/ic-next.svg" alt="">
+            </button>
+            <span class="viewer__sep" aria-hidden="true"></span>
+        </ng-container>
+        <button type="button"
+                *ngIf="hasVideo"
+                class="viewer__btn hg-glass"
+                [attr.aria-label]="muted ? 'Turn sound on' : 'Turn sound off'"
+                [attr.aria-pressed]="!muted"
+                (click)="toggleSound()">
+            <img class="hg-icon" [src]="muted ? 'assets/icons/design-system/sound-off.svg' : 'assets/icons/design-system/sound-on.svg'" alt="">
+        </button>
+        <button type="button"
+                class="viewer__btn viewer__btn--zoom"
+                [class.viewer__btn--active]="magnify"
+                aria-label="Magnify (Z)"
+                [attr.aria-pressed]="magnify"
+                (click)="toggleMagnify()">
+            <img class="hg-icon" src="assets/icons/design-system/ic-zoom.svg" alt="">
+        </button>
+        <button type="button"
+                *ngIf="favourite"
+                class="viewer__btn hg-glass"
+                [attr.aria-label]="saved ? 'Remove from favourites' : 'Save to favourites'"
+                [attr.aria-pressed]="saved"
+                (click)="toggleSaved()">
+            <img class="hg-icon" [src]="saved ? 'assets/icons/design-system/heart-saved.svg' : 'assets/icons/design-system/heart.svg'" alt="">
+        </button>
+    </div>
+</div>

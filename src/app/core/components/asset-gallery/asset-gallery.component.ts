@@ -1,8 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import './types.d';
 import { AssetFragment } from '../../../common/generated-types';
 import { isPlatformBrowser } from '@angular/common';
+import { FavouriteItem } from '../../providers/favourites/favourites.service';
+import { GalleryViewerItem } from '../gallery-viewer/gallery-viewer.component';
 
 export type AssetWithDimensions = Pick<AssetFragment, 'id' | 'preview' | 'width' | 'height'>;
 
@@ -19,6 +19,13 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     /** Video source URL for hover effect on first image */
     @Input() videoSource?: string | null = null;
 
+    /** Wall label data for the fullscreen viewer. */
+    @Input() title = '';
+    @Input() year?: string | null;
+    @Input() technique?: string | null;
+    @Input() size?: string | null;
+    @Input() favourite: FavouriteItem | null = null;
+
     @ViewChild('mainPreview', { static: false })
     featuredAssetLoaded = false;
     private mainPreview: ElementRef<HTMLImageElement>;
@@ -26,8 +33,14 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     @ViewChild('videoPlayer', { static: false })
     videoPlayer: ElementRef<HTMLVideoElement>;
 
+    @ViewChild('mainImage', { static: false })
+    mainImage?: ElementRef<HTMLImageElement>;
+
     selectedAsset?: AssetWithDimensions;
-    private gallery?: PhotoSwipeLightbox;
+
+    /** Fullscreen viewer state */
+    viewerOpen = false;
+    viewerIndex = 0;
 
     /** Controls video visibility on hover */
     isVideoVisible = false;
@@ -48,46 +61,19 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngOnChanges() {
+        this.viewerItems = (this.assets ?? []).map(asset => ({ id: asset.id, src: asset.preview, width: asset.width, height: asset.height }));
         if (this.assets) {
-            this.initPhotoswipe();
             this.selectImage(this.selectedAssetId);
         }
     }
 
     ngAfterViewInit() {
-        if (this.assets) {
-            this.initPhotoswipe();
-        }
         // Preload video for faster playback
         this.preloadVideo();
     }
 
     onLoad() {
         this.featuredAssetLoaded = true;
-    }
-
-    private initPhotoswipe() {
-        if (isPlatformBrowser(this.platformId)) {
-
-            const items = this.assets?.map(asset => ({
-                src: asset.preview,
-                msrc: asset.preview + '?preset=medium',
-                width: asset.width || 1000,
-                height: asset.height || 1000,
-            }));
-
-            this.gallery = new PhotoSwipeLightbox({
-                dataSource: items,
-                pswpModule: () => import('photoswipe'),
-                showHideOpacity: true,
-            });
-
-            // this.gallery.on('uiRegister', () => {
-            //     console.log('PhotoSwipe UI registered');
-            // });
-
-            this.gallery.init();
-        }
     }
 
     selectImage(assetId: string) {
@@ -100,18 +86,34 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
         this.isVideoVisible = false;
     }
 
+    viewerItems: GalleryViewerItem[] = [];
+
+    /** Rect of the on-page painting for the viewer's fly-in / fly-back. */
+    readonly originRect = (): DOMRect | null => this.mainImage?.nativeElement.getBoundingClientRect() ?? null;
+
     openImage(assetId: string) {
-        if (!this.assets) {
+        if (!this.assets || !isPlatformBrowser(this.platformId)) {
             return;
         }
-        const index = this.assets.findIndex(a => a.id === assetId);
-        const items = this.assets.map(asset => ({
-            src: asset.preview,
-            msrc: asset.preview + '?preset=medium',
-            width: asset.width || 1000,
-            height: asset.height || 1000,
-        }));
-        this.gallery?.loadAndOpen(index, items);
+        this.viewerIndex = Math.max(0, this.assets.findIndex(a => a.id === assetId));
+        this.onMouseLeave();
+        this.viewerOpen = true;
+        this.cdr.markForCheck();
+    }
+
+    onViewerIndexChange(index: number) {
+        this.viewerIndex = index;
+        const asset = this.assets?.[index];
+        if (asset) {
+            this.selectImage(asset.id);
+        }
+        this.cdr.markForCheck();
+    }
+
+    onViewerClosed() {
+        this.viewerOpen = false;
+        this.cdr.markForCheck();
+        this.mainImage?.nativeElement.focus({ preventScroll: true });
     }
 
     /**

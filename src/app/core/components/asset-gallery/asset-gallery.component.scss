@@ -71,6 +71,9 @@
         border-radius: 2px;
         object-fit: cover;
         cursor: pointer;
+
+        // The viewer flies the painting out of this spot, so the original stays invisible meanwhile.
+        &--lifted { visibility: hidden; }
     }
 }
 

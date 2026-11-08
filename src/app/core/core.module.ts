@@ -13,6 +13,7 @@ import { APOLLO_CLIENT_PROVIDER } from './apollo-client-provider';
 import { AboutMeComponent } from './components/about-me/about-me.component';
 import { AccountLinkComponent } from './components/account-link/account-link.component';
 import { AssetGalleryComponent } from './components/asset-gallery/asset-gallery.component';
+import { GalleryViewerComponent } from './components/gallery-viewer/gallery-viewer.component';
 import { FavouriteToggleComponent } from './components/favourite-toggle/favourite-toggle.component';
 import { InterestFormComponent } from './components/interest-form/interest-form.component';
 import { InterestPageComponent } from './components/interest-page/interest-page.component';
@@ -61,6 +62,7 @@ const CORE_COMPONENTS = [
     ProductListControlsComponent,
     ProductSearchBarComponent,
     AssetGalleryComponent,
+    GalleryViewerComponent,
     FavouriteToggleComponent,
     FavouritesDrawerComponent,
     SavedToggleComponent,
