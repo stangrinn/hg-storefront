@@ -1371,6 +1371,11 @@ export type IntStructFieldConfig = StructField & {
   ui?: Maybe<Scalars['JSON']>;
 };
 
+export type InterestArtworkInput = {
+  productId: Scalars['ID'];
+  variantId?: InputMaybe<Scalars['ID']>;
+};
+
 export enum InterestEmailTheme {
   DARK = 'DARK',
   LIGHT = 'LIGHT'
@@ -1808,6 +1813,8 @@ export type Mutation = {
    * 3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
    */
   registerCustomerAccount: RegisterCustomerAccountResult;
+  /** Register all selected artworks as one atomic enquiry. Success confirms registration, not inbox delivery. */
+  registerInterest: RegisterPreOrderResult;
   /**
    * Register a pre-order for a product.
    * Creates an Order with orderType='preorder'.
@@ -1931,6 +1938,11 @@ export type MutationRefreshCustomerVerificationArgs = {
 
 export type MutationRegisterCustomerAccountArgs = {
   input: RegisterCustomerInput;
+};
+
+
+export type MutationRegisterInterestArgs = {
+  input: RegisterInterestInput;
 };
 
 
@@ -3187,6 +3199,14 @@ export type RegisterCustomerInput = {
   title?: InputMaybe<Scalars['String']>;
 };
 
+export type RegisterInterestInput = {
+  artworks: Array<InterestArtworkInput>;
+  comment?: InputMaybe<Scalars['String']>;
+  customerEmail: Scalars['String'];
+  customerName: Scalars['String'];
+  emailTheme?: InputMaybe<InterestEmailTheme>;
+};
+
 export type RegisterPreOrderResult = {
   __typename?: 'RegisterPreOrderResult';
   success: Scalars['Boolean'];
@@ -3953,6 +3973,13 @@ export type SendContactMessageMutationVariables = Exact<{
 
 
 export type SendContactMessageMutation = { __typename?: 'Mutation', sendContactMessage: { __typename?: 'SendContactMessageResult', success: boolean, errorCode?: ContactMessageErrorCode } };
+
+export type RegisterInterestMutationVariables = Exact<{
+  input: RegisterInterestInput;
+}>;
+
+
+export type RegisterInterestMutation = { __typename?: 'Mutation', registerInterest: { __typename?: 'RegisterPreOrderResult', success: boolean } };
 
 export type RegisterPreOrderMutationVariables = Exact<{
   productId: Scalars['ID'];

@@ -1,0 +1,8 @@
+<dialog #dialog class="interest-result" aria-labelledby="interest-result-title" aria-describedby="interest-result-message"
+    (click)="backdropClick($event)">
+    <div class="interest-result__content">
+        <h2 id="interest-result-title">{{ success ? 'Interest registered' : 'Unable to register interest' }}</h2>
+        <p id="interest-result-message">{{ message }}</p>
+        <button type="button" (click)="close()" autofocus>OK</button>
+    </div>
+</dialog>

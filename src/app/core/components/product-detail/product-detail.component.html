@@ -135,7 +135,7 @@
                 </div>
             </div>
 
-            <hgart-interest-form [submitting]="isSubmitting" (submitted)="submitPreorder($event)"></hgart-interest-form>
+            <hgart-interest-form [submitting]="isSubmitting" [completed]="hasSubmittedInterest" (submitted)="submitPreorder($event)"></hgart-interest-form>
         </div>
 
         <div class="ir__next">
@@ -152,3 +152,4 @@
 </div>
 
 </ng-container>
+<hgart-interest-result #interestResult></hgart-interest-result>

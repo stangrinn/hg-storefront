@@ -35,7 +35,7 @@
                         <p class="ir__item-collection" *ngIf="item.collection">{{ item.collection }}</p>
                     </div>
 
-                    <button type="button" class="ir__remove" (click)="favourites.remove(item.slug)">REMOVE</button>
+                    <button type="button" class="ir__remove" [disabled]="isSubmitting || hasSubmitted" (click)="favourites.remove(item.slug)">REMOVE</button>
                 </li>
             </ul>
 
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <hgart-interest-form [plural]="true" [submitting]="isSubmitting" (submitted)="submit(items, $event)"></hgart-interest-form>
+        <hgart-interest-form [plural]="true" [submitting]="isSubmitting" [completed]="hasSubmitted" (submitted)="submit(items, $event)"></hgart-interest-form>
     </div>
 
     <ng-template #empty>
@@ -70,3 +70,4 @@
         </ol>
     </div>
 </div>
+<hgart-interest-result #result></hgart-interest-result>

@@ -20,6 +20,7 @@ export interface InterestFormValue {
 export class InterestFormComponent {
     @Input() submitting = false;
     @Input() plural = false;
+    @Input() completed = false;
     @Output() submitted = new EventEmitter<InterestFormValue>();
 
     model = { name: '', email: '', country: '', preferences: '', comment: '' };
@@ -50,7 +51,7 @@ export class InterestFormComponent {
     submit(): void {
         this.submitAttempted = true;
 
-        if (this.errorCount || this.submitting) {
+        if (this.errorCount || this.submitting || this.completed) {
             return;
         }
 

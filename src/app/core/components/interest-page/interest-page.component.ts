@@ -1,46 +1,39 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { forkJoin, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
-import { RegisterPreOrderMutation, RegisterPreOrderMutationVariables } from '../../../common/generated-types';
+import { RegisterInterestMutation, RegisterInterestMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
 import { FavouriteItem, FavouritesService } from '../../providers/favourites/favourites.service';
-import { NotificationService } from '../../providers/notification/notification.service';
 import { InterestFormValue } from '../interest-form/interest-form.component';
-import { REGISTER_PREORDER } from '../product-detail/preorder.graphql';
+import { InterestResultComponent } from '../interest-result/interest-result.component';
+import { REGISTER_INTEREST } from './interest-page.graphql';
 import { interestEmailTheme } from '../../interest-email-theme';
 
-/** "Review Your Interest" page: one interest request for every saved artwork. */
+/** All saved artworks are submitted as one atomic enquiry, not one mutation per work. */
 @Component({
     selector: 'hgart-interest-page',
     templateUrl: './interest-page.component.html',
     styleUrls: ['./interest-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InterestPageComponent {
+export class InterestPageComponent implements OnDestroy {
+    @ViewChild('result', { static: true }) private result: InterestResultComponent;
+
     isSubmitting = false;
 
-    private readonly submittedIds = new Set<string>();
+    hasSubmitted = false;
+
+    private readonly subscriptions = new Subscription();
 
     constructor(public favourites: FavouritesService,
-                private router: Router,
                 private dataService: DataService,
-                private notificationService: NotificationService,
                 private cDRef: ChangeDetectorRef,
                 @Inject(DOCUMENT) private document: Document) {}
 
     submit(items: FavouriteItem[], value: InterestFormValue): void {
-        if (this.isSubmitting || !items.length) {
-            return;
-        }
-
-        const pendingItems = items.filter(item => !this.submittedIds.has(item.id));
-
-        if (!pendingItems.length) {
-            this.router.navigate(['/']);
-
+        if (this.isSubmitting || this.hasSubmitted || !items.length) {
             return;
         }
 
@@ -48,43 +41,33 @@ export class InterestPageComponent {
 
         const emailTheme = interestEmailTheme(this.document);
 
-        forkJoin(pendingItems.map(item => this.dataService.mutate<RegisterPreOrderMutation, RegisterPreOrderMutationVariables>(REGISTER_PREORDER, {
-            productId: item.id,
-            customerName: value.name,
-            customerEmail: value.email,
-            comment: value.details || undefined,
-            emailTheme,
-        }).pipe(
-            map(result => ({ id: item.id, success: result.registerPreOrder.success })),
-            tap(result => {
-                if (result.success) {
-                    this.submittedIds.add(result.id);
-                }
-            }),
-            catchError(() => of({ id: item.id, success: false })),
-        ))).subscribe({
-            next: results => {
+        this.subscriptions.add(this.dataService.mutate<RegisterInterestMutation, RegisterInterestMutationVariables>(REGISTER_INTEREST, {
+            input: {
+                artworks: items.map(item => ({ productId: item.id })),
+                customerName: value.name,
+                customerEmail: value.email,
+                comment: value.details || undefined,
+                emailTheme,
+            },
+        }).pipe(take(1)).subscribe({
+            next: response => {
                 this.isSubmitting = false;
-
-                const failed = results.filter(result => !result.success).length;
-
-                if (failed) {
-                    this.notificationService.error(`${failed} artwork enquiries could not be sent. Please try again; confirmed enquiries will not be sent again on this page.`).subscribe();
-                    this.cDRef.markForCheck();
-
-                    return;
-                }
-
-                this.notificationService.success('Interest registered. Helena will be in touch personally.').subscribe();
-                this.router.navigate(['/']);
-                this.cDRef.markForCheck();
+                this.hasSubmitted = response?.registerInterest?.success === true;
+                this.cDRef.detectChanges();
+                this.result.show(this.hasSubmitted, this.hasSubmitted
+                    ? 'Thank you for your interest. All selected artworks have been registered in one enquiry. Helena will be in touch personally. Your confirmation email will follow.'
+                    : 'Your interest could not be registered for all selected artworks. Please check your selection and try again later.');
             },
             error: () => {
                 this.isSubmitting = false;
-                this.notificationService.error('Failed to register interest. Please try again.').subscribe();
-                this.cDRef.markForCheck();
+                this.cDRef.detectChanges();
+                this.result.show(false, 'We could not confirm your interest registration. Your details and selection have been kept. Please check your email before retrying, or contact the studio.');
             },
-        });
+        }));
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
     }
 
     trackBySlug(_: number, item: FavouriteItem): string {

@@ -16,6 +16,7 @@ import { AssetGalleryComponent } from './components/asset-gallery/asset-gallery.
 import { FavouriteToggleComponent } from './components/favourite-toggle/favourite-toggle.component';
 import { InterestFormComponent } from './components/interest-form/interest-form.component';
 import { InterestPageComponent } from './components/interest-page/interest-page.component';
+import { InterestResultComponent } from './components/interest-result/interest-result.component';
 import { FavouritesDrawerComponent } from './components/favourites-drawer/favourites-drawer.component';
 import { SavedToggleComponent } from './components/saved-toggle/saved-toggle.component';
 import { CollectionBreadcrumbsComponent } from './components/collection-breadcrumbs/collection-breadcrumbs.component';
@@ -65,6 +66,7 @@ const CORE_COMPONENTS = [
     SavedToggleComponent,
     InterestFormComponent,
     InterestPageComponent,
+    InterestResultComponent,
 ];
 
 @NgModule({

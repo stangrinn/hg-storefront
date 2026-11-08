@@ -18,7 +18,6 @@ import {
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { FavouriteItem } from '../../providers/favourites/favourites.service';
 import { DataService } from '../../providers/data/data.service';
-import { NotificationService } from '../../providers/notification/notification.service';
 import { PageLoadState, PageResponseService } from '../../providers/page-response.service';
 import { StateService } from '../../providers/state/state.service';
 
@@ -27,6 +26,7 @@ import { GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail
 import { InterestFormValue } from '../interest-form/interest-form.component';
 import { REGISTER_PREORDER } from './preorder.graphql';
 import { interestEmailTheme } from '../../interest-email-theme';
+import { InterestResultComponent } from '../interest-result/interest-result.component';
 
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
@@ -64,6 +64,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     /** Form submission state */
     isSubmitting = false;
 
+    hasSubmittedInterest = false;
+
+    @ViewChild('interestResult', { static: true }) private interestResult: InterestResultComponent;
+
     /** URL from which user navigated to this page */
     private referrerUrl: string | null = null;
 
@@ -77,7 +81,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     constructor(private dataService: DataService,
         private stateService: StateService,
-        private notificationService: NotificationService,
         private route: ActivatedRoute,
         private router: Router,
         private cDRef: ChangeDetectorRef,
@@ -99,6 +102,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.pageState = 'loading';
                 this.product = undefined;
                 this.isInterestFormOpen = false;
+                this.hasSubmittedInterest = false;
+                this.isSubmitting = false;
                 this.relatedProducts = [];
                 this.cDRef.markForCheck();
 
@@ -426,46 +431,43 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     /** Sends the interest request for this artwork. */
     submitPreorder(value: InterestFormValue): void {
-        if (this.isSubmitting || !this.product) {
+        if (this.isSubmitting || this.hasSubmittedInterest || !this.product) {
             return;
         }
 
         this.isSubmitting = true;
+        const productId = this.product.id;
 
-        this.dataService.mutate<RegisterPreOrderMutation, RegisterPreOrderMutationVariables>(REGISTER_PREORDER, {
+        this.sub.add(this.dataService.mutate<RegisterPreOrderMutation, RegisterPreOrderMutationVariables>(REGISTER_PREORDER, {
             productId: this.product.id,
             variantId: this.selectedVariant?.id,
             customerName: value.name,
             customerEmail: value.email,
             comment: value.details || undefined,
             emailTheme: interestEmailTheme(this.document),
-        }).subscribe({
+        }).pipe(take(1)).subscribe({
             next: result => {
-                this.isSubmitting = false;
-
-                if (!result.registerPreOrder.success) {
-                    this.notificationService.error('Failed to register interest. Please try again.').subscribe();
-                    this.cDRef.markForCheck();
-
+                if (this.product?.id !== productId) {
                     return;
                 }
 
-                this.closeInterestForm();
-
-                this.notificationService.notify({
-                    title: 'Interest Registered',
-                    type: 'info',
-                    duration: 5000,
-                }).subscribe();
-
-                this.cDRef.markForCheck();
+                this.isSubmitting = false;
+                this.hasSubmittedInterest = result?.registerPreOrder?.success === true;
+                this.cDRef.detectChanges();
+                this.interestResult.show(this.hasSubmittedInterest, this.hasSubmittedInterest
+                    ? 'Thank you for your interest. Your enquiry has been registered. Helena will be in touch personally. Your confirmation email will follow.'
+                    : 'Your interest could not be registered. Please check your details and try again later.');
             },
             error: () => {
+                if (this.product?.id !== productId) {
+                    return;
+                }
+
                 this.isSubmitting = false;
-                this.notificationService.error('Failed to register interest. Please try again.').subscribe();
-                this.cDRef.markForCheck();
+                this.cDRef.detectChanges();
+                this.interestResult.show(false, 'We could not confirm your interest registration. Your details have been kept. Please check your email before retrying, or contact the studio.');
             }
-        });
+        }));
     }
 
     ngOnDestroy() {

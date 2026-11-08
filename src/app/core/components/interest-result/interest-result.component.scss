@@ -1,0 +1,38 @@
+@use '../../../../styles/tokens' as hg;
+
+.interest-result {
+    position: fixed;
+    inset: 0;
+    width: min(480px, calc(100vw - 32px));
+    max-height: calc(100dvh - 48px);
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--hg-border-subtle);
+    background: var(--hg-bg-surface);
+    color: var(--hg-text-primary);
+    box-shadow: var(--hg-shadow-modal);
+
+    &::backdrop { background: rgba(0, 0, 0, 0.65); }
+}
+
+.interest-result__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: clamp(24px, 5vw, 40px);
+
+    h2 { font: 400 40px/1.1 'Cormorant Garamond', Georgia, serif; }
+
+    p { font: 400 15px/1.7 Montserrat, sans-serif; }
+
+    button {
+        @include hg.focus-ring;
+        min-height: 48px;
+        padding: 16px;
+        background: var(--hg-button-bg);
+        color: var(--hg-button-text);
+        font: 400 12px/1.4 Orbitron, sans-serif;
+        letter-spacing: 3px;
+    }
+}
