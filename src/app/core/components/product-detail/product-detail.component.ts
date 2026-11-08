@@ -16,14 +16,14 @@ import {
     RegisterPreOrderMutationVariables
 } from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
-import { FavouriteItem } from '../../providers/favourites/favourites.service';
+import { FavouriteItem, FavouritesService } from '../../providers/favourites/favourites.service';
 import { DataService } from '../../providers/data/data.service';
 import { PageLoadState, PageResponseService } from '../../providers/page-response.service';
 import { StateService } from '../../providers/state/state.service';
 
 import { SEARCH_PRODUCTS } from '../product-list/product-list.graphql';
 import { GET_PRODUCT_DETAIL, SEARCH_COLLECTION_PRODUCTS } from './product-detail.graphql';
-import { InterestFormValue } from '../interest-form/interest-form.component';
+import { InterestFormComponent, InterestFormValue } from '../interest-form/interest-form.component';
 import { REGISTER_PREORDER } from './preorder.graphql';
 import { interestEmailTheme } from '../../interest-email-theme';
 import { InterestResultComponent } from '../interest-result/interest-result.component';
@@ -68,6 +68,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     @ViewChild('interestResult', { static: true }) private interestResult: InterestResultComponent;
 
+    @ViewChild(InterestFormComponent) private interestForm?: InterestFormComponent;
+
     /** URL from which user navigated to this page */
     private referrerUrl: string | null = null;
 
@@ -80,6 +82,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private readonly sub = new Subscription();
 
     constructor(private dataService: DataService,
+        private favourites: FavouritesService,
         private stateService: StateService,
         private route: ActivatedRoute,
         private router: Router,
@@ -453,9 +456,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
                 this.isSubmitting = false;
                 this.hasSubmittedInterest = result?.registerPreOrder?.success === true;
+                if (this.hasSubmittedInterest) {
+                    this.interestForm?.reset();
+                    this.favourites.remove(this.product.slug);
+                }
+
                 this.cDRef.detectChanges();
                 this.interestResult.show(this.hasSubmittedInterest, this.hasSubmittedInterest
-                    ? 'Thank you for your interest. Your enquiry has been registered. Helena will be in touch personally. Your confirmation email will follow.'
+                    ? 'Thank you for your interest. Your enquiry has been registered. Helena will be in touch personally. If you do not receive your confirmation email, please check your spam folder.'
                     : 'Your interest could not be registered. Please check your details and try again later.');
             },
             error: () => {

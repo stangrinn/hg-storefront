@@ -6,7 +6,7 @@ import { take } from 'rxjs/operators';
 import { RegisterInterestMutation, RegisterInterestMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
 import { FavouriteItem, FavouritesService } from '../../providers/favourites/favourites.service';
-import { InterestFormValue } from '../interest-form/interest-form.component';
+import { InterestFormComponent, InterestFormValue } from '../interest-form/interest-form.component';
 import { InterestResultComponent } from '../interest-result/interest-result.component';
 import { REGISTER_INTEREST } from './interest-page.graphql';
 import { interestEmailTheme } from '../../interest-email-theme';
@@ -20,6 +20,8 @@ import { interestEmailTheme } from '../../interest-email-theme';
 })
 export class InterestPageComponent implements OnDestroy {
     @ViewChild('result', { static: true }) private result: InterestResultComponent;
+
+    @ViewChild(InterestFormComponent) private form?: InterestFormComponent;
 
     isSubmitting = false;
 
@@ -53,9 +55,17 @@ export class InterestPageComponent implements OnDestroy {
             next: response => {
                 this.isSubmitting = false;
                 this.hasSubmitted = response?.registerInterest?.success === true;
+                const success = this.hasSubmitted;
+
+                if (success) {
+                    this.form?.reset();
+                    items.forEach(item => this.favourites.remove(item.slug));
+                    this.hasSubmitted = false;
+                }
+
                 this.cDRef.detectChanges();
-                this.result.show(this.hasSubmitted, this.hasSubmitted
-                    ? 'Thank you for your interest. All selected artworks have been registered in one enquiry. Helena will be in touch personally. Your confirmation email will follow.'
+                this.result.show(success, success
+                    ? 'Thank you for your interest. All selected artworks have been registered in one enquiry. Helena will be in touch personally. If you do not receive your confirmation email, please check your spam folder.'
                     : 'Your interest could not be registered for all selected artworks. Please check your selection and try again later.');
             },
             error: () => {

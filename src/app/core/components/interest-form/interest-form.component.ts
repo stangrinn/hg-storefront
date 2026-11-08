@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 export interface InterestFormValue {
     name: string;
@@ -18,6 +19,8 @@ export interface InterestFormValue {
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InterestFormComponent {
+    @ViewChild(NgForm) private form?: NgForm;
+
     @Input() submitting = false;
     @Input() plural = false;
     @Input() completed = false;
@@ -25,6 +28,15 @@ export class InterestFormComponent {
 
     model = { name: '', email: '', country: '', preferences: '', comment: '' };
     submitAttempted = false;
+
+    constructor(private cDRef: ChangeDetectorRef) {}
+
+    reset(): void {
+        this.model = { name: '', email: '', country: '', preferences: '', comment: '' };
+        this.submitAttempted = false;
+        this.form?.resetForm(this.model);
+        this.cDRef.markForCheck();
+    }
 
     get nameError(): string {
         return this.submitAttempted && !this.model.name.trim() ? 'Name is required.' : '';
