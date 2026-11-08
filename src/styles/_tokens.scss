@@ -110,6 +110,14 @@ $light: (
     transition: border-color .2s ease;
 
     &::placeholder { color: var(--hg-text-muted); }
+    // Browsers paint autofilled fields with their own background; a long transition keeps it transparent.
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--hg-text-primary);
+        caret-color: var(--hg-text-primary);
+        transition: background-color 600000s 0s, color 600000s 0s, border-color .2s ease;
+    }
     &:hover:not(:disabled) { border-color: var(--hg-text-secondary); }
     &:focus { border-color: var(--hg-text-primary); box-shadow: none; }
     &:disabled {
