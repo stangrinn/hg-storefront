@@ -7,11 +7,26 @@
      [class.viewer--idle]="idle"
      [class.viewer--closing]="closing"
      [class.viewer--magnify]="magnify"
+     [class.viewer--zoomed]="zoomed"
+     [class.viewer--sheet]="sheet"
+     (pointerdown)="onTouchDown($event)"
+     (pointermove)="onTouchMove($event)"
+     (pointerup)="onTouchUp($event)"
+     (pointercancel)="onTouchUp($event)"
      (click)="onWallClick($event)">
     <div class="viewer__floor" aria-hidden="true"></div>
     <div class="viewer__vignette" aria-hidden="true"></div>
     <img class="viewer__spotlight" src="assets/gallery-spotlight.svg" alt="">
 
+    <span class="viewer__counter viewer__counter--top viewer__fade" aria-hidden="true" *ngIf="items.length > 1">{{ index + 1 }} / {{ items.length }}</span>
+    <button type="button"
+            *ngIf="favourite"
+            class="viewer__close viewer__heart hg-glass"
+            [attr.aria-label]="saved ? 'Remove from favourites' : 'Save to favourites'"
+            [attr.aria-pressed]="saved"
+            (click)="toggleSaved()">
+        <img class="hg-icon" [src]="saved ? 'assets/icons/design-system/heart-saved.svg' : 'assets/icons/design-system/heart.svg'" alt="">
+    </button>
     <button type="button" class="viewer__close hg-glass" aria-label="Close viewer" (click)="close()">
         <img class="hg-icon" src="assets/icons/design-system/close.svg" alt="">
     </button>
@@ -22,6 +37,8 @@
         <div class="viewer__art"
              #art
              [class.viewer__art--magnify]="magnify"
+             [class.viewer__art--smooth]="smooth"
+             [style.transform]="scale !== 1 ? 'translate(' + tx + 'px, ' + ty + 'px) scale(' + scale + ')' : null"
              (pointermove)="onArtMove($event)"
              (pointerleave)="onArtLeave()"
              (click)="onArtClick($event)"
@@ -52,17 +69,40 @@
         <p class="viewer__label-ar" *ngIf="videoSource">AR EXPERIENCE INCLUDED</p>
     </aside>
 
-    <ng-container *ngIf="magnify && lens.visible && current">
+    <div class="viewer__caption viewer__fade" aria-hidden="true">
+        <ng-container *ngIf="magnify && !lens.visible; else captionText">
+            <span class="viewer__pill">LONG-PRESS &amp; DRAG</span>
+        </ng-container>
+        <ng-template #captionText>
+            <p class="viewer__caption-title">{{ title }}</p>
+            <p class="viewer__caption-meta">{{ caption }}</p>
+        </ng-template>
+    </div>
+
+    <span class="viewer__pill viewer__zoom-pill" *ngIf="zoomed" aria-hidden="true">{{ zoomLabel }}</span>
+    <div class="viewer__mini" *ngIf="zoomed && current" aria-hidden="true" [style.--ratio]="ratio" [style.backgroundImage]="'url(&quot;' + current.src + '&quot;)'">
+        <span class="viewer__mini-view"
+              [style.left.%]="mini.left"
+              [style.top.%]="mini.top"
+              [style.width.%]="mini.width"
+              [style.height.%]="mini.height"></span>
+    </div>
+
+    <ng-container *ngIf="lens.visible && current">
         <div class="viewer__loupe"
              aria-hidden="true"
-             [style.left.px]="lens.clientX - loupeSize / 2"
-             [style.top.px]="lens.clientY - loupeSize / 2"
+             [style.left.px]="loupeLeft"
+             [style.top.px]="loupeTop"
+             [style.width.px]="loupeSize"
+             [style.height.px]="loupeSize"
              [style.backgroundImage]="'url(&quot;' + current.src + '&quot;)'"
              [style.backgroundPosition]="loupePosition"
              [style.backgroundSize]="loupeBackgroundSize">
             <img class="viewer__loupe-dot" src="assets/icons/design-system/ic-loupe-dot.svg" alt="">
         </div>
+        <span class="viewer__touch-dot" *ngIf="lens.touch" aria-hidden="true" [style.left.px]="lens.clientX - 20" [style.top.px]="lens.clientY - 20"></span>
         <div class="viewer__hint"
+             *ngIf="!lens.touch"
              aria-hidden="true"
              [style.left.px]="lens.clientX - loupeSize / 2"
              [style.top.px]="lens.clientY + loupeSize / 2 + 20">{{ hint }}</div>
@@ -73,7 +113,7 @@
             <button type="button" class="viewer__btn hg-glass" aria-label="Previous artwork image" (click)="step(-1)">
                 <img class="hg-icon" src="assets/icons/design-system/ic-previous.svg" alt="">
             </button>
-            <span class="viewer__counter" aria-live="polite">{{ index + 1 }} / {{ items.length }}</span>
+            <span class="viewer__counter viewer__counter--dock" aria-live="polite">{{ index + 1 }} / {{ items.length }}</span>
             <button type="button" class="viewer__btn hg-glass" aria-label="Next artwork image" (click)="step(1)">
                 <img class="hg-icon" src="assets/icons/design-system/ic-next.svg" alt="">
             </button>
@@ -96,12 +136,28 @@
             <img class="hg-icon" src="assets/icons/design-system/ic-zoom.svg" alt="">
         </button>
         <button type="button"
+                class="viewer__btn viewer__btn--info hg-glass"
+                aria-label="Artwork details"
+                [attr.aria-pressed]="sheet"
+                (click)="toggleSheet()">
+            <img class="hg-icon" src="assets/icons/design-system/info.svg" alt="">
+        </button>
+        <button type="button"
                 *ngIf="favourite"
-                class="viewer__btn hg-glass"
+                class="viewer__btn viewer__btn--heart hg-glass"
                 [attr.aria-label]="saved ? 'Remove from favourites' : 'Save to favourites'"
                 [attr.aria-pressed]="saved"
                 (click)="toggleSaved()">
             <img class="hg-icon" [src]="saved ? 'assets/icons/design-system/heart-saved.svg' : 'assets/icons/design-system/heart.svg'" alt="">
         </button>
     </div>
+
+    <section class="viewer__sheet" *ngIf="sheet" role="region" aria-label="Artwork details">
+        <span class="viewer__sheet-grip" aria-hidden="true"></span>
+        <p class="viewer__label-author">{{ author }}</p>
+        <p class="viewer__label-title">{{ title }}</p>
+        <p class="viewer__label-meta" *ngIf="meta">{{ meta }}</p>
+        <p class="viewer__label-ar" *ngIf="videoSource">AR EXPERIENCE INCLUDED · CERTIFICATE</p>
+        <button type="button" class="viewer__sheet-cta" *ngIf="favourite" (click)="registerInterest()">REGISTER YOUR INTEREST</button>
+    </section>
 </div>

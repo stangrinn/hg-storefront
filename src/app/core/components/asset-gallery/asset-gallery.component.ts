@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, Input, OnChanges, OnInit, PLATFORM_ID, SimpleChanges, ViewChild } from '@angular/core';
 import { AssetFragment } from '../../../common/generated-types';
 import { isPlatformBrowser } from '@angular/common';
 import { FavouriteItem } from '../../providers/favourites/favourites.service';
@@ -60,7 +60,11 @@ export class AssetGalleryComponent implements OnInit, OnChanges, AfterViewInit {
         this.selectImage(this.selectedAssetId);
     }
 
-    ngOnChanges() {
+    ngOnChanges(changes: SimpleChanges) {
+        // `favourite` is a fresh object on every parent check; it must not reset the chosen thumbnail.
+        if (!changes.assets && !changes.selectedAssetId) {
+            return;
+        }
         this.viewerItems = (this.assets ?? []).map(asset => ({ id: asset.id, src: asset.preview, width: asset.width, height: asset.height }));
         if (this.assets) {
             this.selectImage(this.selectedAssetId);

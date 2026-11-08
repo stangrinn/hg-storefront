@@ -1,6 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
+import { Router } from '@angular/router';
+
 import { FavouriteItem, FavouritesService } from '../../providers/favourites/favourites.service';
 
 export interface GalleryViewerItem {
@@ -15,6 +17,17 @@ const LOUPE_SIZE = 320;
 const ZOOM_MIN = 2;
 const ZOOM_MAX = 6;
 const ZOOM_DEFAULT = 3;
+const MOBILE_QUERY = '(max-width: 700px)';
+const LONG_PRESS_MS = 350;
+const MOVE_SLOP = 10;
+const SWIPE_DISTANCE = 70;
+const DOUBLE_TAP_MS = 300;
+const PINCH_MAX = 6;
+
+interface Point {
+    x: number;
+    y: number;
+}
 
 /** Fullscreen "gallery wall" viewer: painting in a frame, dock, wall label and a loupe. */
 @Component({
@@ -49,19 +62,68 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
     idle = false;
     closing = false;
     muted = true;
-    lens = { clientX: 0, clientY: 0, x: 0, y: 0, width: 1, height: 1, visible: false };
-    readonly loupeSize = LOUPE_SIZE;
+    lens = { clientX: 0, clientY: 0, x: 0, y: 0, width: 1, height: 1, visible: false, touch: false };
+    mobile = false;
+    sheet = false;
+    scale = 1;
+    tx = 0;
+    ty = 0;
+    smooth = false;
+    mini = { left: 0, top: 0, width: 100, height: 100 };
 
     private idleTimer?: ReturnType<typeof setTimeout>;
+    private pressTimer?: ReturnType<typeof setTimeout>;
     private previousOverflow = '';
+    private mobileQuery?: MediaQueryList;
+    private pointers = new Map<number, Point>();
+    private start: Point = { x: 0, y: 0 };
+    private last: Point = { x: 0, y: 0 };
+    private moved = false;
+    private pressing = false;
+    private base: DOMRect;
+    private panStart?: Point & { tx: number; ty: number };
+    private pinch?: { dist: number; scale: number; tx: number; ty: number; fx: number; fy: number };
+    private lastTap?: Point & { time: number };
+
+    private readonly onMobileChange = (): void => {
+        this.mobile = !!this.mobileQuery?.matches;
+        this.cdr.markForCheck();
+    };
 
     constructor(
         public favourites: FavouritesService,
         private host: ElementRef<HTMLElement>,
         private cdr: ChangeDetectorRef,
         private zone: NgZone,
+        private router: Router,
         @Inject(DOCUMENT) private document: Document,
     ) {}
+
+    get loupeSize(): number {
+        return this.mobile ? 180 : LOUPE_SIZE;
+    }
+
+    get loupeLeft(): number {
+        return this.lens.clientX - this.loupeSize / 2;
+    }
+
+    get loupeTop(): number {
+        // On touch the loupe sits above the finger so the finger never covers it.
+        const offset = this.lens.touch ? (this.mobile ? 150 : 130) : 0;
+        return this.lens.clientY - offset - this.loupeSize / 2;
+    }
+
+    get zoomed(): boolean {
+        return this.scale > 1.01;
+    }
+
+    get zoomLabel(): string {
+        return `${Math.round(this.scale * 100)}%  ·  DOUBLE-TAP TO RESET`;
+    }
+
+    get caption(): string {
+        return [this.author, this.year].filter(Boolean).join(' · ');
+    }
 
     get current(): GalleryViewerItem | undefined {
         return this.items[this.index];
@@ -93,6 +155,9 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
         const body = this.document.body;
         this.previousOverflow = body.style.overflow;
         body.style.overflow = 'hidden';
+        this.mobileQuery = this.document.defaultView?.matchMedia?.(MOBILE_QUERY);
+        this.mobile = !!this.mobileQuery?.matches;
+        this.mobileQuery?.addEventListener?.('change', this.onMobileChange);
         this.wake();
         this.playOpen();
     }
@@ -105,6 +170,8 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnDestroy(): void {
         this.document.body.style.overflow = this.previousOverflow;
+        this.mobileQuery?.removeEventListener?.('change', this.onMobileChange);
+        this.clearPress();
         if (this.idleTimer) {
             clearTimeout(this.idleTimer);
         }
@@ -157,9 +224,14 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    /** Esc exits magnify first, then the viewer. */
+    /** Esc exits the details sheet, zoom and magnify first, then the viewer. */
     onEscape(): void {
-        if (this.magnify) {
+        if (this.sheet) {
+            this.sheet = false;
+            this.cdr.markForCheck();
+        } else if (this.zoomed) {
+            this.resetZoom();
+        } else if (this.magnify) {
             this.setMagnify(false);
         } else {
             this.close();
@@ -173,6 +245,7 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.index = (this.index + direction + count) % count;
         this.lens.visible = false;
+        this.resetZoom(false);
         this.indexChange.emit(this.index);
         this.cdr.markForCheck();
     }
@@ -194,8 +267,21 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    toggleSheet(): void {
+        this.sheet = !this.sheet;
+        this.cdr.markForCheck();
+    }
+
+    registerInterest(): void {
+        if (!this.favourite) {
+            return;
+        }
+        this.router.navigate(['/product', this.favourite.slug], { queryParams: { interest: 1 } });
+        this.close();
+    }
+
     onArtMove(event: PointerEvent): void {
-        if (!this.magnify || this.locked) {
+        if (event.pointerType === 'touch' || !this.magnify || this.locked) {
             return;
         }
         const rect = this.art.nativeElement.getBoundingClientRect();
@@ -207,6 +293,7 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
             width: rect.width,
             height: rect.height,
             visible: true,
+            touch: false,
         };
         this.cdr.markForCheck();
     }
@@ -220,7 +307,12 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
 
     onArtClick(event: MouseEvent): void {
         event.stopPropagation();
-        if (this.magnify && this.lens.visible) {
+        if (this.sheet) {
+            this.sheet = false;
+            this.cdr.markForCheck();
+            return;
+        }
+        if (this.magnify && this.lens.visible && !this.lens.touch) {
             this.locked = !this.locked;
             this.cdr.markForCheck();
         }
@@ -241,7 +333,12 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
         if (event.target !== event.currentTarget) {
             return;
         }
-        if (this.magnify) {
+        if (this.sheet) {
+            this.sheet = false;
+            this.cdr.markForCheck();
+        } else if (this.zoomed) {
+            this.resetZoom();
+        } else if (this.magnify) {
             this.setMagnify(false);
         } else {
             this.close();
@@ -255,13 +352,274 @@ export class GalleryViewerComponent implements OnInit, OnChanges, OnDestroy {
         this.closing = true;
         this.magnify = false;
         this.locked = false;
+        this.sheet = false;
+        this.scale = 1;
+        this.tx = 0;
+        this.ty = 0;
+        this.smooth = false;
         this.lens = { ...this.lens, visible: false };
-        this.cdr.markForCheck();
+        // Apply the reset now: the fly-back reads the painting's rect.
+        this.cdr.detectChanges();
         this.playClose();
     }
 
+    onTouchDown(event: PointerEvent): void {
+        if (event.pointerType !== 'touch' || this.closing || this.isControl(event.target)) {
+            return;
+        }
+        this.smooth = false;
+        const point = { x: event.clientX, y: event.clientY };
+        this.pointers.set(event.pointerId, point);
+        this.last = point;
+
+        if (this.pointers.size === 1) {
+            this.start = point;
+            this.moved = false;
+            this.panStart = { ...point, tx: this.tx, ty: this.ty };
+            if (this.scale === 1) {
+                this.base = this.art.nativeElement.getBoundingClientRect();
+            }
+            this.clearPress();
+            if (!this.sheet && this.scale === 1 && this.contains(this.base, point)) {
+                this.pressTimer = setTimeout(() => this.beginPress(), LONG_PRESS_MS);
+            }
+        } else if (this.pointers.size === 2 && !this.sheet) {
+            this.clearPress();
+            this.endPress();
+            if (this.scale === 1) {
+                this.base = this.art.nativeElement.getBoundingClientRect();
+            }
+            const [a, b] = Array.from(this.pointers.values());
+            this.pinch = {
+                dist: Math.hypot(a.x - b.x, a.y - b.y) || 1,
+                scale: this.scale,
+                tx: this.tx,
+                ty: this.ty,
+                fx: (a.x + b.x) / 2,
+                fy: (a.y + b.y) / 2,
+            };
+        }
+    }
+
+    onTouchMove(event: PointerEvent): void {
+        if (event.pointerType !== 'touch' || !this.pointers.has(event.pointerId)) {
+            return;
+        }
+        const point = { x: event.clientX, y: event.clientY };
+        this.pointers.set(event.pointerId, point);
+        this.last = point;
+
+        if (this.pointers.size >= 2) {
+            this.pinchMove();
+            return;
+        }
+        if (this.sheet) {
+            return;
+        }
+        if (!this.moved && Math.hypot(point.x - this.start.x, point.y - this.start.y) > MOVE_SLOP) {
+            this.moved = true;
+            if (!this.pressing) {
+                this.clearPress();
+            }
+        }
+        if (this.pressing) {
+            this.updateLens(point);
+        } else if (this.zoomed && this.moved && this.panStart) {
+            this.tx = this.panStart.tx + point.x - this.panStart.x;
+            this.ty = this.panStart.ty + point.y - this.panStart.y;
+            this.constrain();
+        }
+    }
+
+    onTouchUp(event: PointerEvent): void {
+        if (event.pointerType !== 'touch' || !this.pointers.has(event.pointerId)) {
+            return;
+        }
+        const count = this.pointers.size;
+        const isUp = event.type === 'pointerup';
+        const point = { x: event.clientX, y: event.clientY };
+        this.pointers.delete(event.pointerId);
+        this.clearPress();
+
+        if (this.sheet) {
+            if (count === 1 && isUp && point.y - this.start.y > SWIPE_DISTANCE) {
+                this.sheet = false;
+                this.cdr.markForCheck();
+            }
+            return;
+        }
+        if (this.pressing) {
+            this.endPress();
+            return;
+        }
+        if (count === 2) {
+            this.pinch = undefined;
+            if (this.scale < 1.05) {
+                this.resetZoom();
+            } else {
+                const rest = Array.from(this.pointers.values())[0];
+                this.start = rest;
+                this.panStart = { ...rest, tx: this.tx, ty: this.ty };
+                this.moved = true;
+            }
+            return;
+        }
+        if (!isUp) {
+            return;
+        }
+
+        const dx = point.x - this.start.x;
+        const dy = point.y - this.start.y;
+        if (!this.moved) {
+            this.onTap(point);
+        } else if (!this.zoomed) {
+            if (Math.abs(dx) > SWIPE_DISTANCE && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                this.step(dx < 0 ? 1 : -1);
+            } else if (dy > SWIPE_DISTANCE && dy > Math.abs(dx) * 1.5) {
+                this.close();
+            }
+        }
+    }
+
+    private onTap(point: Point): void {
+        if (!this.zoomed && !this.contains(this.base, point)) {
+            this.lastTap = undefined;
+            return;
+        }
+        const now = Date.now();
+        const prev = this.lastTap;
+        if (prev && now - prev.time < DOUBLE_TAP_MS && Math.hypot(point.x - prev.x, point.y - prev.y) < 40) {
+            this.lastTap = undefined;
+            if (this.zoomed) {
+                this.resetZoom();
+            } else {
+                this.smooth = true;
+                this.scale = ZOOM_DEFAULT;
+                const centre = this.centre();
+                this.tx = (point.x - centre.x) * (1 - ZOOM_DEFAULT);
+                this.ty = (point.y - centre.y) * (1 - ZOOM_DEFAULT);
+                this.constrain();
+            }
+        } else {
+            this.lastTap = { ...point, time: now };
+        }
+    }
+
+    private pinchMove(): void {
+        const pinch = this.pinch;
+        if (!pinch) {
+            return;
+        }
+        const [a, b] = Array.from(this.pointers.values());
+        const dist = Math.hypot(a.x - b.x, a.y - b.y);
+        const mx = (a.x + b.x) / 2;
+        const my = (a.y + b.y) / 2;
+        const scale = Math.min(PINCH_MAX, Math.max(1, pinch.scale * dist / pinch.dist));
+        const centre = this.centre();
+        // Keep the painting point that started under the fingers' midpoint under their current midpoint.
+        const px = (pinch.fx - centre.x - pinch.tx) / pinch.scale;
+        const py = (pinch.fy - centre.y - pinch.ty) / pinch.scale;
+        this.scale = scale;
+        this.tx = mx - centre.x - px * scale;
+        this.ty = my - centre.y - py * scale;
+        this.constrain();
+    }
+
+    private beginPress(): void {
+        this.pressing = true;
+        this.updateLens(this.last);
+    }
+
+    private endPress(): void {
+        if (this.pressing) {
+            this.pressing = false;
+            this.lens = { ...this.lens, visible: false };
+            this.cdr.markForCheck();
+        }
+    }
+
+    private clearPress(): void {
+        if (this.pressTimer) {
+            clearTimeout(this.pressTimer);
+            this.pressTimer = undefined;
+        }
+    }
+
+    private updateLens(point: Point): void {
+        const rect = this.base;
+        this.lens = {
+            clientX: point.x,
+            clientY: point.y,
+            x: Math.min(rect.width, Math.max(0, point.x - rect.left)),
+            y: Math.min(rect.height, Math.max(0, point.y - rect.top)),
+            width: rect.width,
+            height: rect.height,
+            visible: true,
+            touch: true,
+        };
+        this.cdr.markForCheck();
+    }
+
+    private resetZoom(smooth = true): void {
+        this.smooth = smooth;
+        this.scale = 1;
+        this.tx = 0;
+        this.ty = 0;
+        this.pinch = undefined;
+        this.syncMini();
+        this.cdr.markForCheck();
+    }
+
+    private centre(): Point {
+        return { x: this.base.left + this.base.width / 2, y: this.base.top + this.base.height / 2 };
+    }
+
+    /** Keeps the zoomed painting covering the screen (or inside it when smaller). */
+    private constrain(): void {
+        const view = this.document.defaultView;
+        const centre = this.centre();
+        this.tx = this.limit(this.tx, centre.x, this.base.width * this.scale, view?.innerWidth ?? 0);
+        this.ty = this.limit(this.ty, centre.y, this.base.height * this.scale, view?.innerHeight ?? 0);
+        this.syncMini();
+        this.cdr.markForCheck();
+    }
+
+    private limit(offset: number, centre: number, size: number, viewport: number): number {
+        const covers = size >= viewport;
+        const min = covers ? viewport - centre - size / 2 : size / 2 - centre;
+        const max = covers ? size / 2 - centre : viewport - centre - size / 2;
+        return Math.min(max, Math.max(min, offset));
+    }
+
+    /** Mini-map rectangle: the part of the painting currently on screen, in percent. */
+    private syncMini(): void {
+        if (!this.base || !this.zoomed) {
+            return;
+        }
+        const view = this.document.defaultView;
+        const centre = this.centre();
+        const width = this.base.width * this.scale;
+        const height = this.base.height * this.scale;
+        const left = centre.x + this.tx - width / 2;
+        const top = centre.y + this.ty - height / 2;
+        const clamp = (value: number) => Math.min(1, Math.max(0, value));
+        const x0 = clamp(-left / width);
+        const x1 = clamp(((view?.innerWidth ?? 0) - left) / width);
+        const y0 = clamp(-top / height);
+        const y1 = clamp(((view?.innerHeight ?? 0) - top) / height);
+        this.mini = { left: x0 * 100, top: y0 * 100, width: (x1 - x0) * 100, height: (y1 - y0) * 100 };
+    }
+
+    private contains(rect: DOMRect, point: Point): boolean {
+        return point.x >= rect.left && point.x <= rect.right && point.y >= rect.top && point.y <= rect.bottom;
+    }
+
+    private isControl(target: EventTarget | null): boolean {
+        return !!(target as HTMLElement | null)?.closest?.('button, .viewer__dock');
+    }
+
     get loupePosition(): string {
-        const half = LOUPE_SIZE / 2;
+        const half = this.loupeSize / 2;
         return `${half - this.lens.x * this.zoom}px ${half - this.lens.y * this.zoom}px`;
     }
 
