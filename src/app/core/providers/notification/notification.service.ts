@@ -1,8 +1,9 @@
 import { Overlay, OverlayConfig } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { Injectable, Injector } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable, Injector } from '@angular/core';
 import { race, timer } from 'rxjs';
-import { finalize, mapTo, take } from 'rxjs/operators';
+import { finalize, take } from 'rxjs/operators';
 
 import { NotificationComponent } from '../../components/notification/notification.component';
 
@@ -14,7 +15,9 @@ import { NOTIFICATION_OPTIONS, NotificationOptions } from './notification-types'
  */
 @Injectable({providedIn: 'root'})
 export class NotificationService {
-    constructor(private overlay: Overlay, private injector: Injector) {
+    constructor(private overlay: Overlay,
+                private injector: Injector,
+                @Inject(DOCUMENT) private document: Document) {
     }
 
     /**
@@ -28,6 +31,8 @@ export class NotificationService {
                 scrollStrategy,
                 positionStrategy,
                 hasBackdrop: false,
+                // The overlay lives outside hgart-layout, so it must carry the theme class itself.
+                panelClass: this.document.querySelector('hgart-layout.theme-light') ? 'theme-light' : [],
             }),
         );
         const closeFn = () => {
