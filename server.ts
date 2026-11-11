@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
-import * as express from 'express';
+import express from 'express';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import 'zone.js/node';
@@ -35,6 +35,11 @@ export function app() {
     // Serve static files from /browser
     server.get('*.*', express.static(distFolder, {
         maxAge: '1y',
+        setHeaders: (res, filePath) => {
+            if (filePath.endsWith('ar-config.json')) {
+                res.setHeader('Cache-Control', 'no-cache');
+            }
+        },
     }));
 
     // All regular routes use the Universal engine

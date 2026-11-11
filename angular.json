@@ -23,6 +23,7 @@
                             "src/robots.txt",
                             "src/assets",
                             "src/storefront-config.json",
+                            "src/ar-config.json",
                             "src/manifest.json"
                         ],
                         "styles": [
@@ -116,6 +117,7 @@
                         "assets": [
                             "src/favicon.ico",
                             "src/assets",
+                            "src/ar-config.json",
                             "src/manifest.json"
                         ]
                     }
