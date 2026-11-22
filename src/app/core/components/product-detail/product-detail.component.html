@@ -34,6 +34,15 @@
                     </select>
                 </div>
 
+                <dl class="pd__specs" *ngIf="specRows.length">
+                    <div class="pd__spec" *ngFor="let row of specRows">
+                        <dt class="pd__spec-label">{{ row.label }}</dt>
+                        <dd class="pd__spec-value">{{ row.value }}</dd>
+                    </div>
+                </dl>
+
+                <div class="pd__description" [innerHTML]="product?.description"></div>
+
                 <div class="pd__actions">
                     <div class="pd__cta-row">
                         <button class="pd__cta" (click)="openInterestForm()" [disabled]="!product"><span>REGISTER <span class="pd__cta-line">YOUR INTEREST</span></span></button>
@@ -45,25 +54,6 @@
 
                 <p class="pd__ar"><img class="pd__passport pd__icon" src="assets/icons/product/passport.svg" alt=""><span>AR EXPERIENCE INCLUDED · CERTIFICATE OF AUTHENTICITY</span></p>
             </div>
-        </div>
-
-        <div class="pd__tabs">
-            <nav class="pd__tab-list">
-                <button type="button" class="pd__tab" [class.pd__tab--active]="activeTab === 'description'"
-                    (click)="setActiveTab('description')">
-                    Description
-                    <img class="pd__tab-divider" [src]="activeTab === 'description' ? 'assets/icons/product/tab-active.svg' : 'assets/icons/product/tab-inactive.svg'" alt="">
-                </button>
-                <button *ngIf="hasAdditionalInfo()" type="button" class="pd__tab"
-                    [class.pd__tab--active]="activeTab === 'additionalInfo'" (click)="setActiveTab('additionalInfo')">
-                    Additional Information
-                    <img class="pd__tab-divider" [src]="activeTab === 'additionalInfo' ? 'assets/icons/product/tab-active.svg' : 'assets/icons/product/tab-inactive.svg'" alt="">
-                </button>
-            </nav>
-
-            <div class="pd__panel" *ngIf="activeTab === 'description'" [innerHTML]="product?.description"></div>
-            <div class="pd__panel" *ngIf="activeTab === 'additionalInfo' && hasAdditionalInfo()"
-                [innerHTML]="getAdditionalInfo()"></div>
         </div>
     </section>
 

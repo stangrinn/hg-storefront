@@ -1,5 +1,5 @@
 overwrite: true
-schema: "http://localhost:3000/shop-api"
+schema: "http://localhost:3010/shop-api"
 documents: "./src/app/**/*.graphql.ts"
 generates:
   ./src/app/common/generated-types.ts:

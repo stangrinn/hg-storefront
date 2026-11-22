@@ -12,7 +12,10 @@ export const GET_PRODUCT_DETAIL = gql`
             description
             customFields {
                 additionalInfo
-                artCollectionName
+                dimensions
+                medium
+                year
+                shipping
             }
             variants {
                 id
@@ -40,6 +43,7 @@ export const GET_PRODUCT_DETAIL = gql`
             collections {
                 id
                 slug
+                name
                 breadcrumbs {
                     id
                     name

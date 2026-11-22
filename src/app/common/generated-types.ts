@@ -11,13 +11,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: string;
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: unknown;
-  /** The `Money` scalar type represents monetary values and supports signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point). */
   Money: number;
-  /** The `Upload` scalar type represents a file upload. */
   Upload: File;
 };
 
@@ -2766,22 +2762,28 @@ export type ProductVariantListArgs = {
 export type ProductCustomFields = {
   __typename?: 'ProductCustomFields';
   additionalInfo?: Maybe<Scalars['String']>;
-  artCollectionName?: Maybe<Scalars['String']>;
+  dimensions?: Maybe<Scalars['String']>;
+  medium?: Maybe<Scalars['String']>;
+  shipping?: Maybe<Scalars['String']>;
+  year?: Maybe<Scalars['String']>;
 };
 
 export type ProductFilterParameter = {
   _and?: InputMaybe<Array<ProductFilterParameter>>;
   _or?: InputMaybe<Array<ProductFilterParameter>>;
   additionalInfo?: InputMaybe<StringOperators>;
-  artCollectionName?: InputMaybe<StringOperators>;
   createdAt?: InputMaybe<DateOperators>;
   description?: InputMaybe<StringOperators>;
+  dimensions?: InputMaybe<StringOperators>;
   enabled?: InputMaybe<BooleanOperators>;
   id?: InputMaybe<IdOperators>;
   languageCode?: InputMaybe<StringOperators>;
+  medium?: InputMaybe<StringOperators>;
   name?: InputMaybe<StringOperators>;
+  shipping?: InputMaybe<StringOperators>;
   slug?: InputMaybe<StringOperators>;
   updatedAt?: InputMaybe<DateOperators>;
+  year?: InputMaybe<StringOperators>;
 };
 
 export type ProductList = PaginatedList & {
@@ -2850,13 +2852,16 @@ export type ProductOptionTranslation = {
 
 export type ProductSortParameter = {
   additionalInfo?: InputMaybe<SortOrder>;
-  artCollectionName?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
+  dimensions?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
+  medium?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
+  shipping?: InputMaybe<SortOrder>;
   slug?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
+  year?: InputMaybe<SortOrder>;
 };
 
 export type ProductTranslation = {
@@ -4000,7 +4005,7 @@ export type GetProductDetailQueryVariables = Exact<{
 }>;
 
 
-export type GetProductDetailQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, slug: string, name: string, description: string, customFields?: { __typename?: 'ProductCustomFields', additionalInfo?: string, artCollectionName?: string }, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, price: number, priceWithTax: number, sku: string, options: Array<{ __typename?: 'ProductOption', code: string, name: string }>, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, customFields?: { __typename?: 'ProductVariantCustomFields', additionalInfo?: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, assets: Array<{ __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }>, collections: Array<{ __typename?: 'Collection', id: string, slug: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }> } };
+export type GetProductDetailQuery = { __typename?: 'Query', product?: { __typename?: 'Product', id: string, slug: string, name: string, description: string, customFields?: { __typename?: 'ProductCustomFields', additionalInfo?: string, dimensions?: string, medium?: string, year?: string, shipping?: string }, variants: Array<{ __typename?: 'ProductVariant', id: string, name: string, price: number, priceWithTax: number, sku: string, options: Array<{ __typename?: 'ProductOption', code: string, name: string }>, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, customFields?: { __typename?: 'ProductVariantCustomFields', additionalInfo?: string } }>, featuredAsset?: { __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }, assets: Array<{ __typename?: 'Asset', id: string, width: number, height: number, name: string, preview: string, source: string, focalPoint?: { __typename?: 'Coordinate', x: number, y: number } }>, collections: Array<{ __typename?: 'Collection', id: string, slug: string, name: string, breadcrumbs: Array<{ __typename?: 'CollectionBreadcrumb', id: string, name: string, slug: string }> }> } };
 
 export type SearchCollectionProductsQueryVariables = Exact<{
   collectionId: Scalars['ID'];

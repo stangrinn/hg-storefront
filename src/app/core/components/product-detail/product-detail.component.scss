@@ -68,7 +68,7 @@
         flex: 1 1 0;
         flex-direction: column;
         max-width: 800px;
-        gap: 24px;
+        gap: 32px;
         min-width: 0;
     }
 
@@ -79,7 +79,7 @@
     }
 
     .pd__title {
-        @include hg.type(title-1);
+        @include hg.type(hero);
         color: var(--pd-text);
     }
 
@@ -163,39 +163,51 @@
         border: 1px solid var(--pd-border);
     }
 
-    .pd__tabs {
+    // Key/value rows: DIMENSIONS, MEDIUM, YEAR, SHIPPING (Figma node 830:74150).
+    .pd__specs {
         display: flex;
         flex-direction: column;
-        gap: 28px;
+        gap: 20px;
     }
 
-    .pd__tab-list {
+    .pd__spec {
         display: flex;
-        gap: 48px;
-    }
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        border-top: 1px solid var(--pd-border);
+        padding-top: 20px;
 
-    .pd__tab {
-        padding-bottom: 12px;
-        border-bottom: 1px solid transparent;
-        font: 700 14px/1 Orbitron, sans-serif;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        color: var(--pd-muted);
-
-        &--active {
-            color: var(--pd-text-2);
-            border-bottom-color: var(--pd-text-2);
+        &:first-child {
+            border-top: 0;
+            padding-top: 0;
         }
     }
 
-    .pd__panel {
+    .pd__spec-label {
+        @include hg.type(caption);
+        color: var(--pd-muted);
+    }
+
+    .pd__spec-value {
+        @include hg.type(body-2);
+        color: var(--pd-text-2);
+        text-align: right;
+    }
+
+    .pd__description {
         max-width: 960px;
         font-weight: 300;
         font-size: 16px;
-        line-height: 26px;
+        line-height: 25px;
+        color: var(--pd-muted);
 
         ::ng-deep p {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
     }
 

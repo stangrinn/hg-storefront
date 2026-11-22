@@ -30,8 +30,12 @@ import { InterestResultComponent } from '../interest-result/interest-result.comp
 
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
-/** Available tabs for product detail page */
-type ProductTab = 'description' | 'additionalInfo';
+
+/** A single row of the "Specifications" block (dimensions, medium, year, shipping). */
+interface SpecRow {
+    label: string;
+    value: string;
+}
 
 type ProductLoadResult =
     | { state: 'ready'; product: NonNullable<GetProductDetailQuery['product']> }
@@ -52,9 +56,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     selectedVariant: Variant;
     breadcrumbs: Collection['breadcrumbs'] | null = null;
 
-    /** Currently active tab */
-    activeTab: ProductTab = 'description';
-    
+    /** The product's most relevant collection (see {@link getMostRelevantCollection}); its `name` is shown on the page. */
+    activeCollection: Collection | null = null;
+
     /** Video source URL for gallery hover effect */
     videoSource: string | null = null;
     
@@ -147,6 +151,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
 
+            this.activeCollection = collection ?? null;
             this.breadcrumbs = collection ? collection.breadcrumbs : [];
 
             this.loadRelatedProducts(product.id, collection?.id);
@@ -185,9 +190,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     get collectionName(): string {
-        const custom = this.product?.customFields?.artCollectionName;
-        const slug = this.product?.collections[0]?.slug;
-        return custom || slug?.replace(/-/g, ' ') || '';
+        return this.activeCollection?.name ?? '';
     }
 
     trackByProductId(index: number, item: SearchProductsQuery['search']['items'][number]) {
@@ -340,31 +343,21 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         })[0];
     }
 
-    /**
-     * Sets the active tab.
-     * @param tab - Tab to activate
-     */
-    setActiveTab(tab: ProductTab): void {
-        this.activeTab = tab;
-    }
+    /** Rows for the "Specifications" block (dimensions, medium, year, shipping); empty values are omitted. */
+    get specRows(): SpecRow[] {
+        const cf = this.product?.customFields;
+        if (!cf) {
+            return [];
+        }
 
-    /**
-     * Returns the additional info content with priority:
-     * variant's additionalInfo > product's additionalInfo.
-     * @returns Additional info HTML content or null
-     */
-    getAdditionalInfo(): string | null {
-        const variantInfo = this.selectedVariant?.customFields?.additionalInfo;
-        const productInfo = this.product?.customFields?.additionalInfo;
-        return variantInfo || productInfo || null;
-    }
-
-    /**
-     * Checks if additional info is available for current product/variant.
-     * @returns True if additional info exists
-     */
-    hasAdditionalInfo(): boolean {
-        return !!this.getAdditionalInfo();
+        return (
+            [
+                { label: 'Dimensions', value: cf.dimensions },
+                { label: 'Technique', value: cf.medium },
+                { label: 'Year', value: cf.year },
+                { label: 'Shipping', value: cf.shipping },
+            ] as { label: string; value: string | null | undefined }[]
+        ).filter((row): row is SpecRow => !!row.value);
     }
 
     /**
