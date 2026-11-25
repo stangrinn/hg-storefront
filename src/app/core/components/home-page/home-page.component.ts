@@ -41,34 +41,40 @@ export class HomePageComponent implements OnInit {
 
     readonly moments: HomeMoment[] = [
         {
+            title: "Creative Studio Focus",
+            subtitle: "Art that keeps your ideas moving",
+            description: "Blueprints on the table, a quiet loft, and a painting that never quite sits still. Between sketches and client calls, lifting your phone to watch the piece answer back becomes a small ritual that clears your head.",
+            image: "assets/home/carousel-space-1.png"
+        },
+        {
+            title: "Quiet Evenings By The Fire",
+            subtitle: "When everything slows down",
+            description: "Wine poured, the fire crackling, a golden figure glowing above the mantel. As the room dims, the artwork catches the light and shifts with it—a small moment of magic neither of you says out loud.",
+            image: "assets/home/carousel-space-2.png"
+        },
+        {
+            title: "Personal Library Retreat",
+            subtitle: "A page-turner on the wall, too",
+            description: "Tucked between floor-to-ceiling shelves, a glass of wine within reach, the painting watches over the room like it belongs there. Glance up between chapters and something in it has quietly changed.",
+            image: "assets/home/carousel-space-3.png"
+        },
+        {
             title: "Everyday Home Moments",
             subtitle: "Art that just fits your day",
-            description: "You’re making coffee, scrolling your phone, moving from room to room—and the art quietly shifts with you. It’s not a “setup,” it’s just there, like music in the background, changing the feel of the space without asking for attention.",
-            image: "assets/home/carousel-space-1.png"
+            description: "You’re making coffee, cutting lemons, half-reading a magazine—and the art on the wall shifts with you. It’s not a “setup,” it’s just there, like morning light, changing the feel of the space without asking for attention.",
+            image: "assets/home/carousel-space-4.png"
         },
         {
             title: "Friends Hanging Out",
             subtitle: "Something everyone notices, without trying too hard",
-            description: "Friends are over, talking, laughing, maybe someone points at the wall—“wait, did that just change?” It becomes part of the vibe, especially as it gets darker and the room starts to feel a bit more alive.",
-            image: "assets/home/carousel-space-2.png"
-        },
-        {
-            title: "Personal Creative Space",
-            subtitle: "A space that keeps your brain moving",
-            description: "Open spaces designed for creative minds, where bold art energizes your work. Transform your studio into a gallery.",
-            image: "assets/home/carousel-space-3.png"
-        },
-        {
-            title: "Clean, Minimal Space",
-            subtitle: "Museum quality at home",
-            description: "Sophisticated curation that transforms your space into a personal exhibition. Professional presentation in your own space.",
-            image: "assets/home/carousel-space-4.png"
-        },
-        {
-            title: "Romantic Evenings",
-            subtitle: "When everything slows down",
-            description: "Contemporary spaces where minimalist design creates the perfect canvas for living art. Watch as your walls transform throughout the day.",
+            description: "Everyone’s dressed up, glasses in hand, ready to head out—and someone stops mid-sentence: “wait, did that just move?” It becomes part of the night before you’ve even left the room.",
             image: "assets/home/carousel-space-5.png"
+        },
+        {
+            title: "Gallery Opening Night",
+            subtitle: "Your piece, the center of attention",
+            description: "Among the crowd at an opening, phones lift toward the wall as the painting comes alive for a second take. What started as a private ritual at home now draws a room full of strangers in.",
+            image: "assets/home/carousel-space-6.png"
         }
     ];
 

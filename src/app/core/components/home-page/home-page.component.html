@@ -383,7 +383,6 @@
                 <div class="experience-card__moments">
                     <div *ngFor="let moment of moments; let index = index" class="experience-card__moment"
                         [class.is-active]="index === activeMomentIndex"
-                        [class.experience-card--romantic]="index === 4"
                         [attr.aria-hidden]="index !== activeMomentIndex">
                         <span class="eyebrow">Space 0{{ index + 1 }}</span>
                         <h2>{{ moment.title }}</h2>

@@ -101,7 +101,6 @@
         .experience-card__moment > p { width: 397px; max-width: calc(100% + 13px); }
         .experience-card__body h2, .experience-card__body h3, .experience-card__moment > p, .experience-card__moment > .eyebrow,
         .experience-card__body > .eyebrow { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-        .experience-card--romantic h2 { letter-spacing: 3.52px; }
         .experience-card__body h3 { padding-block: 6px; }
     }
     :host-context(.theme-light) {
