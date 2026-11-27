@@ -237,8 +237,7 @@
             font-size: 12px;
             letter-spacing: 4px;
         }
-        hgart-section-divider[variant="diagonal"],
-        hgart-section-divider[variant="wave"] {
+        hgart-section-divider[variant="diagonal"] {
             display: none;
         }
         .mobile-diagonal {
@@ -428,17 +427,6 @@
         }
         .statement--wide > p:last-child {
             margin-top: 24px;
-        }
-        .desktop-wave {
-            height: 112px;
-            overflow: hidden;
-            position: relative;
-        }
-        .desktop-wave img {
-            position: absolute;
-            left: 50%;
-            max-width: none;
-            transform: translateX(-50%);
         }
         .section--ar {
             padding: 104px 60px 109px;

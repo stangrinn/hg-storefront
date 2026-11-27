@@ -140,7 +140,7 @@ export class HomeMotionDirective implements AfterViewInit, OnDestroy {
                     break;
             }
         });
-        this.home.querySelectorAll<HTMLElement>('.mobile-diagonal, .desktop-wave, .mobile-sash').forEach(divider => {
+        this.home.querySelectorAll<HTMLElement>('.mobile-diagonal, .mobile-sash').forEach(divider => {
             const scene = this.scene(divider);
             if (divider.classList.contains('mobile-sash')) {
                 this.scrub(scene, 'picture', [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0)' }]);
