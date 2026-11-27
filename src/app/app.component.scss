@@ -1,3 +1,4 @@
+@use '../styles/tokens' as hg;
 @import "variables";
 
 :host {
@@ -47,7 +48,6 @@
 
 :host ::ng-deep .theme-light hgart-layout-footer,
 :host ::ng-deep .theme-light hgart-layout-footer footer {
-    background: #f7f7f5;
     color: #0f0f10;
 }
 
@@ -454,76 +454,144 @@ hgart-layout-footer footer .footer-grid>div+div+div {
     border-left: 1px solid rgba(0, 0, 0, 1);
 }
 
+// Universal footer shared by all page types (Figma node 641:8616, breakpoints 420/768/1024/1600/1920).
+// 1600 and 1920 only differ by the QR size and nav gap (see the 1366px query below), so they share
+// this base; 1024-1365 is the only tier with a genuinely different two-row layout.
 .site-footer {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 1px 380px 1px 400px;
-    gap: 0;
-    min-height: 305px;
-    padding: 60px;
-    border: 0;
-    background: var(--hg-bg-surface);
-    color: #2a2a2d;
-}
-
-.site-footer__brand,
-.site-footer__links,
-.site-footer__contact {
-    min-width: 0;
-}
-
-.site-footer__brand {
     display: flex;
     flex-direction: column;
+    gap: 48px;
+    padding: 72px 60px 48px;
+    background: var(--hg-bg-surface);
+}
+
+.site-footer__top {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
-    min-height: 185px;
-    padding-right: 40px;
+    gap: 40px;
+}
+
+.site-footer__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.site-footer__identity-label {
+    @include hg.type(caption);
+    margin: 0;
+    color: var(--hg-text-muted);
 }
 
 .site-footer__slogan {
-    color: #e0ded9;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 38px;
+    margin: 0;
+    font-family: var(--hg-font-display);
+    font-size: 40px;
     font-style: italic;
-    line-height: 1;
+    color: var(--hg-text-secondary);
 }
 
-.site-footer__identity,
-.site-footer__bottom > p,
-.site-footer__links a {
-    color: var(--hg-text-muted);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 12px;
-    letter-spacing: 4px;
-    line-height: 1.2;
-    text-transform: uppercase;
+.site-footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    white-space: nowrap;
 }
 
-.site-footer__links a {
-    color: #e0ded9;
-    font-size: 14px;
+.site-footer__nav {
+    display: flex;
+    gap: 40px;
 }
 
-.site-footer__contact a {
-    color: #f7f7f5;
-    font-family: 'Montserrat', sans-serif;
+.site-footer__nav a {
+    @include hg.type(button);
+    color: var(--hg-text-secondary);
+}
+
+.site-footer__email {
+    font-family: var(--hg-font-body);
     font-size: 16px;
     font-weight: 300;
-    line-height: 34px;
+    line-height: 26px;
+    color: var(--hg-text-primary);
     text-decoration: underline;
     text-underline-offset: 2px;
 }
 
-.site-footer__identity {
-    color: #8a8a8f;
-    margin-top: 20px;
+.site-footer__app {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.site-footer__app-qr {
+    display: flex;
+    flex: none;
+    padding: 8px;
+    background: #fff;
+    border-radius: 4px;
+
+    img { display: block; width: 96px; height: 96px; }
+}
+
+.site-footer__app-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+.site-footer__app-copy--compact {
+    display: none;
+}
+
+.site-footer__app-label {
+    @include hg.type(caption);
+    margin: 0;
+    color: var(--hg-text-muted);
+}
+
+.site-footer__app-title {
+    margin: 0;
+    font-family: var(--hg-font-display);
+    font-size: 24px;
+    font-style: italic;
+    line-height: normal;
+    color: var(--hg-text-primary);
+}
+
+.site-footer__app-link {
+    font-family: var(--hg-font-body);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 22px;
+    color: var(--hg-text-primary);
+    text-decoration: underline;
+}
+
+.site-footer__app-button {
+    @include hg.button($variant: secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    padding: 0 32px;
+
+    &::after { content: none; }
+}
+
+.site-footer__divider {
+    height: 1px;
+    background: var(--hg-border-subtle);
 }
 
 .site-footer__bottom {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
     gap: 24px;
-    padding-top: 16px;
 }
 
 .site-footer__social {
@@ -532,153 +600,115 @@ hgart-layout-footer footer .footer-grid>div+div+div {
 }
 
 .site-footer__social a {
-    color: #f7f7f5;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
+    @include hg.type(subtitle);
+    color: var(--hg-text-primary);
     text-transform: lowercase;
 }
 
-.site-footer__bottom > p {
-    max-width: 362px;
+.site-footer__copyright {
+    @include hg.type(caption);
     margin: 0;
+    color: var(--hg-text-muted);
 }
 
-.site-footer__divider {
-    width: 1px;
-    min-height: 185px;
-    background: #e0ded9;
+// 1024-1365: the two-row tablet/small-desktop composition (Figma "1024" variant). The project has no
+// exported Figma frame between 1024 and 1600, so 1366 (a common laptop breakpoint) was picked as a
+// reasonable midpoint for when the single-row 1600/1920 layout takes over instead.
+@media (min-width: 1024px) and (max-width: 1365px) {
+    .site-footer { padding: 56px 32px 40px; gap: 40px; }
+
+    .site-footer__top {
+        flex-wrap: wrap;
+        row-gap: 24px;
+    }
+
+    .site-footer__identity { order: 1; }
+    .site-footer__app { order: 2; }
+
+    .site-footer__links {
+        order: 3;
+        flex: 1 1 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+    }
+
+    .site-footer__slogan { font-size: 36px; }
+    .site-footer__app-title { font-size: 22px; }
+    .site-footer__app-qr img { width: 88px; height: 88px; }
+    .site-footer__nav { gap: 28px; }
 }
 
-.site-footer__links,
-.site-footer__contact {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    min-height: 185px;
+// 1366-1919: same single-row layout as 1920, but with the Figma "1600" variant's tighter QR/nav sizing.
+@media (min-width: 1366px) and (max-width: 1919px) {
+    .site-footer__app-qr img { width: 88px; height: 88px; }
+    .site-footer__nav { gap: 28px; }
 }
 
-.site-footer__links {
-    gap: 24px;
-    padding: 0 20px 0 40px;
+// 721-1023: Figma "768" variant (centered stack, download button instead of a QR code).
+@media (min-width: 721px) and (max-width: 1023px) {
+    .site-footer { gap: 36px; padding: 56px 40px 40px; }
+    .site-footer__slogan { font-size: 36px; }
+    .site-footer__nav { gap: 18px 28px; }
+    .site-footer__app-title { font-size: 26px; }
 }
 
-.site-footer__contact {
-    gap: 8px;
-    padding-left: 40px;
-}
-
-.site-footer h3 {
-    margin: 0 0 auto;
-    color: #e0ded9 !important;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 1;
-}
-
-:host ::ng-deep hgart-layout-footer .site-footer h3,
-:host ::ng-deep hgart-layout-footer .site-footer__slogan,
-:host ::ng-deep hgart-layout-footer .site-footer__contact p {
-    color: #e0ded9 !important;
-}
-
-.site-footer__contact h3 {
-    margin-bottom: 35px;
-}
-
-.site-footer__contact p {
-    margin: 0;
-    color: #e0ded9;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 34px;
-}
-
-.site-footer__contact p.muted {
-    color: #8a8a8f;
-}
-
-:host ::ng-deep .theme-light .site-footer {
-    background: #ffffff;
-    border-top: 1px solid #e0ded9;
-}
-
-:host ::ng-deep .theme-light .site-footer__slogan,
-:host ::ng-deep .theme-light .site-footer h3,
-:host ::ng-deep .theme-light .site-footer__contact p {
-    color: #2a2a2d !important;
-}
-
-:host ::ng-deep .theme-light .site-footer__social a,
-:host ::ng-deep .theme-light .site-footer__contact a {
-    color: #0f0f10;
-}
-
-:host ::ng-deep .theme-light .site-footer__identity,
-:host ::ng-deep .theme-light .site-footer__bottom > p,
-:host ::ng-deep .theme-light .site-footer__contact p.muted {
-    color: #66666b !important;
-}
-
-:host ::ng-deep .theme-light .site-footer__links a {
-    color: #2a2a2d;
-}
-
-:host ::ng-deep .theme-light .site-footer__divider {
-    background: #e0ded9;
-}
-
-@media (max-width: 900px) {
+// <=1023 shared mobile/tablet layout (Figma "420"/"768" variants): centered stack, no QR.
+@media (max-width: 1023px) {
     .site-footer {
-        grid-template-columns: 1fr 1fr;
-        gap: 48px 24px;
-        padding: 40px 28px;
+        align-items: center;
+        gap: 32px;
+        padding: 48px 20px 40px;
+        text-align: center;
     }
 
-    .site-footer__brand {
-        grid-column: 1 / -1;
-        padding-right: 0;
+    .site-footer__top {
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
     }
 
-    .site-footer__divider {
+    .site-footer__identity { align-items: center; }
+    .site-footer__slogan { font-size: 32px; }
+
+    // Links and email are flattened into the same stacked column as Identity/App, matching Figma's
+    // flat sibling layout at these widths instead of the nested "Links + Email" block used from 1024 up.
+    .site-footer__links { display: contents; }
+
+    .site-footer__nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 18px 24px;
+    }
+
+    .site-footer__app {
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+
+    .site-footer__app-qr,
+    .site-footer__app-copy--full {
         display: none;
     }
 
-    .site-footer__links,
-    .site-footer__contact {
-        padding: 0;
-    }
-}
-
-@media (max-width: 560px) {
-    .site-footer {
+    .site-footer__app-copy--compact {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
     }
 
-    .site-footer__slogan {
-        font-size: 32px;
-    }
+    .site-footer__app-title { font-size: 24px; }
 
-    .site-footer__bottom {
-        align-items: flex-start;
-        flex-direction: column;
-        margin-top: 48px;
-    }
+    .site-footer__bottom { flex-direction: column; gap: 20px; }
+    .site-footer__social { justify-content: center; }
+    .site-footer__copyright { max-width: 320px; }
 }
 
-/* Footer headings: 22px */
-hgart-layout-footer footer h3 {
-    font-size: 22px !important;
-    line-height: 1.1;
-}
-
-/* Footer links: 14px */
+/* Footer links: hover-grow underline (size comes from each link's own class now). */
 hgart-layout-footer footer a {
-    font-size: 14px !important;
-
     text-decoration: none;
     position: relative;
 
@@ -698,8 +728,7 @@ hgart-layout-footer footer a {
     }
 }
 
-.site-header__identity--compact,
-.site-footer__divider img { display: none; }
+.site-header__identity--compact { display: none; }
 
 @media (max-width: 1023px) {
     .layout--compact-header {
@@ -712,29 +741,6 @@ hgart-layout-footer footer a {
         .site-header__utilities { position: absolute; right: 4px; top: 24px; }
         .site-header__theme { display: none; }
     }
-
-    .layout--home {
-        .site-footer { display: flex; flex-direction: column; align-items: center; gap: 32px; min-height: 0; padding: 48px 20px; text-align: center; }
-        .site-footer__brand, .site-footer__bottom { display: contents; }
-        .site-footer__brand > div:first-child { order: 0; }
-        .site-footer__slogan { max-width: 380px; margin: 0; font-size: 24px; font-weight: 400; line-height: 28px; }
-        .site-footer__identity { margin-top: 24px; }
-        .site-footer__social { order: 1; margin-top: -8px; }
-        .site-footer__social a { font-size: 20px !important; }
-        .site-footer__identity, .site-footer h3, .site-footer__links a, .site-footer__social a, .site-footer__bottom > p { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-        .site-footer__divider { display: block; width: auto; min-height: 0; height: 5px; background: none; order: 2; }
-        .site-footer__divider img { display: block; }
-        .site-footer__links { order: 3; }
-        .site-footer__links + .site-footer__divider { order: 4; }
-        .site-footer__contact { order: 5; }
-        .site-footer__links, .site-footer__contact { align-items: center; gap: 24px; min-height: 0; padding: 0; }
-        .site-footer h3 { margin: 0; font-size: 20px !important; line-height: 24px; }
-        .site-footer__contact p, .site-footer__contact a { font-size: 16px !important; line-height: 26px; }
-        .site-footer__bottom > p { order: 6; max-width: 380px; padding-top: 16px; line-height: normal; }
-        .site-footer__bottom > p span { display: block; }
-    }
-    :host ::ng-deep .theme-light.layout--home .site-footer__divider { background: none; }
-    :host ::ng-deep .theme-light.layout--home .site-footer__divider img { filter: brightness(0) invert(.16); }
 }
 
 @media (min-width: 721px) and (max-width: 1023px) {
@@ -751,51 +757,15 @@ hgart-layout-footer footer a {
         .site-header__theme { display: block; width: 45px; height: 44px; }
         .site-header__theme img { display: block; width: auto; height: auto; }
     }
-
-    .layout--home {
-        .site-footer__slogan { max-width: none; }
-        .site-footer__brand > div:first-child { width: 100%; }
-    }
 }
-
-.layout--home .site-footer__divider .desktop-footer-divider { display: none; }
 
 @media (min-width: 1024px) and (max-width: 1919px) {
     .layout--home {
         .site-header__logo { gap: 10px; }
         .site-header__logo img { transform: scaleX(-1); }
         .site-header__menu { top: 32px; }
-        .site-footer { grid-template-columns: minmax(0, 1fr) 0 380px 0 400px; min-height: 360px; padding: 60px; }
-        .site-footer__brand { min-height: 240px; padding: 0; }
-        .site-footer__slogan { font-size: 30px; font-weight: 400; line-height: normal; }
-        .site-footer__identity { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-        .site-footer__bottom { padding-top: 16px; padding-right: 0; padding-bottom: 8px; align-items: center; }
-        .site-footer__social a { font-size: 20px !important; }
-        .site-footer__bottom > p { width: 340px; line-height: normal; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-        .site-footer__divider { position: relative; width: 0; height: 240px; min-height: 0; background: none; }
-        .site-footer__divider .desktop-footer-divider { display: block; position: absolute; left: 0; top: 240px; max-width: none; transform: rotate(-90deg); transform-origin: left top; }
-        .site-footer__links { height: 240px; gap: 20px; padding-bottom: 8px; }
-        .site-footer__links a, .site-footer h3 { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-        .site-footer h3 { font-size: 20px !important; line-height: normal; }
-        .site-footer__contact { gap: 8px; }
-        .site-footer__contact h3 { margin-bottom: 63px; }
-        .site-footer__contact p, .site-footer__contact a { font-size: 16px !important; line-height: 26px; }
-        .site-footer__contact p:first-of-type { margin-bottom: 8px; }
-        .site-footer__contact a { text-decoration: underline; }
-    }
-    :host ::ng-deep .theme-light.layout--home .site-footer__divider { background: none; }
-    :host ::ng-deep .theme-light.layout--home .desktop-footer-divider { filter: brightness(0) invert(.16); }
-}
-
-@media (min-width: 1024px) and (max-width: 1439px) {
-    .layout--home {
-        .site-footer { grid-template-columns: minmax(0, 1fr) 0 300px 0 300px; padding: 40px; }
-        .site-footer__bottom { flex-direction: column; align-items: flex-start; }
-        .site-footer__bottom > p { width: auto; }
     }
 }
-
-.layout--home .site-footer__divider .collection-footer-divider { display: none; }
 
 @media (min-width: 1024px) {
     .layout--collection {
@@ -820,20 +790,6 @@ hgart-layout-footer footer a {
     }
 }
 
-@media (min-width: 1024px) {
-    .layout--collection {
-        .site-footer { min-height: 354px; }
-        .site-footer__brand, .site-footer__links, .site-footer__contact { min-height: 234px; }
-        .site-footer__divider { position: relative; width: 1px; height: 234px; min-height: 0; background: none; }
-        .site-footer__divider .collection-footer-divider { display: block; position: absolute; left: 0; top: 234px; max-width: none; transform: rotate(-90deg); transform-origin: left top; }
-        .site-footer__social a { font-size: 20px !important; }
-        .site-footer h3 { font-size: 20px !important; }
-        .site-footer__contact a { font-size: 16px !important; text-decoration: underline; }
-    }
-    :host ::ng-deep .theme-light.layout--collection .site-footer__divider { background: none; }
-    :host ::ng-deep .theme-light.layout--collection .collection-footer-divider { filter: brightness(0) invert(.16); }
-}
-
 // Product detail uses the full identity and flat header from the mobile artwork frame.
 @media (max-width: 720px) {
     .layout--product {
@@ -845,29 +801,8 @@ hgart-layout-footer footer a {
         .site-header__logo span { font-size: 12px; letter-spacing: 4px; line-height: normal; text-box-trim: trim-both; text-box-edge: cap alphabetic; }
         .site-header__utilities { position: absolute; right: 4px; top: 24px; }
         .site-header__theme { display: none; }
-        .site-footer { display: flex; flex-direction: column; align-items: center; gap: 32px; min-height: 0; padding: 48px 20px; text-align: center; }
-        .site-footer__brand, .site-footer__bottom { display: contents; }
-        .site-footer__brand > div:first-child { order: 0; }
-        .site-footer__slogan { max-width: 380px; margin: 0; font-size: 24px; font-weight: 400; line-height: 28px; }
-        .site-footer__identity { margin-top: 24px; }
-        .site-footer__social { order: 1; margin-top: -8px; }
-        .site-footer__social a { font-size: 20px !important; }
-        .site-footer__identity, .site-footer h3, .site-footer__links a, .site-footer__social a, .site-footer__bottom > p { text-box-trim: trim-both; text-box-edge: cap alphabetic; }
-        .site-footer__divider { display: block; width: auto; min-height: 0; height: 5px; background: none; order: 2; }
-        .site-footer__divider img { display: block; }
-        .site-footer__links { order: 3; }
-        .site-footer__links + .site-footer__divider { order: 4; }
-        .site-footer__contact { order: 5; }
-        .site-footer__links, .site-footer__contact { align-items: center; gap: 24px; min-height: 0; padding: 0; }
-        .site-footer h3 { margin: 0; font-size: 20px !important; line-height: 24px; }
-        .site-footer__contact p, .site-footer__contact a { font-size: 16px !important; line-height: 26px; }
-        .site-footer__bottom > p { order: 6; max-width: 380px; padding-top: 16px; line-height: normal; }
-        .site-footer__bottom > p span { display: block; }
-        .site-footer__divider .desktop-footer-divider, .site-footer__divider .collection-footer-divider { display: none; }
     }
     :host ::ng-deep .theme-light.layout--product .site-header { --layout-header-background: #f2efea; background: #f2efea; }
-    :host ::ng-deep .theme-light.layout--product .site-footer__divider { background: none; }
-    :host ::ng-deep .theme-light.layout--product .site-footer__divider img { filter: brightness(0) invert(.16); }
 }
 @media (max-width: 380px) {
     .layout--product .site-header__logo span { font-size: 9px; letter-spacing: 3px; }

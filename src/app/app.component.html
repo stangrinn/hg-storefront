@@ -44,35 +44,44 @@
     <hgart-layout-footer>
         <footer aria-labelledby="footer-heading" class="site-footer">
             <h2 class="sr-only" id="footer-heading">Footer</h2>
-            <div class="site-footer__brand">
-                <div>
-                    <p class="site-footer__slogan">Dreams transformed into reality with Art + AR</p>
-                    <p class="site-footer__identity">HELENA GRINSHPUN ART</p>
+            <div class="site-footer__top">
+                <div class="site-footer__identity">
+                    <p class="site-footer__identity-label">Helena Grinshpun Art</p>
+                    <p class="site-footer__slogan">Emotional art</p>
                 </div>
-                <div class="site-footer__bottom">
-                    <div class="site-footer__social">
-                        <a href="https://www.instagram.com/helena_grinshpun/" target="_blank">insta</a>
-                        <a href="https://www.facebook.com/h.grinshpun" target="_blank">fb</a>
-                        <a href="https://linkedin.com" target="_blank">in</a>
+                <nav class="site-footer__links" aria-label="Useful links">
+                    <div class="site-footer__nav">
+                        <a [routerLink]="['/contact']">contact us</a>
+                        <a [routerLink]="['/support']">faq</a>
+                        <a [routerLink]="['/privacy-policy']">privacy policy</a>
+                        <a [routerLink]="['/terms']">terms &amp; conditions</a>
                     </div>
-                    <p><span>© 2026 Helena Grinshpun Art.</span> <span>All rights reserved.</span></p>
+                    <a class="site-footer__email" href="mailto:hello@helenagrinshpun.art">hello@helenagrinshpun.art</a>
+                </nav>
+                <div class="site-footer__app">
+                    <div class="site-footer__app-qr" aria-hidden="true">
+                        <img src="assets/footer/app-qr-placeholder.svg" alt="" width="96" height="96">
+                    </div>
+                    <div class="site-footer__app-copy site-footer__app-copy--full">
+                        <p class="site-footer__app-label">Get the app</p>
+                        <p class="site-footer__app-title">Scan to bring<br>the art to life</p>
+                        <a class="site-footer__app-link" href="https://helenagrinshpun.art/app" target="_blank">Download for iPhone ↗</a>
+                    </div>
+                    <div class="site-footer__app-copy site-footer__app-copy--compact">
+                        <p class="site-footer__app-label">Get the app</p>
+                        <p class="site-footer__app-title">Bring the art to life</p>
+                        <a class="site-footer__app-button" href="https://helenagrinshpun.art/app" target="_blank">Download the app</a>
+                    </div>
                 </div>
             </div>
-            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/icons/collection/footer-divider.svg" alt=""></div>
-            <nav class="site-footer__links" aria-label="Useful links">
-                <h3>Useful Links</h3>
-                <a [routerLink]="['/contact']">contact us</a>
-                <a [routerLink]="['/support']">faq</a>
-                <a [routerLink]="['/privacy-policy']">privacy policy</a>
-                <a [routerLink]="['/terms']">terms &amp; conditions</a>
-            </nav>
-            <div class="site-footer__divider" aria-hidden="true"><img src="assets/home/mobile-footer-ornament.svg" alt=""><img class="desktop-footer-divider" src="assets/home/desktop-footer-divider.svg" alt=""><img class="collection-footer-divider" src="assets/icons/collection/footer-divider.svg" alt=""></div>
-            <div class="site-footer__contact">
-                <h3>Contact</h3>
-                <p>Open Daily 09:00-19:00</p>
-                <p class="muted">Saturday Closed</p>
-                <p>Cyprus, Limassol</p>
-                <a href="mailto:hello@helenagrinshpun.art">hello@helenagrinshpun.art</a>
+            <div class="site-footer__divider" aria-hidden="true"></div>
+            <div class="site-footer__bottom">
+                <div class="site-footer__social">
+                    <a href="https://www.instagram.com/helena_grinshpun/" target="_blank">insta</a>
+                    <a href="https://www.facebook.com/h.grinshpun" target="_blank">fb</a>
+                    <a href="https://linkedin.com" target="_blank">in</a>
+                </div>
+                <p class="site-footer__copyright">© 2026 Helena Grinshpun Art. All rights reserved.</p>
             </div>
         </footer>
     </hgart-layout-footer>
