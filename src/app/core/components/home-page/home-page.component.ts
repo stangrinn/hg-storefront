@@ -134,7 +134,7 @@ export class HomePageComponent implements OnInit {
         { staticTitle: 'Static', aliveTitle: 'Alive', staticImage: 'assets/home/comparison-static-1.jpeg', aliveImage: 'assets/home/comparison-alive-1.png', aliveVideo: 'assets/home/evolution-alive.mp4' },
         { staticTitle: 'One moment', aliveTitle: 'Ever-changing', mobileSubtitle: 'Infinite variations.', staticImage: 'assets/home/comparison-static-2.jpeg', aliveImage: 'assets/home/comparison-alive-2.png', aliveVideo: 'assets/home/evolution-ever.mp4' },
         { staticTitle: 'Observed', aliveTitle: 'Experienced', mobileSubtitle: 'Full immersion.', staticImage: 'assets/home/comparison-static-3.jpeg', aliveImage: 'assets/home/comparison-alive-3.png', aliveVideo: 'assets/home/evolution-exp.mp4' },
-        { staticTitle: 'Easily replicated', aliveTitle: 'Ownership system', staticImage: 'assets/home/comparison-static-3.jpeg' },
+        { staticTitle: 'Easily replicated', aliveTitle: 'Ownership system', staticImage: 'assets/home/comparison-static-4.jpeg' },
     ];
 
     readonly faqs: HomeFaq[] = [
